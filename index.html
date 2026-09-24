@@ -1,0 +1,152 @@
+<!doctype html><html lang="he"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>קוביות טעות וסליחה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@900&family=Assistant:wght@500;700&display=swap">
+<style>
+  :root{
+    --wall:#4a9fd6; --floor:#b9c6d2; --ink:#1b2f86; --paper:#f3f6f9; --text:#1c2733; --muted:#5b6b7a;
+    --u:min(1px, calc((100vw - 32px) / 640));
+    color-scheme:light;
+  }
+  html,body{background:var(--paper);color:var(--text)}
+  body{font-family:"Assistant",system-ui,sans-serif;padding-inline:16px;padding-block:24px 40px}
+  .wrap{max-width:900px;margin:0 auto;display:grid;gap:20px}
+  h1{margin:0;font:700 22px/1.2 "Assistant",sans-serif;text-wrap:balance}
+  .scene{position:relative;border-radius:10px;overflow:hidden;
+    background:linear-gradient(var(--wall) 0 68%, var(--floor) 68% 100%);
+    padding-block:calc(70 * var(--u)) calc(34 * var(--u));
+    display:flex;justify-content:center;align-items:flex-end;gap:calc(18 * var(--u));direction:ltr}
+  .cube{--z:calc(var(--s) * var(--u));width:var(--z);height:var(--z);flex:none;
+    perspective:calc(var(--z) * 5);perspective-origin:50% -70%}
+  .body{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+    transition:transform 1.1s cubic-bezier(.55,-.15,.3,1.25)}
+  .f{position:absolute;inset:0;display:grid;place-items:center;background:var(--c);
+    border:1px solid rgba(0,0,0,.14);backface-visibility:hidden;
+    font:900 calc(var(--z) * .5)/1 "Frank Ruhl Libre","David","Times New Roman",serif;color:var(--ink)}
+  .front{transform:translateZ(calc(var(--z) / 2))}
+  .left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2))}
+  .back{transform:rotateY(180deg) translateZ(calc(var(--z) / 2))}
+  .right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}
+  .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2));filter:brightness(1.1)}
+  .bottom{transform:rotateX(-90deg) translateZ(calc(var(--z) / 2))}
+  .bottom b{display:block;transform:rotate(var(--r,0deg))}
+  .ball{width:32%;height:32%;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#6b6b6b 0,#1a1a1a 38%,#000 70%);
+    box-shadow:calc(var(--z) * .04) calc(var(--z) * .06) calc(var(--z) * .08) rgba(0,0,0,.45)}
+  .dot{position:absolute;left:var(--x);top:var(--y);width:7%;height:7%;border-radius:50%;background:#000;transform:translate(-50%,-50%)}
+
+  /* Steps 1-2 turn cubes a quarter to the left; step 3 tips every cube upward. */
+  .body{transform:rotateX(0deg) rotateY(0deg)}
+  .scene[data-step="1"] .pink .body,.scene[data-step="1"] .orange .body{transform:rotateX(0deg) rotateY(-90deg)}
+  .scene[data-step="2"] .body{transform:rotateX(0deg) rotateY(-90deg)}
+  .scene[data-step="2"] .pink .body,.scene[data-step="2"] .orange .body{transform:rotateX(0deg) rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .body{transform:rotateX(90deg) rotateY(-90deg)}
+  .scene:is([data-step="3"],[data-step="4"]) :is(.pink,.orange) .body{transform:rotateX(90deg) rotateY(-180deg)}
+  .scene[data-step="1"] .orange .body{transition-delay:.25s}
+  .scene[data-step="2"] .purple .body,.scene[data-step="3"] .purple .body{transition-delay:.15s}
+  .scene[data-step="2"] .green .body,.scene[data-step="3"] .green .body{transition-delay:.3s}
+  .scene[data-step="2"] .yellow .body,.scene[data-step="3"] .yellow .body{transition-delay:.45s}
+  .scene[data-step="2"] .orange .body,.scene[data-step="3"] .orange .body{transition-delay:.6s}
+
+  /* Step 3: after the flip, ו and ת step back and ב/ר trade places (script): חרב. Step 4 settles into חברות. */
+  .cube{position:relative;transition:transform .8s ease,opacity .8s ease,filter .8s ease}
+  .orange{order:1}.yellow{order:2}.green{order:3}.purple{order:4}.pink{order:5}
+  .scene.swapped .green{order:4}.scene.swapped .purple{order:3}
+  .scene[data-step="3"] :is(.orange,.yellow){transition-delay:.2s;transform:translateY(-14%) scale(.62);opacity:.35;filter:saturate(.5) blur(1px)}
+  .scene[data-step="4"] :is(.orange,.yellow){transition-delay:1.1s}
+  .hop{z-index:2}
+
+  .panel{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+  .word{font:900 34px/1 "Frank Ruhl Libre",serif;color:var(--ink);min-height:34px;letter-spacing:.04em}
+  .steps{color:var(--muted);font-size:14px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap}
+  button{font:700 16px/1 "Assistant",sans-serif;border-radius:8px;padding:13px 20px;cursor:pointer;border:2px solid var(--ink)}
+  #next{background:var(--ink);color:#fff}
+  #reset{background:transparent;color:var(--ink)}
+  button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
+  button:disabled{opacity:.45;cursor:default}
+  @media (prefers-reduced-motion:reduce){.body,.ball{transition-duration:.01s!important;transition-delay:0s!important}}
+</style>
+
+<div class="wrap" dir="rtl">
+  <h1>טעות, סליחה, חברות</h1>
+
+  <div class="scene" id="scene" data-step="0" aria-live="polite">
+    <div class="cube orange" style="--s:130;--c:#e8784a"><div class="body">
+      <div class="f front"><span class="ball"></span></div><div class="f right"><span class="dot" style="--x:21%;--y:27%"></span><span class="dot" style="--x:70%;--y:22%"></span><span class="dot" style="--x:42%;--y:48%"></span><span class="dot" style="--x:79%;--y:64%"></span><span class="dot" style="--x:26%;--y:76%"></span><span class="dot" style="--x:59%;--y:83%"></span></div><div class="f back">ה</div>
+      <div class="f left"></div><div class="f top"></div><div class="f bottom"><b style="--r:180deg">ת</b></div></div></div>
+    <div class="cube yellow" style="--s:118;--c:#e8c957"><div class="body">
+      <div class="f front">ת</div><div class="f right">ח</div><div class="f back"></div>
+      <div class="f left"></div><div class="f top"></div><div class="f bottom"><b style="--r:90deg">ו</b></div></div></div>
+    <div class="cube green" style="--s:106;--c:#9ccb82"><div class="body">
+      <div class="f front">ו</div><div class="f right">י</div><div class="f back"></div>
+      <div class="f left"></div><div class="f top"></div><div class="f bottom"><b style="--r:90deg">ר</b></div></div></div>
+    <div class="cube purple" style="--s:96;--c:#bb8cd2"><div class="body">
+      <div class="f front">ע</div><div class="f right">ל</div><div class="f back"></div>
+      <div class="f left"></div><div class="f top"></div><div class="f bottom"><b style="--r:90deg">ב</b></div></div></div>
+    <div class="cube pink" style="--s:86;--c:#db8f98"><div class="body">
+      <div class="f front">ד</div><div class="f right">ט</div><div class="f back">ס</div>
+      <div class="f left"></div><div class="f top"></div><div class="f bottom"><b style="--r:180deg">ח</b></div></div></div>
+  </div>
+
+  <div class="panel">
+    <div>
+      <div class="word" id="word">דעות</div>
+      <div class="steps" id="stepText">המצב ההתחלתי</div>
+    </div>
+    <div class="btns">
+      <button id="next" type="button">סובב את ה־ד</button>
+      <button id="reset" type="button" disabled>מההתחלה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const scene = document.getElementById('scene');
+  const next = document.getElementById('next');
+  const reset = document.getElementById('reset');
+  const word = document.getElementById('word');
+  const stepText = document.getElementById('stepText');
+  const states = [
+    {w:'דעות', t:'המצב ההתחלתי', b:'סובב'},
+    {w:'טעות', t:'ה־ד והקוביה הכתומה הסתובבו שמאלה', b:'סובב את כל הקוביות'},
+    {w:'סליחה', t:'כל הקוביות הסתובבו שמאלה', b:'הפוך כלפי מעלה'},
+        {w:'חרב', t:'הקוביות התהפכו כלפי מעלה, ו ו־ת נדחפו אחורה, ב ו־ר החליפו מקום', b:'סדר את המילה'},
+    {w:'חברות', t:'ב ו־ר חזרו למקום, ו ו־ת חזרו לשורה', b:'עוד פעם'}
+  ];
+  let step = 0;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hopper = scene.querySelector('.green'), slider = scene.querySelector('.purple');
+  // Trade the ב and ר cubes by flex order, then animate from where they were (FLIP).
+  function swap(on, delay){
+    if (scene.classList.contains('swapped') === on) return;
+    const pair = [hopper, slider];
+    const before = pair.map(el => el.getBoundingClientRect().left);
+    scene.classList.toggle('swapped', on);
+    if (reduce) return;
+    pair.forEach((el, i) => {
+      const dx = before[i] - el.getBoundingClientRect().left;
+      const lift = el === hopper ? -el.offsetHeight * 0.7 : 0;
+      el.classList.add('hop');
+      el.animate([
+        {transform:`translate(${dx}px,0)`},
+        {transform:`translate(${dx/2}px,${lift}px)`},
+        {transform:'translate(0,0)'}
+      ], {duration:1000, delay, easing:'ease-in-out', fill:'backwards'})
+        .finished.then(() => el.classList.remove('hop'), () => {});
+    });
+  }
+  function show(s){
+    step = s;
+    scene.dataset.step = s;
+    swap(s === 3, s === 3 ? 700 : 0);
+    word.textContent = states[s].w;
+    stepText.textContent = states[s].t;
+    next.textContent = states[s].b;
+    reset.disabled = s === 0;
+  }
+  next.addEventListener('click', () => show((step + 1) % states.length));
+  reset.addEventListener('click', () => show(0));
+</script>
+
+</html>
