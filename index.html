@@ -33,6 +33,7 @@
   .ball{width:32%;height:32%;border-radius:50%;
     background:radial-gradient(circle at 35% 30%,#6b6b6b 0,#1a1a1a 38%,#000 70%);
     box-shadow:calc(var(--z) * .04) calc(var(--z) * .06) calc(var(--z) * .08) rgba(0,0,0,.45)}
+  .wdot{position:absolute;width:4.8%;height:4.8%;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
   .dot{position:absolute;left:var(--x);top:var(--y);width:7%;height:7%;border-radius:50%;background:#000;transform:translate(-50%,-50%)}
 
   /* Steps 1-2 turn cubes a quarter to the left; step 3 tips every cube upward. */
@@ -114,6 +115,18 @@
         {w:'חרב', t:'הקוביות התהפכו כלפי מעלה, ו ו־ת נדחפו אחורה, ב ו־ר החליפו מקום', b:'סדר את המילה'},
     {w:'חברות', t:'ב ו־ר חזרו למקום, ו ו־ת חזרו לשורה', b:'עוד פעם'}
   ];
+
+  // White confetti dots on the חברות faces, as in NN's reference picture.
+  const DOTS = [[13,15],[37,12],[66,17],[87,14],[22,34],[51,29],[79,37],[12,54],[33,61],[73,59],[89,68],[20,81],[48,86],[78,82]];
+  scene.querySelectorAll('.bottom').forEach((face, i) => {
+    DOTS.forEach(([x, y]) => {
+      const d = document.createElement('span');
+      d.className = 'wdot';
+      d.style.left = (i % 2 ? 100 - x : x) + '%';
+      d.style.top = y + '%';
+      face.appendChild(d);
+    });
+  });
   let step = 0;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hopper = scene.querySelector('.green'), slider = scene.querySelector('.purple');
