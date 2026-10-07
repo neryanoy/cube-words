@@ -81,10 +81,13 @@
   .orange{order:1}.yellow{order:2}.green{order:3}.purple{order:4}.pink{order:5}
   .scene.swapped .green{order:4}.scene.swapped .purple{order:3}
   .hop{z-index:2}
-  /* Packing (last step): every cube back on its open bottom, ready to be lowered over the next smaller one. */
-  .scene[data-step="6"] .body{transform:rotateX(0deg) rotateY(0deg);transition-delay:0s}
+  /* Packing (last step): every cube turns its open side up and the camera looks down into them,
+     then each one drops into the next bigger one, biggest first. */
+  .scene[data-step="6"] .body{transform:rotateX(180deg) rotateY(0deg);transition-delay:0s}
+  .scene[data-step="6"] .cube{perspective-origin:50% -80%}
   .scene.xray .cube:not(.pink){opacity:.5}
-  .scene .cube{transition:opacity .6s ease}
+  .scene.xray .cube{perspective-origin:50% 8%}
+  .scene .cube{transition:opacity .6s ease,perspective-origin 1s ease}
 
   .panel{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
   .word{font:900 34px/1 "Frank Ruhl Libre",serif;color:var(--ink);min-height:34px;letter-spacing:.04em}
@@ -263,7 +266,7 @@
     {w:'חרב', t:'ח־ר־ב התהפכו קדימה, ו ו־ת התהפכו אחורה לצד הפתוח, ב ו־ר החליפו מקום', b:'סדר את המילה'},
     {w:'חבר', t:'ב ו־ר חזרו למקום, ו ו־ת עדיין על הצד הפתוח', b:'השלם את המילה'},
     {w:'חברות', t:'ו ו־ת התהפכו והראו את האותיות', b:'ארוז את הקוביות'},
-    {w:'אריזה', t:'כמו בבושקה: הפתח למטה, וכל קוביה יורדת על הקטנה ממנה', b:'עוד פעם'}
+    {w:'אריזה', t:'כמו בבושקה: הפתח למעלה, והקוביות נכנסות לפי הסדר מהגדולה לקטנה', b:'עוד פעם'}
   ];
   let step = 0, emptyRound = -1;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -295,7 +298,7 @@
     emptyRound = -1;
     empties.textContent = 'הצג את כל הצדדים הריקים';
   }
-  // Matryoshka packing: purple drops over pink, green over purple, and so on up to orange.
+  // Matryoshka packing, biggest first: yellow into orange, green into yellow, ... pink last.
   let packing = [], packTimer = 0;
   function cancelPack(){
     packing.forEach(a => a.cancel());
@@ -305,14 +308,15 @@
     CUBES.forEach(c => c.el.style.zIndex = '');
   }
   function pack(){
-    const target = scene.querySelector('.pink').getBoundingClientRect();
-    const order = ['purple', 'green', 'yellow', 'orange'].map(k => scene.querySelector('.' + k));
+    const outer = scene.querySelector('.orange'), target = outer.getBoundingClientRect();
+    outer.style.zIndex = 10;
+    const order = ['yellow', 'green', 'purple', 'pink'].map(k => scene.querySelector('.' + k));
     const start = reduce ? 0 : 1300, each = reduce ? 0 : 1500;
     order.forEach((el, i) => {
       const r = el.getBoundingClientRect();
       const dx = (target.left + target.width / 2) - (r.left + r.width / 2);
-      const lift = -(el.offsetHeight + 14);
-      el.style.zIndex = 3 + i;
+      const lift = -(outer.offsetHeight + 24);
+      el.style.zIndex = 9 - i;  // under the bigger ones, so it sinks behind their walls
       packing.push(el.animate([
         {transform:'translate(0,0)'},
         {transform:`translate(0,${lift}px)`, offset:.3},
