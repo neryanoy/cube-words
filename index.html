@@ -137,11 +137,9 @@
   .tile.art{font-size:13px}
   .tile[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:1px}
   .ideas{margin:0;padding-inline-start:20px;line-height:1.6;font-size:15px}
-  /* 3D stage: a tab fixed on the side opens it in a full dialog. */
-  .side3d{position:fixed;z-index:20;left:0;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;
-    border-radius:0 10px 10px 0;border-left:0;padding:18px 11px;background:#e8784a;border-color:#e8784a;color:#fff;
-    box-shadow:0 4px 14px rgba(0,0,0,.25)}
-  @media (max-width:600px){.side3d{writing-mode:horizontal-tb;top:auto;bottom:16px;transform:none;left:16px;border-radius:10px;border-left:2px solid #e8784a;padding:13px 16px}}
+  /* 3D stage: a button in the title row opens it in a full dialog. */
+  .titlebar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+  #open3d{background:#e8784a;border-color:#e8784a;color:#fff}
   .dlg3d{width:min(1100px,calc(100vw - 24px));max-width:none;max-height:calc(100vh - 24px);border:0;border-radius:12px;padding:16px;
     background:var(--paper);color:var(--text);direction:rtl;display:none;gap:12px}
   .dlg3d[open]{display:grid}
@@ -156,7 +154,10 @@
 </style>
 
 <div class="wrap" dir="rtl">
-  <h1>תפאורה שחורצי</h1>
+  <div class="titlebar">
+    <h1>תפאורה שחורצי</h1>
+    <button id="open3d" type="button">🎭 הבמה בתלת מימד</button>
+  </div>
 
   <div class="scene" id="scene" data-step="0" aria-live="polite">
     <div class="frame" id="frame" aria-hidden="true"></div>
@@ -185,7 +186,6 @@
     <ul class="ideas" id="ideas"></ul>
   </section>
 
-  <button id="open3d" class="side3d" type="button">🎭 הבמה בתלת מימד</button>
   <dialog id="dlg3d" class="dlg3d" aria-labelledby="stageTitle">
     <div class="dlghead">
       <h2 id="stageTitle">הבמה בתלת מימד</h2>
