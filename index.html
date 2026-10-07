@@ -573,14 +573,15 @@
       top:{p:[0, 7.5, -.6001], t:[0, 0, -.6]},
       back:{p:[-2.8, 2.1, -3.6], t:[0, .6, -.4]}
     };
-    // Strike the whole set at once: actor 1 fetches the dolly from where it hides (behind the backdrop,
-    // stage left) and nests the cubes into the orange one; at the same time actor 2 rolls up the sky fabric
-    // and lays the aluminium frame down. Everything rides out together on the dolly.
-    const BW = 4.6, BH = 2.7;
+    // Strike the whole set at once. Actor 1 fetches the dolly from where it hides (behind the backdrop,
+    // stage left) and nests the cubes into the orange one. Meanwhile actor 2 folds the sky fabric, packs it
+    // into the orange cube, and takes the aluminium frame apart into short poles. Everything goes out on one
+    // dolly trip: actor 1 pulls, actor 2 holds it from behind.
+    const BW = 4.6, BH = 2.7, SEG = .92;           // poles come apart into pieces no longer than SEG metres
     // Parked fully behind the fabric so the audience never sees it; it leaves round the stage-left edge.
     const PARK = {x:-BW / 2 + .7, z:backdropZ - .7}, EDGE = {x:-BW / 2 - .65, z:backdropZ - .7};
     const PILE_Z = backdropZ + .35, OUT = -5.2;
-    const set3 = {sky:null, cloth:null, roll:null, parts:[]};
+    const set3 = {sky:null, cloth:null, fold:null, parts:[], segs:[]};
     const dollyHomeX = () => home[0].x - sizes[0] / 2 - .15 - DOLLY / 2;
     const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
     const lerp = (a, b, k) => a + (b - a) * k;
@@ -592,9 +593,10 @@
       wheels.forEach(w => w.rotation.z = 0);
       stander.position.set(home[0].x, sizes[0], 0); stander.rotation.y = .3;
       walker.position.z = (backOfCubes + backdropZ) / 2;
-      [set3.sky, set3.cloth].forEach(m => { m.scale.y = 1; m.position.y = BH / 2; });
-      set3.roll.visible = false;
-      set3.parts.forEach(p => { p.m.position.copy(p.pos); p.m.rotation.copy(p.rot); });
+      [set3.sky, set3.cloth].forEach(m => { m.visible = true; m.scale.set(1, 1, 1); m.position.y = BH / 2; });
+      set3.fold.visible = false;
+      set3.parts.forEach(m => m.visible = true);
+      set3.segs.forEach(g => g.m.visible = false);
       const b = document.getElementById('drag3d'); if (b) b.textContent = '▶ ארוז וגרור החוצה';
     }
     function stride(a, sec, on){
@@ -608,8 +610,8 @@
       walker.rotation.y = -Math.PI / 2;
     }
     function dragStep(e, sec){
-      const o = home[0], top = sizes[0], dx = dollyHomeX(), loadZ = PILE_Z - .3;
-      let moving = false;
+      const o = home[0], top = sizes[0], dx = dollyHomeX(), loadZ = PILE_Z + .7, onDolly = .12;
+      let moving = false, pushing = false;
       dolly.userData.label.visible = true;
       // ---- Actor 1: dolly and cubes ----
       // 0-1.5 s: brings the dolly out from behind the backdrop, round its edge.
@@ -624,42 +626,68 @@
         m.position.x = lerp(h.x, o.x, ease((k - .3) / .4));
         m.visible = k < 1;
       }
-      if (e >= 1.5 && e < 4.3) placeDolly(dx, 0);
-      // 3.3-4.3 s: the orange cube, holding everything, slides onto the dolly.
-      const k2 = ease((e - 3.3) / 1);
-      let cx = lerp(o.x, dx, k2), cz = 0;
-      // 4.3-5.5 s: dolly over to the pile of poles; 5.5-5.9 s loaded; 5.9-8 s everything goes out together.
-      if (e >= 4.3) {
-        const kb = ease((e - 4.3) / 1.2), ko = Math.min(1, Math.max(0, (e - 5.9) / 2.1));
-        const x = e < 5.9 ? lerp(dx, 0, kb) : lerp(0, OUT, ko), z = lerp(0, loadZ, kb);
+      if (e >= 1.5 && e < 4.8) placeDolly(dx, 0);
+      // 3.8-4.8 s: the orange cube, holding everything, slides onto the dolly.
+      let cx = lerp(o.x, dx, ease((e - 3.8) / 1)), cz = 0;
+      // 4.8-6 s: over to the pile of poles; 6-6.5 s poles loaded on top; 6.5-8.6 s out stage left.
+      if (e >= 4.8) {
+        const kb = ease((e - 4.8) / 1.2), ko = Math.min(1, Math.max(0, (e - 6.5) / 2.1));
+        const x = e < 6.5 ? lerp(dx, 0, kb) : lerp(0, OUT, ko), z = lerp(0, loadZ, kb);
         placeDolly(x, z); cx = x; cz = z;
-        moving = moving || e < 5.5 || (e >= 5.9 && ko < 1);
+        moving = moving || e < 6 || (e >= 6.5 && ko < 1);
+        pushing = true;
       }
-      cubeMesh[0].position.set(cx, o.y + .12 * ease((e - 3.3) / .3), cz);
-      // ---- Actor 2, at the same time: sky fabric and aluminium frame ----
-      stander.position.set(lerp(o.x + .1, .9, ease(e / .5)), lerp(top, 0, ease(e / .3)), lerp(.4, PILE_Z + .5, ease(e / .5)));
-      stander.rotation.y = Math.PI;
-      // 0.5-1.8 s: rolls the fabric down from the top.
-      const kr = ease((e - .5) / 1.3), left = Math.max(.001, 1 - kr);
-      [set3.sky, set3.cloth].forEach(m => { m.scale.y = left; m.position.y = BH * left / 2; });
-      set3.roll.visible = e > .5;
-      set3.roll.position.set(0, Math.max(.06, BH * (1 - kr)), backdropZ + .04);
-      // 1.8-3.2 s: takes the frame apart; every pole lies on the floor in one pile.
-      const kf = ease((e - 1.8) / 1.4);
-      set3.parts.forEach((p, i) => {
-        p.m.position.set(lerp(p.pos.x, 0, kf), lerp(p.pos.y, .03 + i * .05, kf), lerp(p.pos.z, PILE_Z, kf));
-        p.m.rotation.set(p.rot.x, lerp(p.rot.y, p.lie.y, kf), lerp(p.rot.z, p.lie.z, kf));
+      const cubeY = o.y + onDolly * ease((e - 3.8) / .3);
+      cubeMesh[0].position.set(cx, cubeY, cz);
+      // ---- Actor 2, at the same time: fabric and frame ----
+      // 0-0.5 s: steps down and goes to the backdrop.
+      if (!pushing) {
+        stander.position.set(lerp(o.x + .1, .9, ease(e / .5)), lerp(top, 0, ease(e / .3)), lerp(.4, PILE_Z + .5, ease(e / .5)));
+        stander.rotation.y = Math.PI;
+      }
+      // 0.5-1.7 s: folds the fabric in half and in half again, down to a small bundle.
+      const kh = ease((e - .5) / .6), kw = ease((e - 1.1) / .6);
+      [set3.sky, set3.cloth].forEach(m => {
+        m.scale.set(Math.max(.001, 1 - .9 * kw), Math.max(.001, 1 - .93 * kh), 1);
+        m.position.y = BH * m.scale.y / 2;
+        m.visible = e < 1.7;
       });
-      set3.roll.position.z = lerp(backdropZ + .04, PILE_Z, kf);
-      // Loading: poles and the roll go up onto the dolly beside the cube and ride out with it.
-      if (e >= 5.5) {
-        const kl = ease((e - 5.5) / .4), ride = e >= 5.9 ? dolly.position.x : 0;
-        set3.parts.forEach((p, i) => p.m.position.set(ride, lerp(.03 + i * .05, .14 + i * .05, kl), PILE_Z));
-        set3.roll.position.set(ride, lerp(.06, .14 + set3.parts.length * .05 + .06, kl), PILE_Z);
+      // 1.7-3.3 s: the folded fabric goes over to the orange cube; 3.3-3.8 s packed inside it.
+      const f = set3.fold;
+      f.visible = e >= 1.7 && e < 3.8;
+      if (f.visible) {
+        const k1 = ease((e - 2.6) / .7), k2 = ease((e - 3.3) / .5), above = top + .2;
+        f.position.set(lerp(0, o.x, k1), e < 3.3 ? lerp(.1, above, k1) : lerp(above, top - .1, k2), lerp(backdropZ + .1, 0, k1));
+      }
+      if (e >= 2.6 && e < 3.8 && !pushing) stander.position.set(lerp(.9, o.x + .55, ease((e - 2.6) / .7)), 0, lerp(PILE_Z + .5, -.5, ease((e - 2.6) / .7)));
+      // 1.7-2.6 s: the frame comes apart into short poles that stack on the floor.
+      const kf = ease((e - 1.7) / .9);
+      set3.parts.forEach(m => m.visible = e < 1.7);
+      set3.segs.forEach(g => {
+        g.m.visible = e >= 1.7;
+        if (!g.m.visible) return;
+        const loaded = ease((e - 6) / .5), ride = e >= 6.5 ? dolly.position.x : 0;
+        if (e < 6) {
+          g.m.position.set(lerp(g.pos.x, g.pile.x, kf), lerp(g.pos.y, g.pile.y, kf), lerp(g.pos.z, PILE_Z + g.pile.z, kf));
+          g.m.rotation.set(0, lerp(g.rot.y, 0, kf), lerp(g.rot.z, 0, kf));
+        } else {
+          // Onto the top of the orange cube on the dolly.
+          const seat = onDolly + top + .03;
+          g.m.position.set(lerp(g.pile.x, ride + g.pile.x, 1), lerp(g.pile.y, seat + g.pile.y - .03, loaded), lerp(PILE_Z + g.pile.z, loadZ + g.pile.z, loaded));
+          g.m.rotation.set(0, 0, 0);
+        }
+      });
+      // From 4.8 s actor 2 holds the back of the dolly and walks it out with actor 1.
+      if (pushing) {
+        stander.position.set(dolly.position.x + DOLLY / 2 + .35, 0, dolly.position.z);
+        stander.rotation.y = -Math.PI / 2;
+        const u = stander.userData; u.armL.rotation.x = u.armR.rotation.x = 0;
       }
       stride(walker, sec, moving);
-      stride(stander, sec, e < .5);
-      if (e > 9) resetDrag();
+      stride(stander, sec, e < .5 || (e >= 2.6 && e < 3.3) || (pushing && moving));
+      if (pushing) { const u = stander.userData; u.armL.rotation.z = -1.1; u.armR.rotation.z = 1.1; }
+      else { const u = stander.userData; u.armL.rotation.z = u.armR.rotation.z = 0; }
+      if (e > 9.6) resetDrag();
     }
     function setView(k){
       const v = views[k]; camera.position.set(...v.p); controls.target.set(...v.t); controls.update();
@@ -699,19 +727,32 @@
       // Back of the fabric, as the crew sees it backstage.
       const backCloth = new THREE.Mesh(new THREE.PlaneGeometry(bw, bh), new THREE.MeshStandardMaterial({color:0xd9d4c7, roughness:1}));
       backCloth.rotation.y = Math.PI; backCloth.position.set(0, bh / 2, backdropZ - .005); scene3.add(backCloth); set3.cloth = backCloth;
-      set3.roll = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, bw, 20), new THREE.MeshStandardMaterial({color:0x5ea8e6, roughness:1}));
-      set3.roll.rotation.z = Math.PI / 2; set3.roll.castShadow = true; scene3.add(set3.roll);
-      // Each frame part remembers where it stands and how it lies once the frame is taken apart.
-      const part = (m, lie) => set3.parts.push({m, pos:m.position.clone(), rot:m.rotation.clone(), lie});
+      // The folded fabric: a small sky-blue bundle that ends up inside the orange cube.
+      set3.fold = new THREE.Mesh(new THREE.BoxGeometry(.46, .1, .3), new THREE.MeshStandardMaterial({color:0x5ea8e6, roughness:1}));
+      set3.fold.castShadow = true; scene3.add(set3.fold);
+      // Each long pole is really a set of short pieces (at most SEG long) that come apart for the strike.
+      const segGeo = new THREE.BoxGeometry(1, .05, .05);
+      const cut = (len, place) => {
+        const n = Math.ceil(len / SEG), l = len / n;
+        for (let j = 0; j < n; j++) {
+          const m = new THREE.Mesh(segGeo, alu); m.scale.x = l; m.castShadow = true; m.visible = false; scene3.add(m);
+          const k = set3.segs.length, col = k % 6, row = Math.floor(k / 6);
+          const g = {m, pile:new THREE.Vector3(0, .03 + row * .052, (col - 2.5) * .055)};
+          place(g, j, l); set3.segs.push(g);
+        }
+      };
       const alu = new THREE.MeshStandardMaterial({color:0xb9c0c7, metalness:.7, roughness:.35});
       [-bw / 2, -bw / 4, 0, bw / 4, bw / 2].forEach(x => {
-        const post = new THREE.Mesh(new THREE.BoxGeometry(.05, bh, .05), alu); post.position.set(x, bh / 2, backdropZ - .04); scene3.add(post); part(post, {y:0, z:Math.PI / 2});
+        const post = new THREE.Mesh(new THREE.BoxGeometry(.05, bh, .05), alu); post.position.set(x, bh / 2, backdropZ - .04); scene3.add(post); set3.parts.push(post);
+        cut(bh, (g, j, l) => { g.pos = new THREE.Vector3(x, (j + .5) * l, backdropZ - .04); g.rot = {y:0, z:Math.PI / 2}; });
       });
       [0, bh / 2, bh].forEach(y => {
-        const rail = new THREE.Mesh(new THREE.BoxGeometry(bw, .05, .05), alu); rail.position.set(0, y, backdropZ - .04); scene3.add(rail); part(rail, {y:0, z:0});
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(bw, .05, .05), alu); rail.position.set(0, y, backdropZ - .04); scene3.add(rail); set3.parts.push(rail);
+        cut(bw, (g, j, l) => { g.pos = new THREE.Vector3(-bw / 2 + (j + .5) * l, y, backdropZ - .04); g.rot = {y:0, z:0}; });
       });
       [-bw / 2, bw / 2].forEach(x => {
-        const foot = new THREE.Mesh(new THREE.BoxGeometry(.06, .04, .7), alu); foot.position.set(x, .02, backdropZ - .3); scene3.add(foot); part(foot, {y:Math.PI / 2, z:0});
+        const foot = new THREE.Mesh(new THREE.BoxGeometry(.06, .04, .7), alu); foot.position.set(x, .02, backdropZ - .3); scene3.add(foot); set3.parts.push(foot);
+        cut(.7, g => { g.pos = new THREE.Vector3(x, .02, backdropZ - .3); g.rot = {y:Math.PI / 2, z:0}; });
       });
 
       // Cubes, left to right as the audience sees them.
