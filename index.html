@@ -141,6 +141,7 @@
 <script>
   // One place that says what is painted on every side of every cube.
   // null = empty side, 'hole' = the open side the cubes nest through.
+  // The pink cube is the innermost one, so it is closed all round.
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
       faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:{w:'ת'}, bottom:'hole'}},
@@ -151,7 +152,7 @@
     {k:'purple', name:'הסגולה', s:96, c:'#bb8cd2', end:-90,
       faces:{front:'ע', right:'ל', back:null, left:null, top:{w:'ב'}, bottom:'hole'}},
     {k:'pink', name:'הוורודה', s:86, c:'#db8f98', end:-180,
-      faces:{front:'ד', right:'ט', back:'ס', left:null, top:{w:'ח'}, bottom:'hole'}}
+      faces:{front:'ד', right:'ט', back:'ס', left:null, top:{w:'ח'}, bottom:null}}
   ];
   const SIDES = ['front','right','back','left','top','bottom'];
   const SIDE_NAME = {front:'חזית', right:'צד ימין', back:'גב', left:'צד שמאל', top:'למעלה', bottom:'למטה'};
