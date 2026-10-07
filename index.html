@@ -1,5 +1,8 @@
 <!doctype html><html lang="he"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>תפאורה שחורצי</title>
+<meta property="og:title" content="תפאורה שחורצי">
+<meta property="og:description" content="דעות, טעות, סליחה, חרב, חבר, חברות">
+<meta name="description" content="תפאורה שחורצי: דעות, טעות, סליחה, חרב, חבר, חברות">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@900&family=Assistant:wght@500;700&display=swap">
 <style>
@@ -112,7 +115,7 @@
   .btns{display:flex;gap:10px;flex-wrap:wrap}
   button{font:700 16px/1 "Assistant",sans-serif;border-radius:8px;padding:13px 20px;cursor:pointer;border:2px solid var(--ink)}
   #next{background:var(--ink);color:#fff}
-  #reset,#empties,#rigBtn{background:transparent;color:var(--ink)}
+  #reset,#empties,#rigBtn,#drag3d{background:transparent;color:var(--ink)}
   button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
   button:disabled{opacity:.45;cursor:default}
 
@@ -194,6 +197,7 @@
       <button class="view" type="button" data-view="side">מהצד</button>
       <button class="view" type="button" data-view="top">מלמעלה</button>
       <button class="view" type="button" data-view="back">מאחורי הקלעים</button>
+      <button id="drag3d" type="button">▶ ארוז וגרור החוצה</button>
     </div>
     <div id="stage3d" class="stage3d"></div>
     <p class="lead" id="stageNote"></p>
@@ -483,15 +487,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-  // ---- 3D stage, in real metres. Cube sizes are scaled from the drawing (assumption: orange = 65 cm). ----
+  // ---- 3D stage, in real metres. NN: the big cube is 60 cm, the actors 20 cm taller (80 cm). The rest scale from the drawing. ----
   (function(){
     const host = document.getElementById('stage3d'), dlg = document.getElementById('dlg3d');
-    const CM_PER_UNIT = 0.5, GAP = 18 * CM_PER_UNIT / 100, CLEAR = 1.2;
+    const CM_PER_UNIT = 60 / 130, ACTOR_H = 0.8, DOLLY = 0.8, GAP = 18 * CM_PER_UNIT / 100, CLEAR = 1.2;
     const sizes = CUBES.map(c => c.s * CM_PER_UNIT / 100);
     const backOfCubes = -Math.max(...sizes) / 2, backdropZ = backOfCubes - CLEAR;
     document.getElementById('stageNote').textContent =
-      `הנחה: הקוביה הכתומה ${Math.round(sizes[0] * 100)} ס״מ והשאר לפי היחס בציור (${sizes.map(s => Math.round(s * 100)).join(', ')} ס״מ). ` +
-      `המעבר מאחורי הקוביות: ${CLEAR.toFixed(2)} מ׳ עד הבד. שחקן בגובה 1.75 מ׳.`;
+      `הקוביה הכתומה ${Math.round(sizes[0] * 100)} ס״מ והשאר לפי היחס בציור (${sizes.map(s => Math.round(s * 100)).join(', ')} ס״מ). ` +
+      `המעבר מאחורי הקוביות: ${CLEAR.toFixed(2)} מ׳ עד הבד. שחקנים בגובה ${Math.round(ACTOR_H * 100)} ס״מ. דולי ${Math.round(DOLLY * 100)}×${Math.round(DOLLY * 100)} ס״מ על 4 גלגלים.`;
 
     function faceTexture(cube, side){
       const v = cube.faces[side], cv = document.createElement('canvas');
@@ -553,18 +557,67 @@
       armL.position.set(-.25, 1.43, 0); armR.position.set(.25, 1.43, 0);
       const torso = new THREE.Mesh(new THREE.CylinderGeometry(.19, .16, .6, 16), top); torso.position.y = 1.15;
       const head = new THREE.Mesh(new THREE.SphereGeometry(.12, 20, 16), skin); head.position.y = 1.6;
-      [legL, legR, torso, head, armL, armR].forEach(m => { m.castShadow = true; a.add(m); });
+      const body = new THREE.Group();
+      [legL, legR, torso, head, armL, armR].forEach(m => { m.castShadow = true; body.add(m); });
+      body.scale.setScalar(ACTOR_H / 1.72);
+      a.add(body);
       a.userData = {legL, legR, armL, armR};
       return a;
     }
 
-    let renderer, camera, controls, walker, total, started = false;
+    let renderer, camera, controls, walker, stander, dolly, wheels = [], total, started = false, dragT0 = null;
+    const cubeMesh = [], home = [];
     const views = {
       audience:{p:[0, 1.5, 5.6], t:[0, .8, -.6]},
       side:{p:[5.2, 2.3, .4], t:[0, .5, -.9]},
       top:{p:[0, 7.5, -.6001], t:[0, 0, -.6]},
       back:{p:[-2.8, 2.1, -3.6], t:[0, .6, -.4]}
     };
+    // Pack & drag out: the smaller cubes drop into the orange one, it goes onto the dolly, actor 1 pulls it off stage.
+    const dollyHomeX = () => home[0].x - sizes[0] / 2 - .15 - DOLLY / 2;
+    function resetDrag(){
+      dragT0 = null;
+      cubeMesh.forEach((m, i) => { m.position.copy(home[i]); m.visible = true; });
+      dolly.position.set(dollyHomeX(), 0, 0);
+      wheels.forEach(w => w.rotation.z = 0);
+      stander.position.set(home[0].x, sizes[0], 0); stander.rotation.y = .3;
+      walker.position.z = (backOfCubes + backdropZ) / 2;
+      const b = document.getElementById('drag3d'); if (b) b.textContent = '▶ ארוז וגרור החוצה';
+    }
+    const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
+    function stride(a, sec, on){
+      const sw = on ? Math.sin(sec * 9) * .45 : 0, u = a.userData;
+      u.legL.rotation.x = sw; u.legR.rotation.x = -sw; u.armL.rotation.x = -sw * .7; u.armR.rotation.x = on ? -.9 : 0;
+    }
+    function dragStep(e, sec){
+      const o = home[0], top = sizes[0];
+      // Actor 2 steps down to the floor in front of the cubes.
+      stander.position.set(o.x + .1, 0, .75); stander.rotation.y = 0;
+      // 0-4 s: yellow, green, purple, pink lift and sink into the orange cube, biggest first.
+      for (let i = 1; i < 5; i++) {
+        const k = e - (i - 1), m = cubeMesh[i], h = home[i];
+        if (k < 0) { m.position.copy(h); m.visible = true; continue; }
+        const up = top + sizes[i] / 2 + .08;
+        m.position.y = k < .35 ? h.y + (up - h.y) * ease(k / .35) : k < .65 ? up : up + (sizes[i] / 2 + .01 - up) * ease((k - .65) / .35);
+        m.position.x = h.x + (o.x - h.x) * ease((k - .3) / .4);
+        m.visible = k < 1;
+      }
+      // 4-5.5 s: the orange cube (now holding everything) slides up onto the dolly.
+      const dx = dollyHomeX(), k2 = ease((e - 4) / 1.5);
+      cubeMesh[0].position.set(o.x + (dx - o.x) * k2, o.y + .12 * ease((e - 4) / .5), 0);
+      // 4-5.5 s actor 1 comes round to the handle; 5.5-11 s pulls the dolly off stage left.
+      const handX = x => x - DOLLY / 2 - .55;
+      const out = -5.2, k3 = (e - 5.5) / 5.5, k3e = k3 < 0 ? 0 : k3 > 1 ? 1 : k3;
+      const dX = dx + (out - dx) * k3e;
+      dolly.position.x = dX;
+      if (e >= 5.5) cubeMesh[0].position.x = dX;
+      wheels.forEach(w => w.rotation.z = -(dX - dx) / .04);
+      const wz = (backOfCubes + backdropZ) / 2, ka = ease((e - 4) / 1.5);
+      walker.position.set(e < 5.5 ? walker.position.x + (handX(dx) - walker.position.x) * Math.min(1, ka) : handX(dX), 0, wz + (0 - wz) * ka);
+      walker.rotation.y = -Math.PI / 2;
+      stride(walker, sec, (e > 4 && e < 5.5) || (e >= 5.5 && k3 < 1));
+      if (e > 12.5) resetDrag();
+    }
     function setView(k){
       const v = views[k]; camera.position.set(...v.p); controls.target.set(...v.t); controls.update();
       document.querySelectorAll('.view').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === k)));
@@ -625,6 +678,7 @@
         const m = new THREE.Mesh(new THREE.BoxGeometry(s, s, s), mats);
         m.position.set(x + s / 2, s / 2, 0); m.castShadow = m.receiveShadow = true; scene3.add(m);
         cubePos.push(m.position.clone());
+        cubeMesh.push(m); home.push(m.position.clone());
         x += s + GAP;
       });
 
@@ -640,10 +694,31 @@
 
       // Actor 1 walks the corridor; actor 2 stands on the big orange cube.
       walker = actor(0x2f6fd6); walker.position.set(0, 0, (backOfCubes + backdropZ) / 2); scene3.add(walker);
-      const stander = actor(0xd64b4b);
+      stander = actor(0xd64b4b);
       stander.position.set(cubePos[0].x, sizes[0], 0); stander.rotation.y = .3; scene3.add(stander);
-      const l1 = label('שחקן 1 עובר מאחור', 1.2); l1.position.set(0, 2.05, 0); walker.add(l1);
-      const l2 = label('שחקן 2 על הקוביה', 1.2); l2.position.set(0, 2.05, 0); stander.add(l2);
+      const l1 = label('שחקן 1', .75); l1.position.set(0, ACTOR_H + .2, 0); walker.add(l1);
+      const l2 = label('שחקן 2', .75); l2.position.set(0, ACTOR_H + .2, 0); stander.add(l2);
+
+      // Dolly: wooden board on four casters, with a pull handle on its left side.
+      dolly = new THREE.Group();
+      const wood = new THREE.MeshStandardMaterial({color:0xa8743f, roughness:.8});
+      const board = new THREE.Mesh(new THREE.BoxGeometry(DOLLY, .04, DOLLY), wood);
+      board.position.y = .1; board.castShadow = board.receiveShadow = true; dolly.add(board);
+      const rubber = new THREE.MeshStandardMaterial({color:0x222222, roughness:.6});
+      const hub = new THREE.MeshStandardMaterial({color:0xcccccc, metalness:.6, roughness:.4});
+      [[-1, -1], [-1, 1], [1, -1], [1, 1]].forEach(([sx, sz]) => {
+        const w = new THREE.Group();
+        const tyre = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, .03, 16), rubber); tyre.rotation.x = Math.PI / 2;
+        const spoke = new THREE.Mesh(new THREE.BoxGeometry(.075, .012, .032), hub);
+        w.add(tyre, spoke); w.position.set(sx * (DOLLY / 2 - .07), .04, sz * (DOLLY / 2 - .07));
+        const fork = new THREE.Mesh(new THREE.BoxGeometry(.06, .04, .05), hub); fork.position.set(w.position.x, .07, w.position.z);
+        dolly.add(w, fork); wheels.push(w);
+      });
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .5, 8), hub);
+      handle.position.set(-DOLLY / 2 - .2, .26, 0); handle.rotation.z = -1.0; dolly.add(handle);
+      scene3.add(dolly);
+      const ld = label('דולי', .5); ld.position.set(0, .2, DOLLY / 2 + .15); dolly.add(ld);
+      resetDrag();
 
       setView('audience');
       addEventListener('resize', () => { if (dlg.open) fit(); });
@@ -652,7 +727,8 @@
         requestAnimationFrame(loop);
         if (!dlg.open) return;
         const span = total / 2 + .2, sec = t / 1000;
-        if (!reduce) {
+        if (dragT0 !== null) dragStep((t - dragT0) / 1000, sec);
+        else if (!reduce) {
           const ph = (sec * .22) % 2, f = ph < 1 ? ph : 2 - ph;
           walker.position.x = -span + f * 2 * span;
           walker.rotation.y = ph < 1 ? Math.PI / 2 : -Math.PI / 2;
@@ -670,6 +746,12 @@
       else fit();
     });
     document.getElementById('close3d').addEventListener('click', () => dlg.close());
+    document.getElementById('drag3d').addEventListener('click', e => {
+      if (!started) return;
+      if (dragT0 !== null) { resetDrag(); return; }
+      dragT0 = performance.now();
+      e.currentTarget.textContent = '■ החזר';
+    });
     document.querySelectorAll('.view').forEach(b => b.addEventListener('click', () => { if (started) setView(b.dataset.view); }));
   })();
 </script>
