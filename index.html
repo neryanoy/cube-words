@@ -573,50 +573,93 @@
       top:{p:[0, 7.5, -.6001], t:[0, 0, -.6]},
       back:{p:[-2.8, 2.1, -3.6], t:[0, .6, -.4]}
     };
-    // Pack & drag out: the smaller cubes drop into the orange one, it goes onto the dolly, actor 1 pulls it off stage.
+    // Strike the whole set at once: actor 1 fetches the dolly from where it hides (behind the backdrop,
+    // stage left) and nests the cubes into the orange one; at the same time actor 2 rolls up the sky fabric
+    // and lays the aluminium frame down. Everything rides out together on the dolly.
+    const BW = 4.6, BH = 2.7;
+    // Parked fully behind the fabric so the audience never sees it; it leaves round the stage-left edge.
+    const PARK = {x:-BW / 2 + .7, z:backdropZ - .7}, EDGE = {x:-BW / 2 - .65, z:backdropZ - .7};
+    const PILE_Z = backdropZ + .35, OUT = -5.2;
+    const set3 = {sky:null, cloth:null, roll:null, parts:[]};
     const dollyHomeX = () => home[0].x - sizes[0] / 2 - .15 - DOLLY / 2;
+    const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
+    const lerp = (a, b, k) => a + (b - a) * k;
     function resetDrag(){
       dragT0 = null;
       cubeMesh.forEach((m, i) => { m.position.copy(home[i]); m.visible = true; });
-      dolly.position.set(dollyHomeX(), 0, 0);
+      dolly.position.set(PARK.x, 0, PARK.z);
+      dolly.userData.label.visible = false;  // labels draw through walls; keep the hidden dolly hidden
       wheels.forEach(w => w.rotation.z = 0);
       stander.position.set(home[0].x, sizes[0], 0); stander.rotation.y = .3;
       walker.position.z = (backOfCubes + backdropZ) / 2;
+      [set3.sky, set3.cloth].forEach(m => { m.scale.y = 1; m.position.y = BH / 2; });
+      set3.roll.visible = false;
+      set3.parts.forEach(p => { p.m.position.copy(p.pos); p.m.rotation.copy(p.rot); });
       const b = document.getElementById('drag3d'); if (b) b.textContent = '▶ ארוז וגרור החוצה';
     }
-    const ease = k => k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k);
     function stride(a, sec, on){
       const sw = on ? Math.sin(sec * 9) * .45 : 0, u = a.userData;
       u.legL.rotation.x = sw; u.legR.rotation.x = -sw; u.armL.rotation.x = -sw * .7; u.armR.rotation.x = on ? -.9 : 0;
     }
+    function placeDolly(x, z){
+      dolly.position.set(x, 0, z);
+      wheels.forEach(w => w.rotation.z = -x / .04);
+      walker.position.set(x - DOLLY / 2 - .55, 0, z);
+      walker.rotation.y = -Math.PI / 2;
+    }
     function dragStep(e, sec){
-      const o = home[0], top = sizes[0];
-      // Actor 2 steps down to the floor in front of the cubes.
-      stander.position.set(o.x + .1, 0, .75); stander.rotation.y = 0;
-      // 0-4 s: yellow, green, purple, pink lift and sink into the orange cube, biggest first.
+      const o = home[0], top = sizes[0], dx = dollyHomeX(), loadZ = PILE_Z - .3;
+      let moving = false;
+      dolly.userData.label.visible = true;
+      // ---- Actor 1: dolly and cubes ----
+      // 0-1.5 s: brings the dolly out from behind the backdrop, round its edge.
+      if (e < .6) { const k = ease(e / .6); placeDolly(lerp(PARK.x, EDGE.x, k), PARK.z); moving = true; }
+      else if (e < 1.5) { const k = ease((e - .6) / .9); placeDolly(lerp(EDGE.x, dx, k), lerp(EDGE.z, 0, k)); moving = true; }
+      // 0.3-3.3 s: yellow, green, purple, pink lift and sink into the orange cube, biggest first.
       for (let i = 1; i < 5; i++) {
-        const k = e - (i - 1), m = cubeMesh[i], h = home[i];
+        const k = (e - .3 - (i - 1) * .75) / .75, m = cubeMesh[i], h = home[i];
         if (k < 0) { m.position.copy(h); m.visible = true; continue; }
         const up = top + sizes[i] / 2 + .08;
-        m.position.y = k < .35 ? h.y + (up - h.y) * ease(k / .35) : k < .65 ? up : up + (sizes[i] / 2 + .01 - up) * ease((k - .65) / .35);
-        m.position.x = h.x + (o.x - h.x) * ease((k - .3) / .4);
+        m.position.y = k < .35 ? lerp(h.y, up, ease(k / .35)) : k < .65 ? up : lerp(up, sizes[i] / 2 + .01, ease((k - .65) / .35));
+        m.position.x = lerp(h.x, o.x, ease((k - .3) / .4));
         m.visible = k < 1;
       }
-      // 4-5.5 s: the orange cube (now holding everything) slides up onto the dolly.
-      const dx = dollyHomeX(), k2 = ease((e - 4) / 1.5);
-      cubeMesh[0].position.set(o.x + (dx - o.x) * k2, o.y + .12 * ease((e - 4) / .5), 0);
-      // 4-5.5 s actor 1 comes round to the handle; 5.5-11 s pulls the dolly off stage left.
-      const handX = x => x - DOLLY / 2 - .55;
-      const out = -5.2, k3 = (e - 5.5) / 5.5, k3e = k3 < 0 ? 0 : k3 > 1 ? 1 : k3;
-      const dX = dx + (out - dx) * k3e;
-      dolly.position.x = dX;
-      if (e >= 5.5) cubeMesh[0].position.x = dX;
-      wheels.forEach(w => w.rotation.z = -(dX - dx) / .04);
-      const wz = (backOfCubes + backdropZ) / 2, ka = ease((e - 4) / 1.5);
-      walker.position.set(e < 5.5 ? walker.position.x + (handX(dx) - walker.position.x) * Math.min(1, ka) : handX(dX), 0, wz + (0 - wz) * ka);
-      walker.rotation.y = -Math.PI / 2;
-      stride(walker, sec, (e > 4 && e < 5.5) || (e >= 5.5 && k3 < 1));
-      if (e > 12.5) resetDrag();
+      if (e >= 1.5 && e < 4.3) placeDolly(dx, 0);
+      // 3.3-4.3 s: the orange cube, holding everything, slides onto the dolly.
+      const k2 = ease((e - 3.3) / 1);
+      let cx = lerp(o.x, dx, k2), cz = 0;
+      // 4.3-5.5 s: dolly over to the pile of poles; 5.5-5.9 s loaded; 5.9-8 s everything goes out together.
+      if (e >= 4.3) {
+        const kb = ease((e - 4.3) / 1.2), ko = Math.min(1, Math.max(0, (e - 5.9) / 2.1));
+        const x = e < 5.9 ? lerp(dx, 0, kb) : lerp(0, OUT, ko), z = lerp(0, loadZ, kb);
+        placeDolly(x, z); cx = x; cz = z;
+        moving = moving || e < 5.5 || (e >= 5.9 && ko < 1);
+      }
+      cubeMesh[0].position.set(cx, o.y + .12 * ease((e - 3.3) / .3), cz);
+      // ---- Actor 2, at the same time: sky fabric and aluminium frame ----
+      stander.position.set(lerp(o.x + .1, .9, ease(e / .5)), lerp(top, 0, ease(e / .3)), lerp(.4, PILE_Z + .5, ease(e / .5)));
+      stander.rotation.y = Math.PI;
+      // 0.5-1.8 s: rolls the fabric down from the top.
+      const kr = ease((e - .5) / 1.3), left = Math.max(.001, 1 - kr);
+      [set3.sky, set3.cloth].forEach(m => { m.scale.y = left; m.position.y = BH * left / 2; });
+      set3.roll.visible = e > .5;
+      set3.roll.position.set(0, Math.max(.06, BH * (1 - kr)), backdropZ + .04);
+      // 1.8-3.2 s: takes the frame apart; every pole lies on the floor in one pile.
+      const kf = ease((e - 1.8) / 1.4);
+      set3.parts.forEach((p, i) => {
+        p.m.position.set(lerp(p.pos.x, 0, kf), lerp(p.pos.y, .03 + i * .05, kf), lerp(p.pos.z, PILE_Z, kf));
+        p.m.rotation.set(p.rot.x, lerp(p.rot.y, p.lie.y, kf), lerp(p.rot.z, p.lie.z, kf));
+      });
+      set3.roll.position.z = lerp(backdropZ + .04, PILE_Z, kf);
+      // Loading: poles and the roll go up onto the dolly beside the cube and ride out with it.
+      if (e >= 5.5) {
+        const kl = ease((e - 5.5) / .4), ride = e >= 5.9 ? dolly.position.x : 0;
+        set3.parts.forEach((p, i) => p.m.position.set(ride, lerp(.03 + i * .05, .14 + i * .05, kl), PILE_Z));
+        set3.roll.position.set(ride, lerp(.06, .14 + set3.parts.length * .05 + .06, kl), PILE_Z);
+      }
+      stride(walker, sec, moving);
+      stride(stander, sec, e < .5);
+      if (e > 9) resetDrag();
     }
     function setView(k){
       const v = views[k]; camera.position.set(...v.p); controls.target.set(...v.t); controls.update();
@@ -650,21 +693,25 @@
       floor.position.set(0, -.04, backdropZ + 2.1); floor.receiveShadow = true; scene3.add(floor);
 
       // Backdrop: one sky fabric on an aluminium frame.
-      const bw = 4.6, bh = 2.7;
+      const bw = BW, bh = BH;
       const sky = new THREE.Mesh(new THREE.PlaneGeometry(bw, bh), new THREE.MeshStandardMaterial({map:skyTexture(), roughness:1}));
-      sky.position.set(0, bh / 2, backdropZ); sky.receiveShadow = true; scene3.add(sky);
+      sky.position.set(0, bh / 2, backdropZ); sky.receiveShadow = true; scene3.add(sky); set3.sky = sky;
       // Back of the fabric, as the crew sees it backstage.
       const backCloth = new THREE.Mesh(new THREE.PlaneGeometry(bw, bh), new THREE.MeshStandardMaterial({color:0xd9d4c7, roughness:1}));
-      backCloth.rotation.y = Math.PI; backCloth.position.set(0, bh / 2, backdropZ - .005); scene3.add(backCloth);
+      backCloth.rotation.y = Math.PI; backCloth.position.set(0, bh / 2, backdropZ - .005); scene3.add(backCloth); set3.cloth = backCloth;
+      set3.roll = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, bw, 20), new THREE.MeshStandardMaterial({color:0x5ea8e6, roughness:1}));
+      set3.roll.rotation.z = Math.PI / 2; set3.roll.castShadow = true; scene3.add(set3.roll);
+      // Each frame part remembers where it stands and how it lies once the frame is taken apart.
+      const part = (m, lie) => set3.parts.push({m, pos:m.position.clone(), rot:m.rotation.clone(), lie});
       const alu = new THREE.MeshStandardMaterial({color:0xb9c0c7, metalness:.7, roughness:.35});
       [-bw / 2, -bw / 4, 0, bw / 4, bw / 2].forEach(x => {
-        const post = new THREE.Mesh(new THREE.BoxGeometry(.05, bh, .05), alu); post.position.set(x, bh / 2, backdropZ - .04); scene3.add(post);
+        const post = new THREE.Mesh(new THREE.BoxGeometry(.05, bh, .05), alu); post.position.set(x, bh / 2, backdropZ - .04); scene3.add(post); part(post, {y:0, z:Math.PI / 2});
       });
       [0, bh / 2, bh].forEach(y => {
-        const rail = new THREE.Mesh(new THREE.BoxGeometry(bw, .05, .05), alu); rail.position.set(0, y, backdropZ - .04); scene3.add(rail);
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(bw, .05, .05), alu); rail.position.set(0, y, backdropZ - .04); scene3.add(rail); part(rail, {y:0, z:0});
       });
       [-bw / 2, bw / 2].forEach(x => {
-        const foot = new THREE.Mesh(new THREE.BoxGeometry(.06, .04, .7), alu); foot.position.set(x, .02, backdropZ - .3); scene3.add(foot);
+        const foot = new THREE.Mesh(new THREE.BoxGeometry(.06, .04, .7), alu); foot.position.set(x, .02, backdropZ - .3); scene3.add(foot); part(foot, {y:Math.PI / 2, z:0});
       });
 
       // Cubes, left to right as the audience sees them.
@@ -717,7 +764,7 @@
       const handle = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .5, 8), hub);
       handle.position.set(-DOLLY / 2 - .2, .26, 0); handle.rotation.z = -1.0; dolly.add(handle);
       scene3.add(dolly);
-      const ld = label('דולי', .5); ld.position.set(0, .2, DOLLY / 2 + .15); dolly.add(ld);
+      const ld = dolly.userData.label = label('דולי', .5); ld.position.set(0, .2, DOLLY / 2 + .15); dolly.add(ld);
       resetDrag();
 
       setView('audience');
