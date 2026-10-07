@@ -53,22 +53,21 @@
   .dot{position:absolute;left:var(--x);top:var(--y);width:7%;height:7%;border-radius:50%;background:#000;transform:translate(-50%,-50%)}
 
   /* Steps 1-2 turn cubes a quarter to the left. Step 3 tips ח-ר-ב forward onto their tops,
-     while ו and ת tip backward and show their open side. Step 4 flips ו and ת over too: חברות. */
+     while ו and ת tip backward and show their open side. Step 4 puts ב/ר back (חבר) while ו and ת stay open; step 5 flips them over: חברות. */
   .body{transform:rotateX(0deg) rotateY(0deg)}
   .scene[data-step="1"] .pink .body,.scene[data-step="1"] .orange .body{transform:rotateX(0deg) rotateY(-90deg)}
   .scene[data-step="2"] .body{transform:rotateX(0deg) rotateY(-90deg)}
   .scene[data-step="2"] .pink .body,.scene[data-step="2"] .orange .body{transform:rotateX(0deg) rotateY(-180deg)}
-  .scene:is([data-step="3"],[data-step="4"]) .body{transform:rotateX(-90deg) rotateY(-90deg)}
-  .scene:is([data-step="3"],[data-step="4"]) :is(.pink,.orange) .body{transform:rotateX(-90deg) rotateY(-180deg)}
-  .scene[data-step="3"] .yellow .body{transform:rotateX(90deg) rotateY(-90deg)}
-  .scene[data-step="3"] .orange .body{transform:rotateX(90deg) rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .body{transform:rotateX(-90deg) rotateY(-90deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) :is(.pink,.orange) .body{transform:rotateX(-90deg) rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .yellow .body{transform:rotateX(90deg) rotateY(-90deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .orange .body{transform:rotateX(90deg) rotateY(-180deg)}
   .scene[data-step="1"] .orange .body{transition-delay:.25s}
   .scene[data-step="2"] .purple .body,.scene[data-step="3"] .purple .body{transition-delay:.15s}
   .scene[data-step="2"] .green .body,.scene[data-step="3"] .green .body{transition-delay:.3s}
   .scene[data-step="2"] .yellow .body,.scene[data-step="3"] .yellow .body{transition-delay:.45s}
   .scene[data-step="2"] .orange .body,.scene[data-step="3"] .orange .body{transition-delay:.6s}
-  .scene[data-step="4"] .yellow .body{transition-delay:.9s}
-  .scene[data-step="4"] .orange .body{transition-delay:1.05s}
+  .scene[data-step="5"] .orange .body{transition-delay:.2s}
   .scene.peek .body{transition-delay:0s!important}
 
   /* ב and ר trade places in step 3 (script) and come back in step 4. */
@@ -253,7 +252,8 @@
     {w:'טעות', t:'ה־ד והקוביה הכתומה הסתובבו שמאלה', b:'סובב את כל הקוביות'},
     {w:'סליחה', t:'כל הקוביות הסתובבו שמאלה', b:'הפוך'},
     {w:'חרב', t:'ח־ר־ב התהפכו קדימה, ו ו־ת התהפכו אחורה לצד הפתוח, ב ו־ר החליפו מקום', b:'סדר את המילה'},
-    {w:'חברות', t:'ב ו־ר חזרו למקום, ו ו־ת התהפכו והראו את האותיות', b:'עוד פעם'}
+    {w:'חבר', t:'ב ו־ר חזרו למקום, ו ו־ת עדיין על הצד הפתוח', b:'השלם את המילה'},
+    {w:'חברות', t:'ו ו־ת התהפכו והראו את האותיות', b:'עוד פעם'}
   ];
   let step = 0, emptyRound = -1;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
