@@ -34,6 +34,23 @@
       radial-gradient(ellipse 10% 4% at 88% 52%,rgba(255,255,255,.8) 0 50%,transparent 72%),
       radial-gradient(ellipse 9% 3.5% at 6% 58%,rgba(255,255,255,.75) 0 50%,transparent 72%),
       linear-gradient(#2f7fd0,#5ea8e6 55%,#a9d4f5)}
+  /* Backdrop rigging demo: the bare aluminium frame with Velcro strips, then the sky fabric comes down onto it. */
+  .frame{position:absolute;z-index:0;inset:0 0 34% 0;opacity:0;transition:opacity .5s ease}
+  .scene.rig .frame{opacity:1}
+  .bar{position:absolute;background:linear-gradient(90deg,#8b949d,#eef1f4 40%,#b9c0c7 60%,#7d868f)}
+  .bar.h{left:0;right:0;height:calc(10 * var(--u));background:linear-gradient(#8b949d,#eef1f4 40%,#b9c0c7 60%,#7d868f)}
+  .bar.v{top:0;bottom:0;width:calc(10 * var(--u))}
+  .velcro{position:absolute;background:repeating-linear-gradient(45deg,#1f1f1f 0 2px,#3b3b3b 2px 4px);border-radius:2px}
+  /* Pressing: the strips glow through the fabric where it grips. */
+  .scene.rig.press .frame{z-index:1}
+  .scene.rig.press :is(.bar,.tag){opacity:0}
+  .scene.rig.press .velcro{background:#ffd34d;opacity:0;animation:press .8s ease-in-out 4}
+  @keyframes press{50%{opacity:.85}}
+  .tag{position:absolute;top:calc(22 * var(--u));left:50%;transform:translateX(-50%);direction:rtl;white-space:nowrap;
+    background:#ffd34d;color:#1c2733;font:700 calc(15 * var(--u))/1 "Assistant",sans-serif;padding:calc(6 * var(--u)) calc(10 * var(--u));border-radius:6px}
+  .roll{position:absolute;z-index:1;left:0;right:0;top:0;height:calc(16 * var(--u));border-radius:calc(8 * var(--u));opacity:0;
+    background:linear-gradient(#a9d4f5,#5ea8e6 45%,#2f7fd0);box-shadow:0 calc(4 * var(--u)) calc(8 * var(--u)) rgba(0,0,0,.35)}
+  .scene.rig .cube{opacity:.25}
   .cube{--z:calc(var(--s) * var(--u));width:var(--z);height:var(--z);flex:none;z-index:1;
     perspective:calc(var(--z) * 5);perspective-origin:28% 8%}
   .body{position:relative;width:100%;height:100%;transform-style:preserve-3d;
@@ -95,7 +112,7 @@
   .btns{display:flex;gap:10px;flex-wrap:wrap}
   button{font:700 16px/1 "Assistant",sans-serif;border-radius:8px;padding:13px 20px;cursor:pointer;border:2px solid var(--ink)}
   #next{background:var(--ink);color:#fff}
-  #reset,#empties{background:transparent;color:var(--ink)}
+  #reset,#empties,#rigBtn{background:transparent;color:var(--ink)}
   button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
   button:disabled{opacity:.45;cursor:default}
 
@@ -124,7 +141,9 @@
   <h1>תפאורה שחורצי</h1>
 
   <div class="scene" id="scene" data-step="0" aria-live="polite">
-    <div class="drop" aria-hidden="true"></div>
+    <div class="frame" id="frame" aria-hidden="true"></div>
+    <div class="drop" id="drop" aria-hidden="true"></div>
+    <div class="roll" id="roll" aria-hidden="true"></div>
   </div>
 
   <div class="panel">
@@ -135,6 +154,7 @@
     <div class="btns">
       <button id="next" type="button">סובב</button>
       <button id="reset" type="button" disabled>מההתחלה</button>
+      <button id="rigBtn" type="button">איך מלבישים את הרקע</button>
     </div>
   </div>
 
@@ -291,6 +311,7 @@
     });
   }
   function clearPeek(){
+    if (typeof stopRig === 'function' && scene.classList.contains('rig')) stopRig();
     if (typeof cancelPack === 'function') cancelPack();
     scene.classList.remove('peek');
     CUBES.forEach(c => c.body.style.transform = '');
@@ -356,6 +377,54 @@
     reset.disabled = false;
   }
   // Cycle every cube to its free sides: first round the left sides, then the backs.
+  // ---- Backdrop rigging demo ----
+  const frame = document.getElementById('frame'), drop = document.getElementById('drop'), roll = document.getElementById('roll');
+  const rigBtn = document.getElementById('rigBtn');
+  const U = 'var(--u)';
+  [0, 25, 50, 75, 100].forEach(x => {
+    frame.insertAdjacentHTML('beforeend',
+      `<div class="bar v" style="left:calc(${x}% - ${x / 10} * ${U})"></div>` +
+      `<div class="velcro" style="top:0;bottom:0;width:calc(4 * ${U});left:calc(${x}% - ${x / 10} * ${U} + 3 * ${U})"></div>`);
+  });
+  [0, 50, 100].forEach(y => {
+    frame.insertAdjacentHTML('beforeend',
+      `<div class="bar h" style="top:calc(${y}% - ${y / 10} * ${U})"></div>` +
+      `<div class="velcro" style="left:0;right:0;height:calc(4 * ${U});top:calc(${y}% - ${y / 10} * ${U} + 3 * ${U})"></div>`);
+  });
+  frame.insertAdjacentHTML('beforeend', '<div class="tag">פסי סקוץ׳ על מסגרת האלומיניום</div>');
+  let rigTimers = [], rigAnims = [];
+  function stopRig(){
+    rigTimers.forEach(clearTimeout); rigTimers = [];
+    rigAnims.forEach(a => a.cancel()); rigAnims = [];
+    scene.classList.remove('rig', 'press');
+    rigBtn.disabled = false;
+  }
+  rigBtn.addEventListener('click', () => {
+    stopRig();
+    clearPeek();
+    rigBtn.disabled = true;
+    scene.classList.add('rig');
+    const fast = reduce ? 0.01 : 1;
+    const hidden = drop.animate([{clipPath:'inset(0 0 100% 0)'}], {duration:1, fill:'forwards'});
+    rigAnims.push(hidden);
+    word.textContent = 'הרכבת הרקע';
+    stepText.textContent = '1. מסגרת אלומיניום. על המוטות מודבקים פסי סקוץ׳ (השחורים).';
+    const at = (ms, fn) => rigTimers.push(setTimeout(fn, ms * fast));
+    at(3000, () => {
+      stepText.textContent = '2. מורידים את בד השמיים מלמעלה ומצמידים אותו לסקוץ׳.';
+      const h = frame.offsetHeight;
+      rigAnims.push(drop.animate([{clipPath:'inset(0 0 100% 0)'}, {clipPath:'inset(0 0 0% 0)'}],
+        {duration:3200 * fast, easing:'ease-in-out', fill:'forwards'}));
+      rigAnims.push(roll.animate([{opacity:1, transform:'translateY(0)'}, {opacity:1, transform:`translateY(${h - roll.offsetHeight}px)`, offset:.94}, {opacity:0, transform:`translateY(${h}px)`}],
+        {duration:3400 * fast, easing:'ease-in-out', fill:'forwards'}));
+    });
+    at(6600, () => {
+      scene.classList.add('press');
+      stepText.textContent = '3. לוחצים לאורך הפסים, הבד נצמד ונמתח. אפשר לפרוק ולהחליף בד בקלות.';
+    });
+    at(10000, () => { stopRig(); show(step); });
+  });
+
   empties.addEventListener('click', () => {
     const round = emptyRound + 1;
     clearPeek();
