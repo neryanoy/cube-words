@@ -115,7 +115,7 @@
   .btns{display:flex;gap:10px;flex-wrap:wrap}
   button{font:700 16px/1 "Assistant",sans-serif;border-radius:8px;padding:13px 20px;cursor:pointer;border:2px solid var(--ink)}
   #next{background:var(--ink);color:#fff}
-  #reset,#empties,#rigBtn,#drag3d{background:transparent;color:var(--ink)}
+  #reset,#empties,#rigBtn{background:transparent;color:var(--ink)}
   button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
   button:disabled{opacity:.45;cursor:default}
 
@@ -139,7 +139,7 @@
   .ideas{margin:0;padding-inline-start:20px;line-height:1.6;font-size:15px}
   /* 3D stage: a button in the title row opens it in a full dialog. */
   .titlebar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
-  #open3d{background:#e8784a;border-color:#e8784a;color:#fff}
+  #open3d,#drag3d{background:#e8784a;border-color:#e8784a;color:#fff}
   .dlg3d{width:min(1100px,calc(100vw - 24px));max-width:none;max-height:calc(100vh - 24px);border:0;border-radius:12px;padding:16px;
     background:var(--paper);color:var(--text);direction:rtl;display:none;gap:12px}
   .dlg3d[open]{display:grid}
