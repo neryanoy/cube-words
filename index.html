@@ -18,16 +18,22 @@
     padding-block:calc(200 * var(--u)) calc(34 * var(--u));
     display:flex;justify-content:center;align-items:flex-end;gap:calc(18 * var(--u));direction:ltr}
 
-  /* Backdrop: two aluminium panels covering the whole back wall, fabric stretched over them from the floor up. */
-  .drop{position:absolute;z-index:0;top:0;bottom:34%;width:50%;box-sizing:border-box;
-    border:calc(7 * var(--u)) solid #b9c0c7;border-image:linear-gradient(135deg,#eef1f4,#9aa3ac 45%,#d7dce1 70%,#8b949d) 1;
+  /* Backdrop: one continuous sky-print fabric, stretched over the aluminium frame from the floor up. */
+  .drop{position:absolute;z-index:0;inset:0 0 34% 0;box-sizing:border-box;
+    border:calc(6 * var(--u)) solid #b9c0c7;border-bottom:0;
+    border-image:linear-gradient(135deg,#eef1f4,#9aa3ac 45%,#d7dce1 70%,#8b949d) 1;
     background:
-      repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 4px),
-      repeating-linear-gradient(90deg,rgba(0,0,0,.025) 0 1px,transparent 1px 4px),
-      linear-gradient(90deg,rgba(0,0,0,.10),rgba(255,255,255,.06) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.12)),
-      var(--wall);
-    box-shadow:0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0,0,0,.25)}
-  .drop.l{left:0}.drop.r{right:0}
+      radial-gradient(ellipse 9% 5% at 14% 22%,#fff 0 55%,transparent 72%),
+      radial-gradient(ellipse 7% 6% at 19% 19%,#fff 0 55%,transparent 72%),
+      radial-gradient(ellipse 8% 4.5% at 23% 24%,#fbfdff 0 55%,transparent 72%),
+      radial-gradient(ellipse 11% 5% at 63% 14%,#fff 0 55%,transparent 72%),
+      radial-gradient(ellipse 7% 6.5% at 69% 10%,#fff 0 55%,transparent 72%),
+      radial-gradient(ellipse 9% 4.5% at 75% 15%,#f7fbff 0 55%,transparent 72%),
+      radial-gradient(ellipse 8% 4% at 42% 46%,rgba(255,255,255,.85) 0 50%,transparent 72%),
+      radial-gradient(ellipse 6% 4% at 46% 43%,rgba(255,255,255,.85) 0 50%,transparent 72%),
+      radial-gradient(ellipse 10% 4% at 88% 52%,rgba(255,255,255,.8) 0 50%,transparent 72%),
+      radial-gradient(ellipse 9% 3.5% at 6% 58%,rgba(255,255,255,.75) 0 50%,transparent 72%),
+      linear-gradient(#2f7fd0,#5ea8e6 55%,#a9d4f5)}
   .cube{--z:calc(var(--s) * var(--u));width:var(--z);height:var(--z);flex:none;z-index:1;
     perspective:calc(var(--z) * 5);perspective-origin:28% 8%}
   .body{position:relative;width:100%;height:100%;transform-style:preserve-3d;
@@ -111,8 +117,7 @@
   <h1>תפאורה שחורצי</h1>
 
   <div class="scene" id="scene" data-step="0" aria-live="polite">
-    <div class="drop l" aria-hidden="true"></div>
-    <div class="drop r" aria-hidden="true"></div>
+    <div class="drop" aria-hidden="true"></div>
   </div>
 
   <div class="panel">
