@@ -201,11 +201,11 @@
   <section class="faces" aria-labelledby="palTitle">
     <h2 id="palTitle">צבעים (מספר HEX)</h2>
     <div class="pal">
-      <div><i style="background:#e8784a"></i><span><b>כתומה (130)</b><code>#E8784A</code></span></div>
-      <div><i style="background:#e8c957"></i><span><b>צהובה (118)</b><code>#E8C957</code></span></div>
-      <div><i style="background:#9ccb82"></i><span><b>ירוקה (106)</b><code>#9CCB82</code></span></div>
-      <div><i style="background:#bb8cd2"></i><span><b>סגולה (96)</b><code>#BB8CD2</code></span></div>
-      <div><i style="background:#db8f98"></i><span><b>ורודה (86)</b><code>#DB8F98</code></span></div>
+      <div><i style="background:#e8784a"></i><span><b>כתומה 50×50 ס״מ</b><code>#E8784A</code></span></div>
+      <div><i style="background:#e8c957"></i><span><b>צהובה 45×45 ס״מ</b><code>#E8C957</code></span></div>
+      <div><i style="background:#9ccb82"></i><span><b>ירוקה 40×40 ס״מ</b><code>#9CCB82</code></span></div>
+      <div><i style="background:#bb8cd2"></i><span><b>סגולה 35×35 ס״מ</b><code>#BB8CD2</code></span></div>
+      <div><i style="background:#db8f98"></i><span><b>ורודה 30×30 ס״מ</b><code>#DB8F98</code></span></div>
       <div><i style="background:#1d1d1d"></i><span><b>חור / צד פתוח</b><code>#1D1D1D</code></span></div>
       <div><i style="background:#63b3f0"></i><span><b>שמיים</b><code>#63B3F0</code></span></div>
       <div><i style="background:#f5f9fa"></i><span><b>עננים</b><code>#F5F9FA</code></span></div>
@@ -247,13 +247,13 @@
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
       faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:{w:'ת'}, bottom:'hole'}},
-    {k:'yellow', name:'הצהובה', s:118, c:'#e8c957', end:-90,
+    {k:'yellow', name:'הצהובה', s:117, c:'#e8c957', end:-90,
       faces:{front:'ת', right:'ח', back:null, left:null, top:{w:'ו'}, bottom:'hole'}},
-    {k:'green', name:'הירוקה', s:106, c:'#9ccb82', end:-90,
+    {k:'green', name:'הירוקה', s:104, c:'#9ccb82', end:-90,
       faces:{front:'ו', right:'י', back:null, left:null, top:{w:'ר'}, bottom:'hole'}},
-    {k:'purple', name:'הסגולה', s:96, c:'#bb8cd2', end:-90,
+    {k:'purple', name:'הסגולה', s:91, c:'#bb8cd2', end:-90,
       faces:{front:'ע', right:'ל', back:null, left:null, top:{w:'ב'}, bottom:'hole'}},
-    {k:'pink', name:'הוורודה', s:86, c:'#db8f98', end:-180,
+    {k:'pink', name:'הוורודה', s:78, c:'#db8f98', end:-180,
       faces:{front:'ד', right:'ט', back:'ס', left:null, top:{w:'ח'}, bottom:null}}
   ];
   const SIDES = ['front','right','back','left','top','bottom'];
@@ -541,10 +541,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
-  // ---- 3D stage, in real metres. NN: the big cube is 60 cm, the actors 20 cm taller (80 cm). The rest scale from the drawing. ----
+  // ---- 3D stage, in real metres. NN: the big cube is 50 cm (45/40/35/30 for the rest), the actors 20 cm taller (80 cm). The rest scale from the drawing. ----
   (function(){
     const host = document.getElementById('stage3d'), dlg = document.getElementById('dlg3d');
-    const CM_PER_UNIT = 60 / 130, ACTOR_H = 0.8, DOLLY = 0.8, GAP = 18 * CM_PER_UNIT / 100, CLEAR = 1.2;
+    const CM_PER_UNIT = 50 / 130, ACTOR_H = 0.8, DOLLY = 0.8, GAP = 18 * CM_PER_UNIT / 100, CLEAR = 1.2;
     const sizes = CUBES.map(c => c.s * CM_PER_UNIT / 100);
     const backOfCubes = -Math.max(...sizes) / 2, backdropZ = backOfCubes - CLEAR;
     document.getElementById('stageNote').textContent =
