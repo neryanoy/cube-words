@@ -1,20 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="210cm" height="160cm" viewBox="0 0 210 160">
 <rect x="55" y="5" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<circle cx="61.50" cy="12.50" r="1.15" fill="#fff"/>
-<circle cx="73.50" cy="11.00" r="1.15" fill="#fff"/>
-<circle cx="88.00" cy="13.50" r="1.15" fill="#fff"/>
-<circle cx="98.50" cy="12.00" r="1.15" fill="#fff"/>
-<circle cx="66.00" cy="22.00" r="1.15" fill="#fff"/>
-<circle cx="80.50" cy="19.50" r="1.15" fill="#fff"/>
-<circle cx="94.50" cy="23.50" r="1.15" fill="#fff"/>
-<circle cx="61.00" cy="32.00" r="1.15" fill="#fff"/>
-<circle cx="71.50" cy="35.50" r="1.15" fill="#fff"/>
-<circle cx="91.50" cy="34.50" r="1.15" fill="#fff"/>
-<circle cx="99.50" cy="39.00" r="1.15" fill="#fff"/>
-<circle cx="65.00" cy="45.50" r="1.15" fill="#fff"/>
-<circle cx="79.00" cy="48.00" r="1.15" fill="#fff"/>
-<circle cx="94.00" cy="46.00" r="1.15" fill="#fff"/>
-<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(80.000 30.000) rotate(180) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
+<rect x="59.50" y="9.50" width="41.00" height="41.00" fill="#1d1d1d"/>
 <rect x="5" y="55" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="55" y="55" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <circle cx="80.0" cy="80.0" r="10.00" fill="#000"/>
@@ -28,6 +14,20 @@
 <rect x="155" y="55" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <path d="M1075 631 1073 145Q993 29 870 -59L850 535Q847 629 833 655Q810 696 729 696H55Q210 981 385 1139Q389 1056 399 991H829Q962 991 1030 887Q1076 816 1075 631ZM418 162Q327 38 205 -55V371Q301 500 418 610Z" fill="#1b2f86" transform="translate(180.000 80.000) rotate(0) scale(0.020033 -0.020033) translate(-565.01 -540.00)"/>
 <rect x="55" y="105" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<rect x="59.50" y="109.50" width="41.00" height="41.00" fill="#1d1d1d"/>
+<circle cx="61.50" cy="112.50" r="1.15" fill="#fff"/>
+<circle cx="73.50" cy="111.00" r="1.15" fill="#fff"/>
+<circle cx="88.00" cy="113.50" r="1.15" fill="#fff"/>
+<circle cx="98.50" cy="112.00" r="1.15" fill="#fff"/>
+<circle cx="66.00" cy="122.00" r="1.15" fill="#fff"/>
+<circle cx="80.50" cy="119.50" r="1.15" fill="#fff"/>
+<circle cx="94.50" cy="123.50" r="1.15" fill="#fff"/>
+<circle cx="61.00" cy="132.00" r="1.15" fill="#fff"/>
+<circle cx="71.50" cy="135.50" r="1.15" fill="#fff"/>
+<circle cx="91.50" cy="134.50" r="1.15" fill="#fff"/>
+<circle cx="99.50" cy="139.00" r="1.15" fill="#fff"/>
+<circle cx="65.00" cy="145.50" r="1.15" fill="#fff"/>
+<circle cx="79.00" cy="148.00" r="1.15" fill="#fff"/>
+<circle cx="94.00" cy="146.00" r="1.15" fill="#fff"/>
+<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(80.000 130.000) rotate(180) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
 <text x="5" y="3.5" font-size="1.6" font-family="Helvetica" fill="#000">Orange cube 50x50 cm | colour #E8784A | letters: David Bold, letter height 24 cm | scale 1:1 | dashed = fold/cut lines</text>
 </svg>

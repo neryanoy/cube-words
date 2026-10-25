@@ -1,20 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="170cm" height="130cm" viewBox="0 0 170 130">
 <rect x="45" y="5" width="40" height="40" fill="#9ccb82" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<circle cx="50.20" cy="11.00" r="0.92" fill="#fff"/>
-<circle cx="59.80" cy="9.80" r="0.92" fill="#fff"/>
-<circle cx="71.40" cy="11.80" r="0.92" fill="#fff"/>
-<circle cx="79.80" cy="10.60" r="0.92" fill="#fff"/>
-<circle cx="53.80" cy="18.60" r="0.92" fill="#fff"/>
-<circle cx="65.40" cy="16.60" r="0.92" fill="#fff"/>
-<circle cx="76.60" cy="19.80" r="0.92" fill="#fff"/>
-<circle cx="49.80" cy="26.60" r="0.92" fill="#fff"/>
-<circle cx="58.20" cy="29.40" r="0.92" fill="#fff"/>
-<circle cx="74.20" cy="28.60" r="0.92" fill="#fff"/>
-<circle cx="80.60" cy="32.20" r="0.92" fill="#fff"/>
-<circle cx="53.00" cy="37.40" r="0.92" fill="#fff"/>
-<circle cx="64.20" cy="39.40" r="0.92" fill="#fff"/>
-<circle cx="76.20" cy="37.80" r="0.92" fill="#fff"/>
-<path d="M864 215Q791 50 647 -70L641 477Q639 696 459 696H68Q155 949 340 1149Q344 1080 347 1062Q353 1023 371 991H621Q758 991 821 882Q864 806 864 696Z" fill="#1b2f86" transform="translate(65.000 25.000) rotate(-90) scale(0.020033 -0.020033) translate(-466.00 -539.50)"/>
+<rect x="48.60" y="8.60" width="32.80" height="32.80" fill="#1d1d1d"/>
 <rect x="5" y="45" width="40" height="40" fill="#9ccb82" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="45" y="45" width="40" height="40" fill="#9ccb82" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#1b2f86" transform="translate(65.000 65.000) rotate(0) scale(0.020033 -0.020033) translate(-248.03 -543.00)"/>
@@ -22,6 +8,20 @@
 <path d="M614 719Q614 493 252 268L207 274Q281 395 294 421Q342 516 342 598Q342 652 313 678Q227 755 74 852L264 1128Q421 1009 549 877Q614 809 614 719Z" fill="#1b2f86" transform="translate(105.000 65.000) rotate(0) scale(0.020033 -0.020033) translate(-344.00 -698.00)"/>
 <rect x="125" y="45" width="40" height="40" fill="#9ccb82" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="45" y="85" width="40" height="40" fill="#9ccb82" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<rect x="48.60" y="88.60" width="32.80" height="32.80" fill="#1d1d1d"/>
+<circle cx="50.20" cy="91.00" r="0.92" fill="#fff"/>
+<circle cx="59.80" cy="89.80" r="0.92" fill="#fff"/>
+<circle cx="71.40" cy="91.80" r="0.92" fill="#fff"/>
+<circle cx="79.80" cy="90.60" r="0.92" fill="#fff"/>
+<circle cx="53.80" cy="98.60" r="0.92" fill="#fff"/>
+<circle cx="65.40" cy="96.60" r="0.92" fill="#fff"/>
+<circle cx="76.60" cy="99.80" r="0.92" fill="#fff"/>
+<circle cx="49.80" cy="106.60" r="0.92" fill="#fff"/>
+<circle cx="58.20" cy="109.40" r="0.92" fill="#fff"/>
+<circle cx="74.20" cy="108.60" r="0.92" fill="#fff"/>
+<circle cx="80.60" cy="112.20" r="0.92" fill="#fff"/>
+<circle cx="53.00" cy="117.40" r="0.92" fill="#fff"/>
+<circle cx="64.20" cy="119.40" r="0.92" fill="#fff"/>
+<circle cx="76.20" cy="117.80" r="0.92" fill="#fff"/>
+<path d="M864 215Q791 50 647 -70L641 477Q639 696 459 696H68Q155 949 340 1149Q344 1080 347 1062Q353 1023 371 991H621Q758 991 821 882Q864 806 864 696Z" fill="#1b2f86" transform="translate(65.000 105.000) rotate(90) scale(0.020033 -0.020033) translate(-466.00 -539.50)"/>
 <text x="5" y="3.5" font-size="1.6" font-family="Helvetica" fill="#000">Green cube 40x40 cm | colour #9CCB82 | letters: David Bold, letter height 24 cm | scale 1:1 | dashed = fold/cut lines</text>
 </svg>
