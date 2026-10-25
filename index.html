@@ -241,7 +241,6 @@
     <p class="lead">כל קוביה פרושה לשש הפאות שלה. לחיצה על פאה מסובבת את הקוביה למעלה כך שהפאה הזו פונה לקהל.</p>
     <div class="tally" id="tally"></div>
     <div class="nets" id="nets"></div>
-    <div class="btns"><button id="empties" type="button">הצג את כל הצדדים הריקים</button></div>
     <ul class="ideas" id="ideas"></ul>
   </section>
 
@@ -429,7 +428,7 @@
   // ---- Story steps ----
   const next = document.getElementById('next');
   const reset = document.getElementById('reset');
-  const empties = document.getElementById('empties');
+  const empties = document.createElement('button');   // the 'show empty sides' button was removed from the page (NN); kept detached so the old handlers stay harmless
   const word = document.getElementById('word');
   const stepText = document.getElementById('stepText');
   const states = [
