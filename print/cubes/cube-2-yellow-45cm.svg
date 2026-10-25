@@ -14,12 +14,12 @@
 <circle cx="86.00" cy="41.45" r="1.03" fill="#fff"/>
 <circle cx="73.40" cy="43.70" r="1.03" fill="#fff"/>
 <circle cx="59.90" cy="41.90" r="1.03" fill="#fff"/>
-<path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#1b2f86" transform="translate(72.500 27.500) rotate(0) scale(0.020033 -0.020033) translate(-248.03 -538.00)"/>
+<path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#1b2f86" transform="translate(72.500 27.500) rotate(0) scale(0.020033 -0.020033) translate(-248.03 -543.00)"/>
 <rect x="5" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="50" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(72.500 72.500) rotate(0) scale(0.020033 -0.020033) translate(-578.50 -538.00)"/>
+<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(72.500 72.500) rotate(0) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
 <rect x="95" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(117.500 72.500) rotate(0) scale(0.020033 -0.020033) translate(-554.00 -538.00)"/>
+<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(117.500 72.500) rotate(0) scale(0.020033 -0.020033) translate(-554.00 -542.00)"/>
 <rect x="140" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="50" y="95" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="54.05" y="99.05" width="36.90" height="36.90" fill="#1d1d1d"/>
