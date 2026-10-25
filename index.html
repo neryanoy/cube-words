@@ -141,7 +141,7 @@
   .tile{display:grid;place-items:center;border-radius:4px;background:var(--c);color:var(--ink);cursor:pointer;
     font:900 21px/1 "Frank Ruhl Libre",serif;border:2px solid transparent;padding:0;position:relative}
   .tile small{font:700 11px/1 "Assistant",sans-serif}
-  .tile.empty{background:#fff;border:2px dashed var(--c);color:#3d4a57}
+  .tile.empty{background:var(--c);border:2px solid transparent}   /* an empty side is just the cube colour, no label */
   .tile.hole{background:#1d1d1d;color:#fff;border-color:var(--c)}
   .tile.art{font-size:13px}
   .tile[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:1px}
@@ -348,7 +348,7 @@
       t.style.gridArea = `${NET[side][1]} / ${NET[side][0]}`;
       t.setAttribute('aria-pressed', 'false');
       t.title = SIDE_NAME[side];
-      t.innerHTML = k === 'empty' ? '<small>ריק</small>' : k === 'hole' ? '<small>חור</small>'
+      t.innerHTML = k === 'empty' ? '' : k === 'hole' ? '<small>חור</small>'
         : k === 'art' ? (v.art === 'ball' ? '⚫' : '⁘') : (v.w || v);
       t.addEventListener('click', () => peekOne(cube, side, t));
       grid.appendChild(t);
@@ -360,7 +360,7 @@
   document.getElementById('tally').innerHTML =
     `<span>${sw('background:#e8c957')}${count.letter} עם אות</span>` +
     `<span>${sw('background:#e8784a')}${count.art} עם ציור</span>` +
-    `<span>${sw('background:#fff;border:2px dashed #8a97a5')}<b>${count.empty} ריקים</b></span>` +
+    `<span><b>${count.empty} פאות ריקות</b> (בצבע הקוביה, בלי אות)</span>` +
     `<span>${sw('background:#1d1d1d')}${count.hole} חורים (צד פתוח)</span>`;
   (() => {
     const f = document.getElementById('fmt'), b = document.getElementById('bleed'), a = document.getElementById('get'),
