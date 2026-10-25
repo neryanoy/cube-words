@@ -25,7 +25,7 @@
   .drop{position:absolute;z-index:0;inset:0 0 34% 0;box-sizing:border-box;
     border:calc(6 * var(--u)) solid #b9c0c7;border-bottom:0;
     border-image:linear-gradient(135deg,#eef1f4,#9aa3ac 45%,#d7dce1 70%,#8b949d) 1;
-    background:#63b3f0 url(sky-bg.jpg) 0 0/100% 100% no-repeat}
+    background:#63b3f0 url(sky-bg.jpg) 50% 0/cover no-repeat}
   /* Backdrop rigging demo: the bare aluminium frame with Velcro strips, then the sky fabric comes down onto it. */
   .frame{position:absolute;z-index:0;inset:0 0 34% 0;opacity:0;transition:opacity .5s ease}
   .scene.rig .frame{opacity:1}
@@ -109,6 +109,14 @@
   .pal div{display:flex;align-items:center;gap:10px;border:1px solid #d5dde5;border-radius:8px;padding:8px 10px;background:#fff}
   .pal i{flex:none;width:34px;height:34px;border-radius:6px;border:1px solid rgba(0,0,0,.2)}
   .pal b{display:block;font-size:15px}.pal code{direction:ltr;unicode-bidi:isolate;font-size:13px;color:var(--muted)}
+  .dl{display:grid;gap:12px}
+  .dl .pv{position:relative;width:100%;max-width:560px;aspect-ratio:5/4;margin:0 auto;background:#fff;border:1px solid #d5dde5}
+  .dl .pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+  .dl .pv .trim{position:absolute;border:2px dashed #e8784a;pointer-events:none}
+  .dl .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .dl select,.dl a.get{font:600 15px/1 "Assistant",sans-serif;padding:10px 12px;border-radius:8px;border:1px solid var(--ink)}
+  .dl a.get{background:var(--ink);color:#fff;text-decoration:none}
+  .dl .info{font-size:14px;color:var(--muted);margin:0}
   button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
   button:disabled{opacity:.45;cursor:default}
 
@@ -150,7 +158,7 @@
   <div class="titlebar">
     <h1>תפאורה שחורצי</h1>
     <button id="open3d" type="button">🎭 הבמה בתלת מימד</button>
-    <a href="sky-3x2.4m-print.png" download style="font-size:14px;text-decoration:none;color:inherit;border:1px solid currentColor;border-radius:8px;padding:6px 10px">☁️ קובץ שמיים להדפסה (3×2.4 מ')</a>
+    <a href="#printTitle" style="font-size:14px;text-decoration:none;color:inherit;border:1px solid currentColor;border-radius:8px;padding:6px 10px">☁️ הורדת קובץ שמיים להדפסה</a>
   </div>
 
   <div class="scene" id="scene" data-step="0" aria-live="polite">
@@ -170,6 +178,25 @@
       <button id="rigBtn" type="button">איך מלבישים את הרקע</button>
     </div>
   </div>
+
+  <section class="faces dl" aria-labelledby="printTitle" id="printSec">
+    <h2 id="printTitle">הורדת קובץ שמיים להדפסה</h2>
+    <p class="lead">התצוגה מראה את הקובץ בפרופורציה האמיתית (3.00×2.40 מ', יחס 5:4), בלי מתיחה. השמיים ועננים נוצרו כווקטור, כך שאפשר להגדיל בלי טשטוש. הקו הכתום המקווקו = קו חיתוך כשמוסיפים בליד.</p>
+    <div class="pv" id="pv"><img id="pvImg" alt="תצוגה מקדימה של השמיים להדפסה"><div class="trim" id="pvTrim" hidden></div></div>
+    <div class="row">
+      <select id="fmt" aria-label="פורמט">
+        <option value="pdf">PDF (וקטורי, מומלץ)</option>
+        <option value="svg">SVG (וקטורי)</option>
+        <option value="rgb.tif">TIFF RGB</option>
+        <option value="cmyk.tif">TIFF CMYK</option>
+        <option value="png">PNG</option>
+        <option value="jpg">JPG</option>
+      </select>
+      <label><input type="checkbox" id="bleed"> עם בליד 3 ס"מ מכל צד</label>
+      <a class="get" id="get" download>⬇ הורד</a>
+    </div>
+    <p class="info" id="dlInfo"></p>
+  </section>
 
   <section class="faces" aria-labelledby="palTitle">
     <h2 id="palTitle">צבעים (מספר HEX)</h2>
@@ -310,6 +337,25 @@
     `<span>${sw('background:#e8784a')}${count.art} עם ציור</span>` +
     `<span>${sw('background:#fff;border:2px dashed #8a97a5')}<b>${count.empty} ריקים</b></span>` +
     `<span>${sw('background:#1d1d1d')}${count.hole} חורים (צד פתוח)</span>`;
+  (() => {
+    const f = document.getElementById('fmt'), b = document.getElementById('bleed'), a = document.getElementById('get'),
+          img = document.getElementById('pvImg'), trim = document.getElementById('pvTrim'), info = document.getElementById('dlInfo');
+    const NOTE = {pdf:'וקטורי: כל הגדלה חדה', svg:'וקטורי: כל הגדלה חדה', 'rgb.tif':'רסטר 100 DPI בגודל מלא, דחיסה LZW',
+      'cmyk.tif':'המרת CMYK בסיסית, בית ההדפסה עשוי להמיר מחדש עם הפרופיל שלו', png:'רסטר 100 DPI בגודל מלא', jpg:'רסטר 100 DPI, דחיסה קלה'};
+    function upd(){
+      const bl = b.checked, base = 'print/sky-3x2.4m' + (bl ? '-bleed3cm' : '');
+      const name = f.value.includes('tif') ? base + '-' + f.value : base + '.' + f.value;
+      a.href = name; a.setAttribute('download', name.split('/').pop());
+      img.src = base + '.svg';
+      const W = bl ? 3060 : 3000, H = bl ? 2460 : 2400, px = Math.round(W / 25.4 * 100), py = Math.round(H / 25.4 * 100);
+      trim.hidden = !bl;
+      if (bl) { trim.style.left = (30 / W * 100) + '%'; trim.style.right = (30 / W * 100) + '%'; trim.style.top = (30 / H * 100) + '%'; trim.style.bottom = (30 / H * 100) + '%'; }
+      img.parentElement.style.aspectRatio = W + '/' + H;
+      info.textContent = `${W/1000} × ${H/1000} מ' (${px}×${py} פיקסל ב-100 DPI) · ${NOTE[f.value]}`;
+    }
+    f.onchange = b.onchange = upd; upd();
+  })();
+
   const emptyLeft = CUBES.filter(c => c.faces.left === null).length;
   const emptyBack = CUBES.filter(c => c.faces.back === null).map(c => c.name);
   document.getElementById('ideas').innerHTML =
@@ -544,11 +590,11 @@
       return s;
     }
     function skyTexture(){
-      const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 512;
+      const cv = document.createElement('canvas'); cv.width = 1024; cv.height = Math.round(1024 * BH / BW);
       const g = cv.getContext('2d');
-      g.fillStyle = '#63b3f0'; g.fillRect(0, 0, 1024, 512);
+      g.fillStyle = '#63b3f0'; g.fillRect(0, 0, 1024, cv.height);
       const t = new THREE.CanvasTexture(cv), im = new Image();
-      im.onload = () => { g.drawImage(im, 0, 0, 1024, 512); t.needsUpdate = true; };
+      im.onload = () => { const sh = Math.min(im.height, im.width * BH / BW); g.drawImage(im, 0, 0, im.width, sh, 0, 0, 1024, cv.height); t.needsUpdate = true; };  // cover-crop from the top: never stretched
       im.src = 'sky-bg.jpg';
       return t;
     }
