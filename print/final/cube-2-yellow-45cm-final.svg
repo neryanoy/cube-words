@@ -1,13 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="190cm" height="145cm" viewBox="0 0 190 145">
-<rect x="50" y="5" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(72.500 27.500) rotate(0) scale(0.020033 -0.020033) translate(-554.00 -542.00)"/>
-<rect x="5" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(27.500 72.500) rotate(270) scale(0.019884 -0.019884) translate(-578.50 -535.50)"/>
-<rect x="50" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<rect x="54.05" y="54.05" width="36.90" height="36.90" fill="#1d1d1d"/>
-<rect x="95" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<g transform="translate(117.5 72.5) rotate(90)"><circle cx="-16.65" cy="-15.75" r="1.03" fill="#fff"/><circle cx="-5.85" cy="-17.10" r="1.03" fill="#fff"/><circle cx="7.20" cy="-14.85" r="1.03" fill="#fff"/><circle cx="16.65" cy="-16.20" r="1.03" fill="#fff"/><circle cx="-12.60" cy="-7.20" r="1.03" fill="#fff"/><circle cx="0.45" cy="-9.45" r="1.03" fill="#fff"/><circle cx="13.05" cy="-5.85" r="1.03" fill="#fff"/><circle cx="-17.10" cy="1.80" r="1.03" fill="#fff"/><circle cx="-7.65" cy="4.95" r="1.03" fill="#fff"/><circle cx="10.35" cy="4.05" r="1.03" fill="#fff"/><circle cx="17.55" cy="8.10" r="1.03" fill="#fff"/><circle cx="-13.50" cy="13.95" r="1.03" fill="#fff"/><circle cx="-0.90" cy="16.20" r="1.03" fill="#fff"/><circle cx="12.60" cy="14.40" r="1.03" fill="#fff"/></g>
-<path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#1b2f86" transform="translate(117.500 72.500) rotate(90) scale(0.020134 -0.020134) translate(-248.03 -543.00)"/>
-<rect x="140" y="50" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<rect x="50" y="95" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<text x="5" y="3.5" font-size="1.6" font-family="Helvetica" fill="#000">Yellow cube 45x45 cm | NN final layout | David Bold, every letter 24 cm tall | 1:1 | dashed = fold lines</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="196cm" height="151cm" viewBox="0 0 196 151">
+<rect x="53" y="8" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(75.500 30.500) rotate(0) scale(0.020033 -0.020033) translate(-554.00 -542.00)"/>
+<rect x="8" y="53" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(30.500 75.500) rotate(270) scale(0.019884 -0.019884) translate(-578.50 -535.50)"/>
+<rect x="53" y="53" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<rect x="57.05" y="57.05" width="36.90" height="36.90" fill="#1d1d1d"/>
+<rect x="98" y="53" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<g transform="translate(120.5 75.5) rotate(90)"><circle cx="-16.65" cy="-15.75" r="1.03" fill="#fff"/><circle cx="-5.85" cy="-17.10" r="1.03" fill="#fff"/><circle cx="7.20" cy="-14.85" r="1.03" fill="#fff"/><circle cx="16.65" cy="-16.20" r="1.03" fill="#fff"/><circle cx="-12.60" cy="-7.20" r="1.03" fill="#fff"/><circle cx="0.45" cy="-9.45" r="1.03" fill="#fff"/><circle cx="13.05" cy="-5.85" r="1.03" fill="#fff"/><circle cx="-17.10" cy="1.80" r="1.03" fill="#fff"/><circle cx="-7.65" cy="4.95" r="1.03" fill="#fff"/><circle cx="10.35" cy="4.05" r="1.03" fill="#fff"/><circle cx="17.55" cy="8.10" r="1.03" fill="#fff"/><circle cx="-13.50" cy="13.95" r="1.03" fill="#fff"/><circle cx="-0.90" cy="16.20" r="1.03" fill="#fff"/><circle cx="12.60" cy="14.40" r="1.03" fill="#fff"/></g>
+<path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#1b2f86" transform="translate(120.500 75.500) rotate(90) scale(0.020134 -0.020134) translate(-248.03 -543.00)"/>
+<rect x="143" y="53" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<rect x="53" y="98" width="45" height="45" fill="#e8c957" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<text x="8" y="2.4" font-size="2.2" font-weight="bold" font-family="Helvetica" fill="#000">YELLOW CUBE  45 x 45 x 45 cm  (6 faces, each 45 x 45 cm)</text>
+<text x="8" y="4.4" font-size="1.4" font-family="Helvetica" fill="#555">Flat net 180 x 135 cm at 1:1 | David Bold, every letter 24 cm tall | dashed = fold lines | grey dimension marks are guides only, do not print</text>
+<line x1="8" y1="145.2" x2="53" y2="145.2" stroke="#555" stroke-width="0.12"/><line x1="8" y1="144.5" x2="8" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/><line x1="53" y1="144.5" x2="53" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/>
+<text x="30.5" y="147.39999999999998" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555">45 cm</text>
+<line x1="53" y1="145.2" x2="98" y2="145.2" stroke="#555" stroke-width="0.12"/><line x1="53" y1="144.5" x2="53" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/><line x1="98" y1="144.5" x2="98" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/>
+<text x="75.5" y="147.39999999999998" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555">45 cm</text>
+<line x1="98" y1="145.2" x2="143" y2="145.2" stroke="#555" stroke-width="0.12"/><line x1="98" y1="144.5" x2="98" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/><line x1="143" y1="144.5" x2="143" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/>
+<text x="120.5" y="147.39999999999998" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555">45 cm</text>
+<line x1="143" y1="145.2" x2="188" y2="145.2" stroke="#555" stroke-width="0.12"/><line x1="143" y1="144.5" x2="143" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/><line x1="188" y1="144.5" x2="188" y2="145.89999999999998" stroke="#555" stroke-width="0.12"/>
+<text x="165.5" y="147.39999999999998" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555">45 cm</text>
+<line x1="5.8" y1="8" x2="5.8" y2="53" stroke="#555" stroke-width="0.12"/><line x1="5.1" y1="8" x2="6.5" y2="8" stroke="#555" stroke-width="0.12"/><line x1="5.1" y1="53" x2="6.5" y2="53" stroke="#555" stroke-width="0.12"/>
+<text x="4.8" y="30.5" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555" transform="rotate(-90 4.8 30.5)">45 cm</text>
+<line x1="5.8" y1="53" x2="5.8" y2="98" stroke="#555" stroke-width="0.12"/><line x1="5.1" y1="53" x2="6.5" y2="53" stroke="#555" stroke-width="0.12"/><line x1="5.1" y1="98" x2="6.5" y2="98" stroke="#555" stroke-width="0.12"/>
+<text x="4.8" y="75.5" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555" transform="rotate(-90 4.8 75.5)">45 cm</text>
+<line x1="5.8" y1="98" x2="5.8" y2="143" stroke="#555" stroke-width="0.12"/><line x1="5.1" y1="98" x2="6.5" y2="98" stroke="#555" stroke-width="0.12"/><line x1="5.1" y1="143" x2="6.5" y2="143" stroke="#555" stroke-width="0.12"/>
+<text x="4.8" y="120.5" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555" transform="rotate(-90 4.8 120.5)">45 cm</text>
+<text x="98" y="149.79999999999998" font-size="1.8" text-anchor="middle" font-weight="bold" font-family="Helvetica" fill="#555">total 180 cm</text>
+<text x="4.2" y="144" font-size="1.8" font-weight="bold" font-family="Helvetica" fill="#555" transform="rotate(-90 4.2 144)">total 135 cm</text>
