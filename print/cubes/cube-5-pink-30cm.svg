@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130cm" height="100cm" viewBox="0 0 130 100">
+<rect x="35" y="5" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<circle cx="38.90" cy="9.50" r="0.69" fill="#fff"/>
+<circle cx="46.10" cy="8.60" r="0.69" fill="#fff"/>
+<circle cx="54.80" cy="10.10" r="0.69" fill="#fff"/>
+<circle cx="61.10" cy="9.20" r="0.69" fill="#fff"/>
+<circle cx="41.60" cy="15.20" r="0.69" fill="#fff"/>
+<circle cx="50.30" cy="13.70" r="0.69" fill="#fff"/>
+<circle cx="58.70" cy="16.10" r="0.69" fill="#fff"/>
+<circle cx="38.60" cy="21.20" r="0.69" fill="#fff"/>
+<circle cx="44.90" cy="23.30" r="0.69" fill="#fff"/>
+<circle cx="56.90" cy="22.70" r="0.69" fill="#fff"/>
+<circle cx="61.70" cy="25.40" r="0.69" fill="#fff"/>
+<circle cx="41.00" cy="29.30" r="0.69" fill="#fff"/>
+<circle cx="49.40" cy="30.80" r="0.69" fill="#fff"/>
+<circle cx="58.40" cy="29.60" r="0.69" fill="#fff"/>
+<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(50.000 20.000) rotate(0) scale(0.020033 -0.020033) translate(-554.00 -538.00)"/>
+<rect x="5" y="35" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<rect x="35" y="35" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<path d="M969 991 852 696H774V193Q694 35 559 -61V696H45Q107 912 311 1137Q315 1047 338 991H614Q689 1072 784 1137V991Z" fill="#1b2f86" transform="translate(50.000 50.000) rotate(0) scale(0.020033 -0.020033) translate(-507.00 -538.00)"/>
+<rect x="65" y="35" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<path d="M1147 696Q1147 515 1020 276Q946 137 800 55Q659 -25 498 -25Q389 -25 338 41Q310 77 289 162L166 662Q139 771 47 829L295 1137Q359 1013 406 737L465 387Q485 270 580 270Q734 270 870 395Q898 473 899 532Q900 620 867 680Q827 752 750 752Q678 752 510 676Q516 834 598 973Q707 1049 848 1049Q991 1049 1072 944Q1147 847 1147 696Z" fill="#1b2f86" transform="translate(80.000 50.000) rotate(0) scale(0.020033 -0.020033) translate(-597.00 -538.00)"/>
+<rect x="95" y="35" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<path d="M1141 793Q1145 464 983 240Q903 129 782 53Q654 -27 539 -27Q408 -27 352 150L178 696H31Q113 978 281 1143L336 991H1004Q1090 991 1118 938Q1139 899 1141 793ZM905 590Q905 696 827 696H430L543 340Q561 283 606 283Q711 283 811 369Q905 450 905 590Z" fill="#1b2f86" transform="translate(110.000 50.000) rotate(0) scale(0.020033 -0.020033) translate(-586.05 -538.00)"/>
+<rect x="35" y="65" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
+<text x="5" y="3.5" font-size="1.6" font-family="Helvetica" fill="#000">Pink cube 30x30 cm | colour #DB8F98 | letters: David Bold, letter height 24 cm | scale 1:1 | dashed = fold/cut lines</text>
+</svg>
