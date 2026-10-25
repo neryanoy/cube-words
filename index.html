@@ -74,10 +74,10 @@
   .scene[data-step="1"] .pink .body,.scene[data-step="1"] .orange .body{transform:rotateX(0deg) rotateY(-90deg)}
   .scene[data-step="2"] .body{transform:rotateX(0deg) rotateY(-90deg)}
   .scene[data-step="2"] .pink .body,.scene[data-step="2"] .orange .body{transform:rotateX(0deg) rotateY(-180deg)}
-  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .body{transform:rotateX(-90deg) rotateY(-90deg)}
-  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) :is(.pink,.orange) .body{transform:rotateX(-90deg) rotateY(-180deg)}
-  .scene:is([data-step="3"],[data-step="4"]) .yellow .body{transform:rotateX(90deg) rotateY(-90deg)}
-  .scene:is([data-step="3"],[data-step="4"]) .orange .body{transform:rotateX(90deg) rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .body{transform:rotateX(90deg) rotateY(-90deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) :is(.pink,.orange) .body{transform:rotateX(90deg) rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .yellow .body{transform:rotateX(-90deg) rotateY(-90deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .orange .body{transform:rotateX(-90deg) rotateY(-180deg)}
   .scene[data-step="1"] .orange .body{transition-delay:.25s}
   .scene[data-step="2"] .purple .body,.scene[data-step="3"] .purple .body{transition-delay:.15s}
   .scene[data-step="2"] .green .body,.scene[data-step="3"] .green .body{transition-delay:.3s}
@@ -93,7 +93,7 @@
   .hop{z-index:2}
   /* Packing (last step): every cube turns its open side up and the camera looks down into them,
      then each one drops into the next bigger one, biggest first. */
-  .scene[data-step="6"] .body{transform:rotateX(180deg) rotateY(0deg);transition-delay:0s}
+  .scene[data-step="6"] .body{transform:rotateX(0deg) rotateY(0deg);transition-delay:0s}
   .scene[data-step="6"] .cube{perspective-origin:50% -80%}
   .scene.xray .cube:not(.pink){opacity:.5}
   .scene.xray .cube{perspective-origin:50% 8%}
@@ -264,15 +264,15 @@
   const LETTER_CM = 24; let LET_R = 0.62, LET_A = 0.45, LET_D = 0.17;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
-      faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:{w:'ת'}, bottom:'hole'}},
+      faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:'hole', bottom:{w:'ת'}}},
     {k:'yellow', name:'הצהובה', s:117, c:'#e8c957', end:-90,
-      faces:{front:'ת', right:'ח', back:null, left:null, top:{w:'ו'}, bottom:'hole'}},
+      faces:{front:'ת', right:'ח', back:null, left:null, top:'hole', bottom:{w:'ו'}}},
     {k:'green', name:'הירוקה', s:104, c:'#9ccb82', end:-90,
-      faces:{front:'ו', right:'י', back:null, left:null, top:{w:'ר'}, bottom:'hole'}},
+      faces:{front:'ו', right:'י', back:null, left:null, top:'hole', bottom:{w:'ר'}}},
     {k:'purple', name:'הסגולה', s:91, c:'#bb8cd2', end:-90,
-      faces:{front:'ע', right:'ל', back:null, left:null, top:{w:'ב'}, bottom:'hole'}},
+      faces:{front:'ע', right:'ל', back:null, left:null, top:'hole', bottom:{w:'ב'}}},
     {k:'pink', name:'הוורודה', s:78, c:'#db8f98', end:-180,
-      faces:{front:'ד', right:'ט', back:'ס', left:null, top:{w:'ח'}, bottom:null}}
+      faces:{front:'ד', right:'ט', back:'ס', left:null, top:null, bottom:{w:'ח'}}}
   ];
   const SIDES = ['front','right','back','left','top','bottom'];
   const SIDE_NAME = {front:'חזית', right:'צד ימין', back:'גב', left:'צד שמאל', top:'למעלה', bottom:'למטה'};
@@ -299,7 +299,7 @@
       else if (v && v.art === 'dots') f.innerHTML = SPOTS.map(([x, y]) => `<span class="dot" style="--x:${x}%;--y:${y}%"></span>`).join('');
       else if (v && v.w) {
         // The חברות letters sit on top; turn them so they read upright once tipped forward.
-        f.innerHTML = `<b style="--r:${cube.end === -180 ? 180 : -90}deg">${v.w}</b>`;
+        f.innerHTML = `<b style="--r:${cube.end === -180 ? 180 : 90}deg">${v.w}</b>`;
         WDOTS.forEach(([x, y]) => {
           const d = document.createElement('span');
           d.className = 'wdot';
@@ -320,7 +320,7 @@
   const facing = (cube, side) => ({
     front:'rotateX(0deg) rotateY(0deg)', right:'rotateX(0deg) rotateY(-90deg)',
     back:'rotateX(0deg) rotateY(-180deg)', left:'rotateX(0deg) rotateY(90deg)',
-    top:`rotateX(-90deg) rotateY(${cube.end}deg)`, bottom:'rotateX(90deg) rotateY(0deg)'
+    top:'rotateX(-90deg) rotateY(0deg)', bottom:`rotateX(90deg) rotateY(${cube.end}deg)`
   })[side];
 
   // ---- Face map ----
