@@ -8,6 +8,7 @@
 <style>
   :root{
     --wall:#4a9fd6; --floor:#b9c6d2; --ink:#1b2f86; --paper:#f3f6f9; --text:#1c2733; --muted:#5b6b7a;
+    --fsu:65;
     --u:min(1px, calc((100vw - 32px) / 640));
     color-scheme:light;
   }
@@ -49,7 +50,7 @@
     transition:transform 1.1s cubic-bezier(.55,-.15,.3,1.25)}
   .f{position:absolute;inset:0;display:grid;place-items:center;background:var(--c);
     border:1px solid rgba(0,0,0,.14);backface-visibility:hidden;
-    font:900 calc(var(--z) * .5)/1 "Frank Ruhl Libre","David","Times New Roman",serif;color:var(--ink)}
+    font:900 calc(var(--fsu) * var(--u))/1 "Frank Ruhl Libre","David","Times New Roman",serif;color:var(--ink)}
   .front{transform:translateZ(calc(var(--z) / 2))}
   .left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2))}
   .back{transform:rotateY(180deg) translateZ(calc(var(--z) / 2))}
@@ -249,6 +250,8 @@
   // One place that says what is painted on every side of every cube.
   // null = empty side, 'hole' = the open side the cubes nest through.
   // The pink cube is the innermost one, so it is closed all round.
+  // Every letter is the same real size on every cube: the letter ד is LETTER_CM tall (NN), the rest use the same font size.
+  const LETTER_CM = 24; let LET_R = 0.62;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
       faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:{w:'ת'}, bottom:'hole'}},
@@ -368,6 +371,7 @@
     try { await document.fonts.load('900 100px "Frank Ruhl Libre"', LETTER); } catch (e) {}
     const g = document.createElement('canvas').getContext('2d'); g.font = '900 100px "Frank Ruhl Libre", serif';
     const m = g.measureText(LETTER), gh = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+    LET_R = gh / 100; document.documentElement.style.setProperty('--fsu', (LETTER_CM / LET_R) * 130 / 50);
     const fs = 100 * LH / gh;                                   // font size (cm) so the glyph itself is exactly 24 cm tall
     const k = fs / 100, asc = m.actualBoundingBoxAscent * k, gw = (m.actualBoundingBoxLeft + m.actualBoundingBoxRight) * k;
     const el = (n, a, t) => { const e = document.createElementNS(NS, n); for (const q in a) e.setAttribute(q, a[q]); if (t) e.textContent = t; svg.appendChild(e); return e; };
@@ -602,7 +606,7 @@
         SPOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 9, 0, 7); g.fill(); });
       } else if (v) {
         if (v.w) { g.fillStyle = '#fff'; WDOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 6, 0, 7); g.fill(); }); }
-        g.fillStyle = '#1b2f86'; g.font = '900 150px "Frank Ruhl Libre", serif';
+        g.fillStyle = '#1b2f86'; g.font = `900 ${Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT))}px "Frank Ruhl Libre", serif`;
         g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(v.w || v, 128, 136);
       }
       const t = new THREE.CanvasTexture(cv);
