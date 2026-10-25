@@ -48,7 +48,7 @@
     perspective:calc(var(--z) * 5);perspective-origin:28% 8%}
   .body{position:relative;width:100%;height:100%;transform-style:preserve-3d;
     transition:transform 1.1s cubic-bezier(.55,-.15,.3,1.25)}
-  .f{position:absolute;inset:0;display:grid;place-items:unsafe center;padding:max(0em,calc(var(--dy,0) * -2em)) max(0em,calc(var(--sx,0) * -2em)) max(0em,calc(var(--dy,0) * 2em)) max(0em,calc(var(--sx,0) * 2em));background:var(--c);
+  .f{position:absolute;inset:0;display:grid;place-items:unsafe center;place-content:unsafe center;padding:max(0em,calc(var(--dy,0) * -2em)) max(0em,calc(var(--sx,0) * -2em)) max(0em,calc(var(--dy,0) * 2em)) max(0em,calc(var(--sx,0) * 2em));background:var(--c);
     border:1px solid rgba(0,0,0,.14);backface-visibility:hidden;
     font:900 calc(var(--fsu) * var(--u))/1 "Frank Ruhl Libre","David","Times New Roman",serif;color:var(--ink)}
   .front{transform:translateZ(calc(var(--z) / 2))}
