@@ -14,7 +14,7 @@
 <circle cx="65.00" cy="45.50" r="1.15" fill="#fff"/>
 <circle cx="79.00" cy="48.00" r="1.15" fill="#fff"/>
 <circle cx="94.00" cy="46.00" r="1.15" fill="#fff"/>
-<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(80.000 30.000) rotate(0) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
+<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(80.000 30.000) rotate(180) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
 <rect x="5" y="55" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="55" y="55" width="50" height="50" fill="#e8784a" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <circle cx="80.0" cy="80.0" r="10.00" fill="#000"/>

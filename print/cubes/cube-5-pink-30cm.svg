@@ -14,7 +14,7 @@
 <circle cx="41.00" cy="29.30" r="0.69" fill="#fff"/>
 <circle cx="49.40" cy="30.80" r="0.69" fill="#fff"/>
 <circle cx="58.40" cy="29.60" r="0.69" fill="#fff"/>
-<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(50.000 20.000) rotate(0) scale(0.020033 -0.020033) translate(-554.00 -542.00)"/>
+<path d="M1053 213Q983 65 870 -57L831 428Q810 696 586 696H346Q357 558 358 453Q359 384 354 195Q272 58 154 -51Q154 185 135 455Q120 680 55 807L307 1141Q315 1092 328 991H621Q800 991 918 877Q1021 775 1034 545Z" fill="#1b2f86" transform="translate(50.000 20.000) rotate(180) scale(0.020033 -0.020033) translate(-554.00 -542.00)"/>
 <rect x="5" y="35" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="35" y="35" width="30" height="30" fill="#db8f98" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <path d="M969 991 852 696H774V193Q694 35 559 -61V696H45Q107 912 311 1137Q315 1047 338 991H614Q689 1072 784 1137V991Z" fill="#1b2f86" transform="translate(50.000 50.000) rotate(0) scale(0.020033 -0.020033) translate(-507.00 -538.00)"/>
