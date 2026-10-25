@@ -57,6 +57,13 @@
   .right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}
   .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2))}
   .bottom{transform:rotateX(-90deg) translateZ(calc(var(--z) / 2))}
+  .f.panel{outline:calc(2 * var(--u)) dashed #d00;outline-offset:-3px;box-shadow:0 0 calc(10 * var(--u)) rgba(0,0,0,.35)}
+  .f.panel::before{content:"פאנל עץ נשלף";position:absolute;top:2%;left:50%;transform:translateX(-50%);direction:rtl;white-space:nowrap;z-index:2;
+    background:#d00;color:#fff;font:700 calc(9 * var(--u))/1 "Assistant",sans-serif;padding:calc(3 * var(--u)) calc(6 * var(--u));border-radius:3px}
+  .left.panel{animation:slideL 4s ease-in-out infinite}
+  .right.panel{animation:slideR 4s ease-in-out infinite}
+  @keyframes slideL{0%,25%,100%{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2))}50%,75%{transform:rotateY(-90deg) translateZ(calc(var(--z) * .85))}}
+  @keyframes slideR{0%,25%,100%{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}50%,75%{transform:rotateY(90deg) translateZ(calc(var(--z) * .85))}}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
   .hole::after{content:"";position:absolute;inset:9%;border-radius:2px;
@@ -305,6 +312,7 @@
       else if (v && v.art === 'ball') f.innerHTML = '<span class="ball"></span>';
       else if (v && v.art === 'dots') f.innerHTML = SPOTS.map(([x, y]) => `<span class="dot" style="--x:${x}%;--y:${y}%"></span>`).join('');
       else if (v && v.w) {
+        if (cube.k === 'orange' || cube.k === 'yellow') f.classList.add('panel');
         // The חברות letters sit on top; turn them so they read upright once tipped forward.
         f.innerHTML = `<b style="--r:${0}deg">${v.w}</b>`;
         WDOTS.forEach(([x, y]) => {
