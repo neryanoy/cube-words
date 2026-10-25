@@ -1,0 +1,175 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>עורך פריסת קוביה</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@500;700&display=swap">
+<style>
+  :root{--ink:#1b2f86;--paper:#f3f6f9;--text:#1c2733;--muted:#5b6b7a;--line:#d5dde5;color-scheme:light}
+  html,body{background:var(--paper);color:var(--text)}
+  body{margin:0;padding:20px 16px 40px;font-family:"Assistant",system-ui,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;display:grid;gap:14px}
+  h1{margin:0;font:700 22px/1.2 "Assistant",sans-serif}
+  p{margin:0;color:var(--muted);line-height:1.5}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  button,.btn{font:700 15px/1 "Assistant",sans-serif;padding:10px 14px;border-radius:8px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;text-decoration:none}
+  button:disabled{opacity:.45;cursor:default}
+  button.on{background:var(--ink);color:#fff}
+  button.sw{border-width:3px;color:#1c2733}
+  button.sw.on{color:#fff}
+  .go{background:#e8784a;border-color:#e8784a;color:#fff}
+  .stage{position:relative;perspective:1400px;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
+  .net{position:absolute;transform-style:preserve-3d;left:0;top:0}
+  .arm{position:absolute;transform-style:preserve-3d}
+  .face{position:absolute;inset:0;backface-visibility:hidden;cursor:grab}
+  .face svg{display:block;width:100%;height:100%}
+  .face.sel{outline:3px solid #e8784a;outline-offset:-3px;z-index:3}
+  .face.tgt{outline:3px dashed #1b2f86;outline-offset:-3px}
+  .flat .face{cursor:grab}
+  .folded .face{cursor:default}
+  .info{font-size:14px;color:var(--muted);margin:0}
+  .badge{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:14px;color:var(--text)}
+</style></head><body>
+<div class="wrap">
+  <h1>עורך פריסת קוביה</h1>
+  <p>בחר קוביה, גרור אות/חור/ציור מפאה לפאה (הם מתחלפים), לחץ על פאה כדי לבחור ואז סובב או הפוך. כשזה נראה נכון, לחץ "קפל" וראה את הקוביה מקופלת, עם החור למעלה, ואפשר לסובב אותה כדי לראות כל צד מול הקהל. הגודל והאות (דוד מודגש, 24 ס"מ) בקנה מידה אמיתי.</p>
+  <div class="row" id="cubes"></div>
+  <div class="row">
+    <button id="rotL" type="button">⟲ סובב 90° שמאלה</button>
+    <button id="rotR" type="button">⟳ סובב 90° ימינה</button>
+    <button id="mir" type="button">↔ הפוך (ראי)</button>
+    <button id="reset" type="button">איפוס</button>
+  </div>
+  <div class="row">
+    <button id="fold" class="go" type="button">קפל</button>
+    <button id="spinL" type="button" disabled>◀ סובב קוביה</button>
+    <button id="spinR" type="button" disabled>סובב קוביה ▶</button>
+    <button id="dl" type="button">⬇ הורד פריסה (SVG, 1:1)</button>
+  </div>
+  <div class="stage flat" id="stage"><div class="net" id="net"></div></div>
+  <div class="row"><span class="badge" id="holeInfo"></span><span class="badge" id="selInfo">לא נבחרה פאה</span></div>
+  <p class="info" id="hint">פאות: מרכז = תחתית הקוביה, הפאה הימנית הרחוקה = המכסה (למעלה). כשמקפלים, הפאות מתקפלות אחורה והצד המודפס נשאר בחוץ.</p>
+  <p><a href="./">← חזרה לדף הקוביות</a></p>
+</div>
+<script src="glyphs.js"></script>
+<script>
+(() => {
+  const DV = window.DAVID, LETTER_CM = 24;
+  const dB = DV.g['ד'].b, KG = (LETTER_CM / ((dB[3] - dB[1]) / DV.upm)) / DV.upm;      // cm per font unit: ד is 24 cm tall, every letter same size
+  const WD = [[13,15],[37,12],[66,17],[87,14],[22,34],[51,29],[79,37],[12,54],[33,61],[73,59],[89,68],[20,81],[48,86],[78,82]];
+  const SP = [[21,27],[70,22],[42,48],[79,64],[26,76],[59,83]];
+  const CELLS = ['top','left','center','right','far','bottom'], POS = {top:[1,0], left:[0,1], center:[1,1], right:[2,1], far:[3,1], bottom:[1,2]};
+  const L = (ch, rot, w) => ({t:'letter', ch, w:!!w, rot, mx:1}), HOLE = () => ({t:'hole', rot:0, mx:1});
+  const CUBES = [
+    {k:'orange', he:'כתומה', c:50, col:'#e8784a', def:{top:{t:'dots',rot:0,mx:1}, left:{t:'ball',rot:0,mx:1}, right:L('ת',90,1), bottom:L('ה',0), far:HOLE()}},
+    {k:'yellow', he:'צהובה', c:45, col:'#e8c957', def:{top:L('ח',0), left:L('ת',180), right:L('ו',90,1), far:HOLE()}},
+    {k:'green',  he:'ירוקה', c:40, col:'#9ccb82', def:{top:L('ו',0), left:L('י',90), right:L('ר',90,1), far:HOLE()}},
+    {k:'purple', he:'סגולה', c:35, col:'#bb8cd2', def:{top:L('ל',0), left:L('ע',180), right:L('ב',90,1), far:HOLE()}},
+    {k:'pink',   he:'ורודה', c:30, col:'#db8f98', def:{top:L('ט',0), left:L('ד',180), right:L('ח',90,1), bottom:L('ס',0)}}
+  ];
+  const clone = o => JSON.parse(JSON.stringify(o));
+  let cur = CUBES[3], state = {}, sel = null, foldT = 0, spin = 0, S = 120, busy = false;
+  const $ = id => document.getElementById(id);
+  const KEY = k => 'cubeEditor.v2.' + k;
+  function load(c){ let s = null; try { s = JSON.parse(localStorage.getItem(KEY(c.k))); } catch (e) {} const d = clone(c.def); CELLS.forEach(x => { if (!(x in d)) d[x] = null; }); return s && CELLS.every(x => x in s) ? s : d; }
+  function save(){ try { localStorage.setItem(KEY(cur.k), JSON.stringify(state)); } catch (e) {} }
+
+  // one item as an SVG group in cm, centred on the face
+  function itemSVG(it, c){
+    if (!it) return '';
+    const h = c / 2; let inner = '';
+    if (it.t === 'hole') inner = `<rect x="${-.41*c}" y="${-.41*c}" width="${.82*c}" height="${.82*c}" fill="#1d1d1d"/>`;
+    else if (it.t === 'ball') inner = `<circle r="${.2*c}" fill="#000"/>`;
+    else if (it.t === 'dots') inner = SP.map(([x, y]) => `<circle cx="${(x/100-.5)*c}" cy="${(y/100-.5)*c}" r="${.035*c}" fill="#000"/>`).join('');
+    else {
+      const g = DV.g[it.ch], xc = (g.b[0] + g.b[2]) / 2, yc = (g.b[1] + g.b[3]) / 2;
+      if (it.w) inner += WD.map(([x, y]) => `<circle cx="${(x/100-.5)*c}" cy="${(y/100-.5)*c}" r="${.023*c}" fill="#fff"/>`).join('');
+      inner += `<path transform="scale(${KG} ${-KG}) translate(${-xc} ${-yc})" d="${g.d}" fill="#1b2f86"/>`;
+    }
+    return `<g transform="translate(${h} ${h}) rotate(${it.rot}) scale(${it.mx} 1)">${inner}</g>`;
+  }
+  const faceSVG = (it, c, col) => `<svg viewBox="0 0 ${c} ${c}" xmlns="http://www.w3.org/2000/svg"><rect width="${c}" height="${c}" fill="${col}"/>${itemSVG(it, c)}</svg>`;
+
+  function build(){
+    S = Math.max(70, Math.min(130, Math.floor((Math.min(innerWidth, 900) - 40) / 4)));
+    const net = $('net'), stage = $('stage'); net.innerHTML = '';
+    stage.style.width = 4 * S + 'px'; stage.style.height = Math.round(3.9 * S) + 'px';
+    net.style.width = 4 * S + 'px'; net.style.height = 3 * S + 'px'; net.style.top = (0.4 * S) + 'px';
+    const mk = (id, par, extra) => {
+      const arm = document.createElement('div'); arm.className = 'arm'; arm.dataset.cell = id;
+      arm.style.cssText = `width:${S}px;height:${S}px;${extra}`;
+      const f = document.createElement('div'); f.className = 'face'; f.dataset.cell = id; arm.appendChild(f);
+      par.appendChild(arm); return arm;
+    };
+    const center = mk('center', net, `left:${S}px;top:${S}px`);
+    mk('top', center, `left:0;top:${-S}px;transform-origin:50% 100%`);
+    mk('bottom', center, `left:0;top:${S}px;transform-origin:50% 0`);
+    mk('left', center, `left:${-S}px;top:0;transform-origin:100% 50%`);
+    const right = mk('right', center, `left:${S}px;top:0;transform-origin:0 50%`);
+    mk('far', right, `left:${S}px;top:0;transform-origin:0 50%`);
+    net.style.transformOrigin = `${1.5 * S}px ${1.5 * S}px ${-S / 2}px`;
+    render(); applyFold();
+  }
+  function render(){
+    CELLS.forEach(id => { const f = document.querySelector(`.face[data-cell="${id}"]`); f.innerHTML = faceSVG(state[id], cur.c, cur.col); f.classList.toggle('sel', sel === id); });
+    const holeAt = CELLS.find(id => state[id] && state[id].t === 'hole');
+    $('holeInfo').textContent = 'החור: ' + (!holeAt ? 'אין (קוביה סגורה)' : holeAt === 'far' ? 'למעלה ✔' : holeAt === 'center' ? 'למטה' : 'בצד');
+    const s = sel && state[sel]; $('selInfo').textContent = s ? 'נבחר: ' + (s.t === 'letter' ? 'האות ' + s.ch + (s.w ? ' (עם נקודות)' : '') : ({hole:'החור', ball:'הכדור', dots:'נקודות'})[s.t]) + ` · ${s.rot}°${s.mx < 0 ? ' · ראי' : ''}` : 'לא נבחרה פאה';
+    ['rotL', 'rotR', 'mir'].forEach(i => $(i).disabled = !s || foldT > 0);
+  }
+  function applyFold(){
+    const a = foldT * 90, net = $('net'), st = Math.max(0, (foldT - 0) );
+    const A = (id, tr) => { document.querySelector(`.arm[data-cell="${id}"]`).style.transform = tr; };
+    A('top', `rotateX(${a}deg)`); A('bottom', `rotateX(${-a}deg)`); A('left', `rotateY(${-a}deg)`); A('right', `rotateY(${a}deg)`); A('far', `rotateY(${a}deg)`);
+    net.style.transform = `rotateX(${-25 * st}deg) rotateY(${spin}deg) rotateX(${-90 * st}deg)`;
+    $('stage').className = 'stage ' + (foldT > 0 ? 'folded' : 'flat');
+  }
+  function animate(to, ms){
+    if (busy) return; busy = true; const from = foldT, t0 = performance.now();
+    const step = now => { const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2) / 2; foldT = from + (to - from) * e; applyFold(); render();
+      if (k < 1) requestAnimationFrame(step); else { busy = false; $('fold').textContent = foldT > 0 ? 'פרוש' : 'קפל'; ['spinL', 'spinR'].forEach(i => $(i).disabled = foldT === 0); } };
+    requestAnimationFrame(step);
+  }
+
+  // ---- drag items between faces (flat view only) ----
+  let drag = null;
+  document.addEventListener('pointerdown', e => {
+    const f = e.target.closest && e.target.closest('.face'); if (!f || foldT > 0 || busy) return;
+    sel = f.dataset.cell; drag = {from: sel, moved: false, x: e.clientX, y: e.clientY}; render(); e.preventDefault();
+  });
+  document.addEventListener('pointermove', e => {
+    if (!drag) return; if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) > 6) drag.moved = true; if (!drag.moved) return;
+    document.querySelectorAll('.face.tgt').forEach(x => x.classList.remove('tgt'));
+    const t = document.elementFromPoint(e.clientX, e.clientY), f = t && t.closest && t.closest('.face'); if (f && f.dataset.cell !== drag.from) f.classList.add('tgt');
+  });
+  document.addEventListener('pointerup', e => {
+    if (!drag) return; document.querySelectorAll('.face.tgt').forEach(x => x.classList.remove('tgt'));
+    if (drag.moved) { const t = document.elementFromPoint(e.clientX, e.clientY), f = t && t.closest && t.closest('.face');
+      if (f && f.dataset.cell !== drag.from) { const a = drag.from, b = f.dataset.cell; [state[a], state[b]] = [state[b], state[a]]; sel = b; save(); } }
+    drag = null; render();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { sel = null; render(); } });
+
+  // ---- buttons ----
+  const rot = d => { const s = sel && state[sel]; if (!s) return; s.rot = ((s.rot + d) % 360 + 360) % 360; save(); render(); };
+  $('rotL').onclick = () => rot(-90); $('rotR').onclick = () => rot(90);
+  $('mir').onclick = () => { const s = sel && state[sel]; if (!s) return; s.mx = -s.mx; save(); render(); };
+  $('reset').onclick = () => { if (foldT > 0) return; state = clone(cur.def); CELLS.forEach(x => { if (!(x in state)) state[x] = null; }); sel = null; save(); render(); };
+  $('fold').onclick = () => animate(foldT > 0 ? 0 : 1, 1500);
+  $('spinL').onclick = () => { spin -= 90; $('net').style.transition = 'transform .5s'; applyFold(); setTimeout(() => $('net').style.transition = '', 520); };
+  $('spinR').onclick = () => { spin += 90; $('net').style.transition = 'transform .5s'; applyFold(); setTimeout(() => $('net').style.transition = '', 520); };
+  $('dl').onclick = () => {
+    const c = cur.c, M = 5, W = 4*c + 2*M, H = 3*c + 2*M; let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}cm" height="${H}cm" viewBox="0 0 ${W} ${H}">`;
+    CELLS.forEach(id => { const [gx, gy] = POS[id]; const x = M + gx*c, y = M + gy*c;
+      o += `<g transform="translate(${x} ${y})"><rect width="${c}" height="${c}" fill="${cur.col}" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>${itemSVG(state[id], c)}</g>`; });
+    o += `<text x="${M}" y="${M-1.5}" font-size="1.6" font-family="Helvetica" fill="#000">${cur.k} cube ${c}x${c} cm | David Bold letters 24 cm | 1:1</text></svg>`;
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([o], {type:'image/svg+xml'})); a.download = `cube-${cur.k}-${c}cm-layout.svg`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+  const box = $('cubes');
+  CUBES.forEach(c => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sw'; b.style.background = c.col; b.textContent = `${c.he} ${c.c}`;
+    b.onclick = () => { if (busy) return; if (foldT > 0) { foldT = 0; spin = 0; $('fold').textContent = 'קפל'; ['spinL', 'spinR'].forEach(i => $(i).disabled = true); }
+      cur = c; state = load(c); sel = null; box.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); build(); };
+    box.appendChild(b); c.btn = b; });
+  state = load(cur); cur.btn.classList.add('on'); build();
+  let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(build, 150); });
+  window.__editor = {get state(){ return state; }};
+})();
+</script></body></html>
