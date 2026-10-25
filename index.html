@@ -51,7 +51,7 @@
     border:1px solid rgba(0,0,0,.14);backface-visibility:hidden;
     font:900 calc(var(--z) * .5)/1 "Frank Ruhl Libre","David","Times New Roman",serif;color:var(--ink)}
   .front{transform:translateZ(calc(var(--z) / 2))}
-  .left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2));filter:brightness(.93)}
+  .left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2))}
   .back{transform:rotateY(180deg) translateZ(calc(var(--z) / 2))}
   .right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}
   .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2))}
@@ -105,6 +105,10 @@
   button{font:700 16px/1 "Assistant",sans-serif;border-radius:8px;padding:13px 20px;cursor:pointer;border:2px solid var(--ink)}
   #next{background:var(--ink);color:#fff}
   #reset,#empties,#rigBtn{background:transparent;color:var(--ink)}
+  .pal{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .pal div{display:flex;align-items:center;gap:10px;border:1px solid #d5dde5;border-radius:8px;padding:8px 10px;background:#fff}
+  .pal i{flex:none;width:34px;height:34px;border-radius:6px;border:1px solid rgba(0,0,0,.2)}
+  .pal b{display:block;font-size:15px}.pal code{direction:ltr;unicode-bidi:isolate;font-size:13px;color:var(--muted)}
   button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
   button:disabled{opacity:.45;cursor:default}
 
@@ -166,6 +170,20 @@
       <button id="rigBtn" type="button">איך מלבישים את הרקע</button>
     </div>
   </div>
+
+  <section class="faces" aria-labelledby="palTitle">
+    <h2 id="palTitle">צבעים (מספר HEX)</h2>
+    <div class="pal">
+      <div><i style="background:#e8784a"></i><span><b>כתומה (130)</b><code>#E8784A</code></span></div>
+      <div><i style="background:#e8c957"></i><span><b>צהובה (118)</b><code>#E8C957</code></span></div>
+      <div><i style="background:#9ccb82"></i><span><b>ירוקה (106)</b><code>#9CCB82</code></span></div>
+      <div><i style="background:#bb8cd2"></i><span><b>סגולה (96)</b><code>#BB8CD2</code></span></div>
+      <div><i style="background:#db8f98"></i><span><b>ורודה (86)</b><code>#DB8F98</code></span></div>
+      <div><i style="background:#1d1d1d"></i><span><b>חור / צד פתוח</b><code>#1D1D1D</code></span></div>
+      <div><i style="background:#63b3f0"></i><span><b>שמיים</b><code>#63B3F0</code></span></div>
+      <div><i style="background:#f5f9fa"></i><span><b>עננים</b><code>#F5F9FA</code></span></div>
+    </div>
+  </section>
 
   <section class="faces" aria-labelledby="facesTitle">
     <h2 id="facesTitle">אילו צדדים פנויים?</h2>
@@ -709,7 +727,7 @@
 
       // Backdrop: one sky fabric on an aluminium frame.
       const bw = BW, bh = BH;
-      const sky = new THREE.Mesh(new THREE.PlaneGeometry(bw, bh), new THREE.MeshStandardMaterial({map:skyTexture(), roughness:1}));
+      const sky = new THREE.Mesh(new THREE.PlaneGeometry(bw, bh), new THREE.MeshBasicMaterial({map:skyTexture()}));
       sky.position.set(0, bh / 2, backdropZ); sky.receiveShadow = true; scene3.add(sky); set3.sky = sky;
       // Back of the fabric, as the crew sees it backstage.
       const backCloth = new THREE.Mesh(new THREE.PlaneGeometry(bw, bh), new THREE.MeshStandardMaterial({color:0xd9d4c7, roughness:1}));
@@ -749,7 +767,7 @@
       const cubePos = [];
       CUBES.forEach((cube, i) => {
         const s = sizes[i];
-        const mats = sideOrder.map(sd => new THREE.MeshStandardMaterial({map:faceTexture(cube, sd), roughness:.8}));
+        const mats = sideOrder.map(sd => new THREE.MeshBasicMaterial({map:faceTexture(cube, sd)}));
         const m = new THREE.Mesh(new THREE.BoxGeometry(s, s, s), mats);
         m.position.set(x + s / 2, s / 2, 0); m.castShadow = m.receiveShadow = true; scene3.add(m);
         cubePos.push(m.position.clone());
