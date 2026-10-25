@@ -57,13 +57,14 @@
   .right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}
   .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2))}
   .bottom{transform:rotateX(-90deg) translateZ(calc(var(--z) / 2))}
-  .f.panel{outline:calc(2 * var(--u)) dashed #d00;outline-offset:-3px;box-shadow:0 0 calc(10 * var(--u)) rgba(0,0,0,.35)}
-  .f.panel::before{content:"פאנל עץ נשלף";position:absolute;top:2%;left:50%;transform:translateX(-50%);direction:rtl;white-space:nowrap;z-index:2;
+  .scene[data-step="3"] .f.panel{outline:calc(2 * var(--u)) dashed #d00;outline-offset:-3px;box-shadow:0 0 calc(10 * var(--u)) rgba(0,0,0,.35)}
+  .f.panel::before{display:none;content:"פאנל עץ נשלף";position:absolute;top:2%;left:50%;transform:translateX(-50%);direction:rtl;white-space:nowrap;z-index:2;
     background:#d00;color:#fff;font:700 calc(9 * var(--u))/1 "Assistant",sans-serif;padding:calc(3 * var(--u)) calc(6 * var(--u));border-radius:3px}
-  .left.panel{animation:slideL 4s ease-in-out infinite}
-  .right.panel{animation:slideR 4s ease-in-out infinite}
-  @keyframes slideL{0%,25%,100%{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2))}50%,75%{transform:rotateY(-90deg) translateZ(calc(var(--z) * .85))}}
-  @keyframes slideR{0%,25%,100%{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}50%,75%{transform:rotateY(90deg) translateZ(calc(var(--z) * .85))}}
+  .scene[data-step="3"] .f.panel::before{display:block}
+  .scene[data-step="3"] .left.panel{animation:slideL 1.6s ease-in-out 1.2s forwards}
+  .scene[data-step="3"] .right.panel{animation:slideR 1.6s ease-in-out 1.2s forwards}
+  @keyframes slideL{0%{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2))}100%{transform:rotateY(-90deg) translateZ(calc(var(--z) * .85))}}
+  @keyframes slideR{0%{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}100%{transform:rotateY(90deg) translateZ(calc(var(--z) * .85))}}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
   .hole::after{content:"";position:absolute;inset:9%;border-radius:2px;
@@ -444,7 +445,7 @@
     {w:'דעות', t:'המצב ההתחלתי', b:'סובב'},
     {w:'טעות', t:'ה־ד והקוביה הכתומה הסתובבו שמאלה', b:'סובב את כל הקוביות'},
     {w:'סליחה', t:'כל הקוביות הסתובבו שמאלה', b:'הפוך'},
-    {w:'חרב', t:'ח־ר־ב הסתובבו לצד, ו ו־ת הראו צד אחר, ב ו־ר החליפו מקום', b:'סדר את המילה'},
+    {w:'חרב', t:'ח־ר־ב הסתובבו לצד, הצהובה והכתומה נפתחות ופלטת העץ יוצאת החוצה, ב ו־ר החליפו מקום', b:'סדר את המילה'},
     {w:'חבר', t:'ב ו־ר חזרו למקום, ו ו־ת עדיין על צד אחר', b:'השלם את המילה'},
     {w:'חברות', t:'ו ו־ת הסתובבו והראו את האותיות', b:'ארוז את הקוביות'},
     {w:'אריזה', t:'כמו בבושקה: הפתח למעלה, והקוביות נכנסות לפי הסדר מהגדולה לקטנה', b:'עוד פעם'}
