@@ -42,6 +42,9 @@
     <button id="fold" class="go" type="button">קפל</button>
     <button id="spinL" type="button" disabled>◀ סובב קוביה</button>
     <button id="spinR" type="button" disabled>סובב קוביה ▶</button>
+    <button id="vTop" type="button" disabled>👁 מלמעלה</button>
+    <button id="vSide" type="button" disabled>👁 מהצד</button>
+    <button id="vBot" type="button" disabled>👁 מלמטה</button>
     <button id="dl" type="button">⬇ הורד פריסה (SVG, 1:1)</button>
   </div>
   <div class="stage flat" id="stage"><div class="net" id="net"></div></div>
@@ -66,7 +69,7 @@
     {k:'pink',   he:'ורודה', c:30, col:'#db8f98', def:{top:L('ט',0), left:L('ד',180), right:L('ח',90,1), bottom:L('ס',0)}}
   ];
   const clone = o => JSON.parse(JSON.stringify(o));
-  let cur = CUBES[3], state = {}, sel = null, foldT = 0, spin = 0, S = 120, busy = false;
+  let cur = CUBES[3], state = {}, sel = null, foldT = 0, spin = 0, S = 120, busy = false, tilt = -25;
   const $ = id => document.getElementById(id);
   const KEY = k => 'cubeEditor.v2.' + k;
   function load(c){ let s = null; try { s = JSON.parse(localStorage.getItem(KEY(c.k))); } catch (e) {} const d = clone(c.def); CELLS.forEach(x => { if (!(x in d)) d[x] = null; }); return s && CELLS.every(x => x in s) ? s : d; }
@@ -111,7 +114,7 @@
   function render(){
     CELLS.forEach(id => { const f = document.querySelector(`.face[data-cell="${id}"]`); f.innerHTML = faceSVG(state[id], cur.c, cur.col); f.classList.toggle('sel', sel === id); });
     const holeAt = CELLS.find(id => state[id] && state[id].t === 'hole');
-    $('holeInfo').textContent = 'החור: ' + (!holeAt ? 'אין (קוביה סגורה)' : holeAt === 'far' ? 'למעלה ✔' : holeAt === 'center' ? 'למטה' : 'בצד');
+    $('holeInfo').textContent = 'החור: ' + (!holeAt ? 'אין (קוביה סגורה)' : holeAt === 'far' ? 'למעלה ✔' : holeAt === 'center' ? 'למטה (בקיפול רואים אותו במבט מלמטה)' : 'בצד');
     const s = sel && state[sel]; $('selInfo').textContent = s ? 'נבחר: ' + (s.t === 'letter' ? 'האות ' + s.ch + (s.w ? ' (עם נקודות)' : '') : ({hole:'החור', ball:'הכדור', dots:'נקודות'})[s.t]) + ` · ${s.rot}°${s.mx < 0 ? ' · ראי' : ''}` : 'לא נבחרה פאה';
     ['rotL', 'rotR', 'mir'].forEach(i => $(i).disabled = !s || foldT > 0);
   }
@@ -119,13 +122,13 @@
     const a = foldT * 90, net = $('net'), st = Math.max(0, (foldT - 0) );
     const A = (id, tr) => { document.querySelector(`.arm[data-cell="${id}"]`).style.transform = tr; };
     A('top', `rotateX(${a}deg)`); A('bottom', `rotateX(${-a}deg)`); A('left', `rotateY(${-a}deg)`); A('right', `rotateY(${a}deg)`); A('far', `rotateY(${a}deg)`);
-    net.style.transform = `rotateX(${-25 * st}deg) rotateY(${spin}deg) rotateX(${-90 * st}deg)`;
+    net.style.transform = `rotateX(${tilt * st}deg) rotateY(${spin}deg) rotateX(${-90 * st}deg)`;
     $('stage').className = 'stage ' + (foldT > 0 ? 'folded' : 'flat');
   }
   function animate(to, ms){
     if (busy) return; busy = true; const from = foldT, t0 = performance.now();
     const step = now => { const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2) / 2; foldT = from + (to - from) * e; applyFold(); render();
-      if (k < 1) requestAnimationFrame(step); else { busy = false; $('fold').textContent = foldT > 0 ? 'פרוש' : 'קפל'; ['spinL', 'spinR'].forEach(i => $(i).disabled = foldT === 0); } };
+      if (k < 1) requestAnimationFrame(step); else { busy = false; $('fold').textContent = foldT > 0 ? 'פרוש' : 'קפל'; ['spinL', 'spinR', 'vTop', 'vSide', 'vBot'].forEach(i => $(i).disabled = foldT === 0); } };
     requestAnimationFrame(step);
   }
 
@@ -153,9 +156,12 @@
   $('rotL').onclick = () => rot(-90); $('rotR').onclick = () => rot(90);
   $('mir').onclick = () => { const s = sel && state[sel]; if (!s) return; s.mx = -s.mx; save(); render(); };
   $('reset').onclick = () => { if (foldT > 0) return; state = clone(cur.def); CELLS.forEach(x => { if (!(x in state)) state[x] = null; }); sel = null; save(); render(); };
-  $('fold').onclick = () => animate(foldT > 0 ? 0 : 1, 1500);
+  $('fold').onclick = () => { if (foldT === 0) { const h = CELLS.find(id => state[id] && state[id].t === 'hole'); setViewQuiet(h === 'center' ? 55 : h === 'far' ? -25 : 0); } animate(foldT > 0 ? 0 : 1, 1500); };
+  const setViewQuiet = t => { tilt = t; ['vTop', 'vSide', 'vBot'].forEach(i => $(i).classList.toggle('on', ({vTop:-25, vSide:0, vBot:55})[i] === t)); };
   $('spinL').onclick = () => { spin -= 90; $('net').style.transition = 'transform .5s'; applyFold(); setTimeout(() => $('net').style.transition = '', 520); };
   $('spinR').onclick = () => { spin += 90; $('net').style.transition = 'transform .5s'; applyFold(); setTimeout(() => $('net').style.transition = '', 520); };
+  const setView = t => { tilt = t; $('net').style.transition = 'transform .6s'; applyFold(); setTimeout(() => $('net').style.transition = '', 640); ['vTop', 'vSide', 'vBot'].forEach(i => $(i).classList.toggle('on', ({vTop:-25, vSide:0, vBot:55})[i] === t)); };
+  $('vTop').onclick = () => setView(-25); $('vSide').onclick = () => setView(0); $('vBot').onclick = () => setView(55);
   $('dl').onclick = () => {
     const c = cur.c, M = 5, W = 4*c + 2*M, H = 3*c + 2*M; let o = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}cm" height="${H}cm" viewBox="0 0 ${W} ${H}">`;
     CELLS.forEach(id => { const [gx, gy] = POS[id]; const x = M + gx*c, y = M + gy*c;
@@ -165,7 +171,7 @@
   };
   const box = $('cubes');
   CUBES.forEach(c => { const b = document.createElement('button'); b.type = 'button'; b.className = 'sw'; b.style.background = c.col; b.textContent = `${c.he} ${c.c}`;
-    b.onclick = () => { if (busy) return; if (foldT > 0) { foldT = 0; spin = 0; $('fold').textContent = 'קפל'; ['spinL', 'spinR'].forEach(i => $(i).disabled = true); }
+    b.onclick = () => { if (busy) return; if (foldT > 0) { foldT = 0; spin = 0; $('fold').textContent = 'קפל'; ['spinL', 'spinR', 'vTop', 'vSide', 'vBot'].forEach(i => $(i).disabled = true); }
       cur = c; state = load(c); sel = null; box.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); build(); };
     box.appendChild(b); c.btn = b; });
   state = load(cur); cur.btn.classList.add('on'); build();
