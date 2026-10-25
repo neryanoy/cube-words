@@ -2,25 +2,12 @@
 <rect x="40" y="5" width="35" height="35" fill="#bb8cd2" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <path d="M862 836Q862 612 741 369Q572 29 98 -45L260 293Q392 312 510 379Q612 437 612 608Q612 696 557 696H199Q112 696 92 722Q80 738 80 815Q80 850 83.0 919.0Q86 988 86 1018Q86 1078 69 1104Q60 1119 27 1139L225 1403Q291 1327 291 1092L292 1025Q299 991 340 991H752Q823 991 845 951Q862 921 862 836Z" fill="#1b2f86" transform="translate(57.500 22.500) rotate(0) scale(0.020033 -0.020033) translate(-444.50 -679.00)"/>
 <rect x="5" y="40" width="35" height="35" fill="#bb8cd2" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<path d="M909 676Q912 491 854 340Q726 180 484 57Q308 -32 10 -127L117 205Q230 225 367 264Q284 577 74 838L315 1139Q397 968 471 699Q529 487 549 346Q595 378 642 411Q692 454 692 508Q692 627 578 840L813 1147Q906 899 909 676Z" fill="#1b2f86" transform="translate(22.500 57.500) rotate(180) scale(0.020033 -0.020033) translate(-459.57 -510.00)"/>
+<path d="M909 676Q912 491 854 340Q726 180 484 57Q308 -32 10 -127L117 205Q230 225 367 264Q284 577 74 838L315 1139Q397 968 471 699Q529 487 549 346Q595 378 642 411Q692 454 692 508Q692 627 578 840L813 1147Q906 899 909 676Z" fill="#1b2f86" transform="translate(22.500 57.500) rotate(270) scale(0.020033 -0.020033) translate(-459.57 -510.00)"/>
 <rect x="40" y="40" width="35" height="35" fill="#bb8cd2" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="75" y="40" width="35" height="35" fill="#bb8cd2" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<circle cx="105.45" cy="45.25" r="0.80" fill="#fff"/>
-<circle cx="97.05" cy="44.20" r="0.80" fill="#fff"/>
-<circle cx="86.90" cy="45.95" r="0.80" fill="#fff"/>
-<circle cx="79.55" cy="44.90" r="0.80" fill="#fff"/>
-<circle cx="102.30" cy="51.90" r="0.80" fill="#fff"/>
-<circle cx="92.15" cy="50.15" r="0.80" fill="#fff"/>
-<circle cx="82.35" cy="52.95" r="0.80" fill="#fff"/>
-<circle cx="105.80" cy="58.90" r="0.80" fill="#fff"/>
-<circle cx="98.45" cy="61.35" r="0.80" fill="#fff"/>
-<circle cx="84.45" cy="60.65" r="0.80" fill="#fff"/>
-<circle cx="78.85" cy="63.80" r="0.80" fill="#fff"/>
-<circle cx="103.00" cy="68.35" r="0.80" fill="#fff"/>
-<circle cx="93.20" cy="70.10" r="0.80" fill="#fff"/>
-<circle cx="82.70" cy="68.70" r="0.80" fill="#fff"/>
+<g transform="translate(92.5 57.5) rotate(90)"><circle cx="-12.95" cy="-12.25" r="0.80" fill="#fff"/><circle cx="-4.55" cy="-13.30" r="0.80" fill="#fff"/><circle cx="5.60" cy="-11.55" r="0.80" fill="#fff"/><circle cx="12.95" cy="-12.60" r="0.80" fill="#fff"/><circle cx="-9.80" cy="-5.60" r="0.80" fill="#fff"/><circle cx="0.35" cy="-7.35" r="0.80" fill="#fff"/><circle cx="10.15" cy="-4.55" r="0.80" fill="#fff"/><circle cx="-13.30" cy="1.40" r="0.80" fill="#fff"/><circle cx="-5.95" cy="3.85" r="0.80" fill="#fff"/><circle cx="8.05" cy="3.15" r="0.80" fill="#fff"/><circle cx="13.65" cy="6.30" r="0.80" fill="#fff"/><circle cx="-10.50" cy="10.85" r="0.80" fill="#fff"/><circle cx="-0.70" cy="12.60" r="0.80" fill="#fff"/><circle cx="9.80" cy="11.20" r="0.80" fill="#fff"/></g>
 <path d="M965 295 836 0H23L164 295H602Q594 468 584 569Q571 696 455 696H39Q106 933 289 1149Q289 1076 305 991H598Q747 991 792 859Q813 795 813 627V295Z" fill="#1b2f86" transform="translate(92.500 57.500) rotate(90) scale(0.020033 -0.020033) translate(-494.00 -574.50)"/>
 <rect x="110" y="40" width="35" height="35" fill="#bb8cd2" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="113.15" y="43.15" width="28.70" height="28.70" fill="#1d1d1d"/>
 <rect x="40" y="75" width="35" height="35" fill="#bb8cd2" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<text x="5" y="3.5" font-size="1.6" font-family="Helvetica" fill="#000">Purple cube 35x35 cm - layout as NN paper model | letters David Bold 24 cm | 1:1 | 6th face (hole) added at right</text></svg>
+<text x="5" y="3.5" font-size="1.6" font-family="Helvetica" fill="#000">Purple cube 35x35 cm | NN final layout | David Bold letters 24 cm | 1:1 | dashed = fold lines</text></svg>
