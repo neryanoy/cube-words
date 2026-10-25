@@ -25,18 +25,7 @@
   .drop{position:absolute;z-index:0;inset:0 0 34% 0;box-sizing:border-box;
     border:calc(6 * var(--u)) solid #b9c0c7;border-bottom:0;
     border-image:linear-gradient(135deg,#eef1f4,#9aa3ac 45%,#d7dce1 70%,#8b949d) 1;
-    background:
-      radial-gradient(ellipse 9% 5% at 14% 22%,#fff 0 55%,transparent 72%),
-      radial-gradient(ellipse 7% 6% at 19% 19%,#fff 0 55%,transparent 72%),
-      radial-gradient(ellipse 8% 4.5% at 23% 24%,#fbfdff 0 55%,transparent 72%),
-      radial-gradient(ellipse 11% 5% at 63% 14%,#fff 0 55%,transparent 72%),
-      radial-gradient(ellipse 7% 6.5% at 69% 10%,#fff 0 55%,transparent 72%),
-      radial-gradient(ellipse 9% 4.5% at 75% 15%,#f7fbff 0 55%,transparent 72%),
-      radial-gradient(ellipse 8% 4% at 42% 46%,rgba(255,255,255,.85) 0 50%,transparent 72%),
-      radial-gradient(ellipse 6% 4% at 46% 43%,rgba(255,255,255,.85) 0 50%,transparent 72%),
-      radial-gradient(ellipse 10% 4% at 88% 52%,rgba(255,255,255,.8) 0 50%,transparent 72%),
-      radial-gradient(ellipse 9% 3.5% at 6% 58%,rgba(255,255,255,.75) 0 50%,transparent 72%),
-      linear-gradient(#2f7fd0,#5ea8e6 55%,#a9d4f5)}
+    background:#63b3f0 url(sky-bg.jpg) 0 0/100% 100% no-repeat}
   /* Backdrop rigging demo: the bare aluminium frame with Velcro strips, then the sky fabric comes down onto it. */
   .frame{position:absolute;z-index:0;inset:0 0 34% 0;opacity:0;transition:opacity .5s ease}
   .scene.rig .frame{opacity:1}
@@ -539,14 +528,11 @@
     function skyTexture(){
       const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 512;
       const g = cv.getContext('2d');
-      const lg = g.createLinearGradient(0, 0, 0, 512);
-      lg.addColorStop(0, '#2f7fd0'); lg.addColorStop(.55, '#5ea8e6'); lg.addColorStop(1, '#a9d4f5');
-      g.fillStyle = lg; g.fillRect(0, 0, 1024, 512);
-      g.fillStyle = '#fff';
-      [[140,110],[200,95],[250,118],[640,70],[700,52],[760,78],[430,230],[880,260],[70,300]].forEach(([x, y], i) => {
-        g.globalAlpha = i < 6 ? 1 : .8; g.beginPath(); g.ellipse(x, y, 70, 26, 0, 0, 7); g.fill();
-      });
-      return new THREE.CanvasTexture(cv);
+      g.fillStyle = '#63b3f0'; g.fillRect(0, 0, 1024, 512);
+      const t = new THREE.CanvasTexture(cv), im = new Image();
+      im.onload = () => { g.drawImage(im, 0, 0, 1024, 512); t.needsUpdate = true; };
+      im.src = 'sky-bg.jpg';
+      return t;
     }
     function actor(shirt){
       const a = new THREE.Group(), skin = new THREE.MeshStandardMaterial({color:0xe0b08a});
