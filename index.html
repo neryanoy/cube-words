@@ -70,14 +70,20 @@
 
   /* Steps 1-2 turn cubes a quarter to the left. Step 3 tips ח-ר-ב forward onto their tops,
      while ו and ת tip backward and show their open side. Step 4 puts ב/ר back (חבר) while ו and ת stay open; step 5 flips them over: חברות. */
-  .body{transform:rotateX(0deg) rotateY(0deg)}
-  .scene[data-step="1"] .pink .body,.scene[data-step="1"] .orange .body{transform:rotateX(0deg) rotateY(-90deg)}
-  .scene[data-step="2"] .body{transform:rotateX(0deg) rotateY(-90deg)}
-  .scene[data-step="2"] .pink .body,.scene[data-step="2"] .orange .body{transform:rotateX(0deg) rotateY(-180deg)}
-  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .body{transform:rotateX(90deg) rotateY(-90deg)}
-  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) :is(.pink,.orange) .body{transform:rotateX(90deg) rotateY(-180deg)}
-  .scene:is([data-step="3"],[data-step="4"]) .yellow .body{transform:rotateX(-90deg) rotateY(-90deg)}
-  .scene:is([data-step="3"],[data-step="4"]) .orange .body{transform:rotateX(-90deg) rotateY(-180deg)}
+  /* Cubes only ever turn to the side (about the vertical axis). A cube shows its LEFT wall at the start (דעות), then
+     front, right, back as it turns left. The orange cube starts on its front (the ball). Packing flips the open-bottom cubes sideways over (rotateZ). */
+  .body{transform:rotateY(90deg)}
+  .orange .body{transform:rotateY(0deg)}
+  .scene[data-step="1"] .pink .body{transform:rotateY(0deg)}
+  .scene[data-step="1"] .orange .body{transform:rotateY(-90deg)}
+  .scene[data-step="2"] .body{transform:rotateY(0deg)}
+  .scene[data-step="2"] .pink .body{transform:rotateY(-90deg)}
+  .scene[data-step="2"] .orange .body{transform:rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .body{transform:rotateY(-90deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .pink .body{transform:rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .yellow .body{transform:rotateY(-180deg)}
+  .scene:is([data-step="3"],[data-step="4"]) .orange .body{transform:rotateY(0deg)}
+  .scene[data-step="5"] .orange .body{transform:rotateY(90deg)}
   .scene[data-step="1"] .orange .body{transition-delay:.25s}
   .scene[data-step="2"] .purple .body,.scene[data-step="3"] .purple .body{transition-delay:.15s}
   .scene[data-step="2"] .green .body,.scene[data-step="3"] .green .body{transition-delay:.3s}
@@ -93,7 +99,8 @@
   .hop{z-index:2}
   /* Packing (last step): every cube turns its open side up and the camera looks down into them,
      then each one drops into the next bigger one, biggest first. */
-  .scene[data-step="6"] .body{transform:rotateX(0deg) rotateY(0deg);transition-delay:0s}
+  .scene[data-step="6"] .body{transform:rotateY(0deg);transition-delay:0s}
+  .scene[data-step="6"] :is(.orange,.yellow) .body{transform:rotateZ(180deg) rotateY(0deg)}
   .scene[data-step="6"] .cube{perspective-origin:50% -80%}
   .scene.xray .cube:not(.pink){opacity:.5}
   .scene.xray .cube{perspective-origin:50% 8%}
@@ -264,15 +271,15 @@
   const LETTER_CM = 24; let LET_R = 0.62, LET_A = 0.45, LET_D = 0.17;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
-      faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:'hole', bottom:{w:'ת'}}},
+      faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:{w:'ת'}, top:null, bottom:'hole'}},
     {k:'yellow', name:'הצהובה', s:117, c:'#e8c957', end:-90,
-      faces:{front:'ת', right:'ח', back:null, left:null, top:'hole', bottom:{w:'ו'}}},
+      faces:{front:'ח', right:{w:'ו'}, back:null, left:'ת', top:null, bottom:'hole'}},
     {k:'green', name:'הירוקה', s:104, c:'#9ccb82', end:-90,
-      faces:{front:'ו', right:'י', back:null, left:null, top:'hole', bottom:{w:'ר'}}},
+      faces:{front:'י', right:{w:'ר'}, back:null, left:'ו', top:'hole', bottom:null}},
     {k:'purple', name:'הסגולה', s:91, c:'#bb8cd2', end:-90,
-      faces:{front:'ע', right:'ל', back:null, left:null, top:'hole', bottom:{w:'ב'}}},
+      faces:{front:'ל', right:{w:'ב'}, back:null, left:'ע', top:'hole', bottom:null}},
     {k:'pink', name:'הוורודה', s:78, c:'#db8f98', end:-180,
-      faces:{front:'ד', right:'ט', back:'ס', left:null, top:null, bottom:{w:'ח'}}}
+      faces:{front:'ט', right:'ס', back:{w:'ח'}, left:'ד', top:null, bottom:null}}
   ];
   const SIDES = ['front','right','back','left','top','bottom'];
   const SIDE_NAME = {front:'חזית', right:'צד ימין', back:'גב', left:'צד שמאל', top:'למעלה', bottom:'למטה'};
@@ -299,7 +306,7 @@
       else if (v && v.art === 'dots') f.innerHTML = SPOTS.map(([x, y]) => `<span class="dot" style="--x:${x}%;--y:${y}%"></span>`).join('');
       else if (v && v.w) {
         // The חברות letters sit on top; turn them so they read upright once tipped forward.
-        f.innerHTML = `<b style="--r:${cube.end === -180 ? 180 : 90}deg">${v.w}</b>`;
+        f.innerHTML = `<b style="--r:${0}deg">${v.w}</b>`;
         WDOTS.forEach(([x, y]) => {
           const d = document.createElement('span');
           d.className = 'wdot';
@@ -320,7 +327,7 @@
   const facing = (cube, side) => ({
     front:'rotateX(0deg) rotateY(0deg)', right:'rotateX(0deg) rotateY(-90deg)',
     back:'rotateX(0deg) rotateY(-180deg)', left:'rotateX(0deg) rotateY(90deg)',
-    top:'rotateX(-90deg) rotateY(0deg)', bottom:`rotateX(90deg) rotateY(${cube.end}deg)`
+    top:'rotateX(-90deg) rotateY(0deg)', bottom:'rotateX(90deg) rotateY(0deg)'
   })[side];
 
   // ---- Face map ----
@@ -427,9 +434,9 @@
     {w:'דעות', t:'המצב ההתחלתי', b:'סובב'},
     {w:'טעות', t:'ה־ד והקוביה הכתומה הסתובבו שמאלה', b:'סובב את כל הקוביות'},
     {w:'סליחה', t:'כל הקוביות הסתובבו שמאלה', b:'הפוך'},
-    {w:'חרב', t:'ח־ר־ב התהפכו קדימה, ו ו־ת התהפכו אחורה לצד הפתוח, ב ו־ר החליפו מקום', b:'סדר את המילה'},
-    {w:'חבר', t:'ב ו־ר חזרו למקום, ו ו־ת עדיין על הצד הפתוח', b:'השלם את המילה'},
-    {w:'חברות', t:'ו ו־ת התהפכו והראו את האותיות', b:'ארוז את הקוביות'},
+    {w:'חרב', t:'ח־ר־ב הסתובבו לצד, ו ו־ת הראו צד אחר, ב ו־ר החליפו מקום', b:'סדר את המילה'},
+    {w:'חבר', t:'ב ו־ר חזרו למקום, ו ו־ת עדיין על צד אחר', b:'השלם את המילה'},
+    {w:'חברות', t:'ו ו־ת הסתובבו והראו את האותיות', b:'ארוז את הקוביות'},
     {w:'אריזה', t:'כמו בבושקה: הפתח למעלה, והקוביות נכנסות לפי הסדר מהגדולה לקטנה', b:'עוד פעם'}
   ];
   let step = 0, emptyRound = -1;
@@ -870,7 +877,8 @@
         const s = sizes[i];
         const mats = sideOrder.map(sd => new THREE.MeshBasicMaterial({map:faceTexture(cube, sd)}));
         const m = new THREE.Mesh(new THREE.BoxGeometry(s, s, s), mats);
-        m.position.set(x + s / 2, s / 2, 0); m.castShadow = m.receiveShadow = true; scene3.add(m);
+        m.position.set(x + s / 2, s / 2, 0); if (i > 0) m.rotation.y = Math.PI / 2;   // the audience starts on each cube's left wall (דעות), orange on its ball
+        m.castShadow = m.receiveShadow = true; scene3.add(m);
         cubePos.push(m.position.clone());
         cubeMesh.push(m); home.push(m.position.clone());
         x += s + GAP;
