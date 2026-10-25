@@ -206,14 +206,15 @@
     <p class="info" id="dlInfo"></p>
     <h2 style="margin-top:14px">קבצי הדפסה לקוביות (הפריסות הסופיות שלך, 1:1)</h2>
     <p class="lead">כל קוביה כפריסה של 6 פאות בקנה מידה אמיתי (ס"מ), וקטורי, בדיוק כמו שסידרת: מיקום האותיות, כיוון כל אות, והחור (בכתומה ובצהובה למטה, בירוקה ובסגולה למעלה, בוורודה אין). אותיות בגופן דוד מודגש בגובה 24 ס"מ. קווים מקווקווים = קפל/חיתוך.</p>
-    <div class="row">
-      <a class="get" href="print/final/cubes-final-1to1.pdf" download>⬇ כל הקוביות (PDF, 5 עמודים)</a>
-      <a class="get" href="print/final/cube-1-orange-50cm-final.svg" download>כתומה 50</a>
-      <a class="get" href="print/final/cube-2-yellow-45cm-final.svg" download>צהובה 45</a>
-      <a class="get" href="print/final/cube-3-green-40cm-final.svg" download>ירוקה 40</a>
-      <a class="get" href="print/final/cube-4-purple-35cm-final.svg" download>סגולה 35</a>
-      <a class="get" href="print/final/cube-5-pink-30cm-final.svg" download>ורודה 30</a>
+    <div style="display:grid;gap:8px">
+      <div class="row"><a class="get" href="print/final/cubes-final-1to1.pdf" download>⬇ כל הקוביות יחד (PDF, 5 עמודים)</a></div>
+      <div class="row" style="justify-content:space-between"><b>כתומה 50×50 ס"מ</b><span class="row"><select class="fmtSel" data-base="print/final/cube-1-orange-50cm-final" aria-label="פורמט כתומה 50×50"><option value=".pdf">PDF (וקטורי, מומלץ)</option><option value=".svg">SVG (וקטורי)</option><option value="-rgb.tif">TIFF RGB</option><option value="-cmyk.tif">TIFF CMYK</option><option value=".png">PNG</option><option value=".jpg">JPG</option></select><a class="get" href="print/final/cube-1-orange-50cm-final.pdf" download>⬇ הורד</a></span></div>
+      <div class="row" style="justify-content:space-between"><b>צהובה 45×45 ס"מ</b><span class="row"><select class="fmtSel" data-base="print/final/cube-2-yellow-45cm-final" aria-label="פורמט צהובה 45×45"><option value=".pdf">PDF (וקטורי, מומלץ)</option><option value=".svg">SVG (וקטורי)</option><option value="-rgb.tif">TIFF RGB</option><option value="-cmyk.tif">TIFF CMYK</option><option value=".png">PNG</option><option value=".jpg">JPG</option></select><a class="get" href="print/final/cube-2-yellow-45cm-final.pdf" download>⬇ הורד</a></span></div>
+      <div class="row" style="justify-content:space-between"><b>ירוקה 40×40 ס"מ</b><span class="row"><select class="fmtSel" data-base="print/final/cube-3-green-40cm-final" aria-label="פורמט ירוקה 40×40"><option value=".pdf">PDF (וקטורי, מומלץ)</option><option value=".svg">SVG (וקטורי)</option><option value="-rgb.tif">TIFF RGB</option><option value="-cmyk.tif">TIFF CMYK</option><option value=".png">PNG</option><option value=".jpg">JPG</option></select><a class="get" href="print/final/cube-3-green-40cm-final.pdf" download>⬇ הורד</a></span></div>
+      <div class="row" style="justify-content:space-between"><b>סגולה 35×35 ס"מ</b><span class="row"><select class="fmtSel" data-base="print/final/cube-4-purple-35cm-final" aria-label="פורמט סגולה 35×35"><option value=".pdf">PDF (וקטורי, מומלץ)</option><option value=".svg">SVG (וקטורי)</option><option value="-rgb.tif">TIFF RGB</option><option value="-cmyk.tif">TIFF CMYK</option><option value=".png">PNG</option><option value=".jpg">JPG</option></select><a class="get" href="print/final/cube-4-purple-35cm-final.pdf" download>⬇ הורד</a></span></div>
+      <div class="row" style="justify-content:space-between"><b>ורודה 30×30 ס"מ</b><span class="row"><select class="fmtSel" data-base="print/final/cube-5-pink-30cm-final" aria-label="פורמט ורודה 30×30"><option value=".pdf">PDF (וקטורי, מומלץ)</option><option value=".svg">SVG (וקטורי)</option><option value="-rgb.tif">TIFF RGB</option><option value="-cmyk.tif">TIFF CMYK</option><option value=".png">PNG</option><option value=".jpg">JPG</option></select><a class="get" href="print/final/cube-5-pink-30cm-final.pdf" download>⬇ הורד</a></span></div>
     </div>
+    <p class="info">כל הקבצים בקנה מידה 1:1 (רסטר: 100 DPI בגודל מלא). PDF/SVG וקטוריים ולכן חדים בכל הגדלה. TIFF CMYK הוא המרה בסיסית, בית ההדפסה עשוי להמיר מחדש עם הפרופיל שלו.</p>
   </section>
 
   <section class="faces" aria-labelledby="letTitle">
@@ -959,3 +960,10 @@
 </script>
 
 </html>
+<script>
+document.querySelectorAll('.fmtSel').forEach(sel => {
+  const a = sel.parentElement.querySelector('a.get');
+  const upd = () => { const h = sel.dataset.base + sel.value; a.href = h; a.setAttribute('download', h.split('/').pop()); };
+  sel.onchange = upd; upd();
+});
+</script>
