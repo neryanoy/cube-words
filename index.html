@@ -57,7 +57,7 @@
   .right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2))}
   .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2))}
   .bottom{transform:rotateX(-90deg) translateZ(calc(var(--z) / 2))}
-  .f b{display:block;transform:rotate(var(--r,0deg))}
+  .f b{display:block;position:relative;top:calc(var(--dy,0) * -1em);transform:rotate(var(--r,0deg))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
   .hole::after{content:"";position:absolute;inset:9%;border-radius:2px;
     background:radial-gradient(ellipse at 50% 35%,#4a4a4a 0,#1d1d1d 55%,#090909 100%);
@@ -251,7 +251,7 @@
   // null = empty side, 'hole' = the open side the cubes nest through.
   // The pink cube is the innermost one, so it is closed all round.
   // Every letter is the same real size on every cube: the letter ד is LETTER_CM tall (NN), the rest use the same font size.
-  const LETTER_CM = 24; let LET_R = 0.62;   // LET_R = glyph height / font size, measured once the font has loaded
+  const LETTER_CM = 24; let LET_R = 0.62, LET_A = 0.45, LET_D = 0.17;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
       faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:{w:'ת'}, bottom:'hole'}},
@@ -371,7 +371,10 @@
     try { await document.fonts.load('900 100px "Frank Ruhl Libre"', LETTER); } catch (e) {}
     const g = document.createElement('canvas').getContext('2d'); g.font = '900 100px "Frank Ruhl Libre", serif';
     const m = g.measureText(LETTER), gh = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
-    LET_R = gh / 100; document.documentElement.style.setProperty('--fsu', (LETTER_CM / LET_R) * 130 / 50);
+    LET_R = gh / 100; LET_A = m.actualBoundingBoxAscent / 100; LET_D = m.actualBoundingBoxDescent / 100;
+    { const fa = m.fontBoundingBoxAscent / 100, fd = m.fontBoundingBoxDescent / 100;   // centre the ד glyph box (not the text line box) on the face
+      document.documentElement.style.setProperty('--dy', ((1 - (fa + fd)) / 2 + fa - (LET_A - LET_D) / 2) - .5); }
+    document.documentElement.style.setProperty('--fsu', (LETTER_CM / LET_R) * 130 / 50);
     const fs = 100 * LH / gh;                                   // font size (cm) so the glyph itself is exactly 24 cm tall
     const k = fs / 100, asc = m.actualBoundingBoxAscent * k, gw = (m.actualBoundingBoxLeft + m.actualBoundingBoxRight) * k;
     const el = (n, a, t) => { const e = document.createElementNS(NS, n); for (const q in a) e.setAttribute(q, a[q]); if (t) e.textContent = t; svg.appendChild(e); return e; };
@@ -607,7 +610,7 @@
       } else if (v) {
         if (v.w) { g.fillStyle = '#fff'; WDOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 6, 0, 7); g.fill(); }); }
         g.fillStyle = '#1b2f86'; g.font = `900 ${Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT))}px "Frank Ruhl Libre", serif`;
-        g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(v.w || v, 128, 136);
+        g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillText(v.w || v, 128, 128 + (LET_A - LET_D) / 2 * Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT)));
       }
       const t = new THREE.CanvasTexture(cv);
       t.anisotropy = 4;
