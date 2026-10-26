@@ -58,6 +58,14 @@
   .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2))}
   .bottom{transform:rotateX(-90deg) translateZ(calc(var(--z) / 2))}
   .cube{position:relative}
+  /* Step 5 ("השלם את המילה"): a panel of the same colour slides down over the opening of the orange and yellow cubes and closes it. */
+  .scene[data-step="5"] :is(.orange,.yellow) .hole::before{content:"";position:absolute;z-index:2;inset:0;background:var(--c);
+    box-shadow:0 calc(var(--z) * .02) calc(var(--z) * .05) rgba(0,0,0,.45);animation:holeShut 1.4s ease-in-out .3s both;
+    display:grid;place-items:center;font:inherit;color:var(--ink)}
+  .scene[data-step="5"] .orange .hole::before{content:"ת";animation-name:holeShutDown}
+  .scene[data-step="5"] .yellow .hole::before{content:"ו"}
+  @keyframes holeShutDown{0%{transform:translateY(130%) rotate(180deg)}100%{transform:translateY(0) rotate(180deg)}}
+  @keyframes holeShut{0%{transform:translateY(-130%);opacity:1}100%{transform:translateY(0);opacity:1}}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
   /* Orange and yellow stay smooth and closed, except in 'חרב' where they tip back and the opening underneath shows (NN). */
