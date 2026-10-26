@@ -75,7 +75,7 @@
   .scene:is([data-step="4"],[data-step="5"]) :is(.orange,.yellow) .body :is(.left,.right){visibility:hidden}
   /* Step 5 ("השלם את המילה"): the letters go back to their place, so the panels come up and slide back into the box. */
   .scene[data-step="5"] .panelOv{opacity:1;animation:panelBack 1.6s ease-in-out .2s both}
-  @keyframes panelBack{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1;transform:translateY(0) scale(.6)}40%{opacity:1;transform:translateY(-110%) scale(.6)}100%{opacity:0;transform:translateY(0) scale(.6)}}
+  @keyframes panelBack{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1;transform:translateY(0) scale(.6)}40%{opacity:1;transform:translateY(-110%) scale(.6)}100%{opacity:1;transform:translateY(0) scale(1)}}
   .scene[data-step="4"] .panelOv{opacity:0}
   /* Packing: the openings stay open, then the panel is back in its face so the whole word is visible. */
   .scene[data-step="6"] .inside{opacity:1;transition:opacity .3s}
