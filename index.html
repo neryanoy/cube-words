@@ -227,7 +227,7 @@
     </div>
     <p class="info" id="dlInfo"></p>
     <h2 style="margin-top:14px">קבצי הדפסה לקוביות (הפריסות הסופיות שלך, 1:1)</h2>
-    <p class="lead">כל קוביה כפריסה של 6 פאות בקנה מידה אמיתי (ס"מ), וקטורי, בדיוק כמו שסידרת: מיקום האותיות, כיוון כל אות, והחור (בכתומה ובצהובה למטה, בירוקה ובסגולה למעלה, בוורודה אין). אותיות בגופן דוד מודגש בגובה 24 ס"מ. קווים מקווקווים = קפל/חיתוך.</p>
+    <p class="lead">כל קוביה כפריסה של 6 פאות בקנה מידה אמיתי (ס"מ), וקטורי, בדיוק כמו שסידרת: מיקום האותיות, כיוון כל אות, והחור (בכתומה ובצהובה למטה, בירוקה ובסגולה למעלה, בוורודה אין). בכתומה ובצהובה יש גם פאנל נפרד (ת ו־ו עם נקודות), לגזור ולהחליק על החור. אותיות בגופן דוד מודגש בגובה 24 ס"מ. קווים מקווקווים = קפל/חיתוך.</p>
     <div style="display:grid;gap:8px">
       <div class="row"><a class="get" href="print/final/cubes-final-1to1.pdf" download>⬇ כל הקוביות יחד (PDF, 5 עמודים)</a></div>
       <div class="row" style="justify-content:space-between"><b>כתומה 50×50 ס"מ</b><span class="row"><select class="fmtSel" data-base="print/final/cube-1-orange-50cm-final" aria-label="פורמט כתומה 50×50"><option value=".pdf">PDF (וקטורי, מומלץ)</option><option value=".svg">SVG (וקטורי)</option><option value="-rgb.tif">TIFF RGB</option><option value="-cmyk.tif">TIFF CMYK</option><option value=".png">PNG</option><option value=".jpg">JPG</option></select><a class="get" href="print/final/cube-1-orange-50cm-final.pdf" download>⬇ הורד</a></span></div>
@@ -292,9 +292,9 @@
   // Every letter is the same real size on every cube: the letter ד is LETTER_CM tall (NN), the rest use the same font size.
   const LETTER_CM = 24; let LET_R = 0.62, LET_A = 0.45, LET_D = 0.17;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
-    {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180,
+    {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180, panel:'ת',
       faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:null, bottom:'hole'}},
-    {k:'yellow', name:'הצהובה', s:117, c:'#e8c957', end:-90,
+    {k:'yellow', name:'הצהובה', s:117, c:'#e8c957', end:-90, panel:'ו',
       faces:{front:'ח', right:null, back:null, left:'ת', top:null, bottom:'hole'}},
     {k:'green', name:'הירוקה', s:104, c:'#9ccb82', end:-90,
       faces:{front:'י', right:{w:'ר'}, back:null, left:'ו', top:'hole', bottom:null}},
@@ -374,6 +374,12 @@
       t.addEventListener('click', () => peekOne(cube, side, t));
       grid.appendChild(t);
     });
+    if (cube.panel) {   // the loose panel that slides over the opening (cut out, not folded)
+      const pt = document.createElement('div');
+      pt.className = 'tile letter'; pt.style.gridArea = '1 / 4'; pt.style.border = '2px solid #000'; pt.style.cursor = 'default';
+      pt.title = 'פאנל נפרד, סוגר את החור'; pt.innerHTML = cube.panel; count.letter++;
+      grid.appendChild(pt);
+    }
     box.appendChild(grid);
     nets.appendChild(box);
   });
