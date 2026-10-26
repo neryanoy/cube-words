@@ -70,7 +70,7 @@
   .holeFace.left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2 + 1px))}
   .holeFace.right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2 + 1px))}
   .scene[data-step="3"] .holeFace{animation:holeOn 0s linear 1.8s both}
-  .scene:is([data-step="4"],[data-step="5"],[data-step="6"]) .holeFace{opacity:1}
+  .scene:is([data-step="4"],[data-step="5"]) .holeFace{opacity:1}
   @keyframes holeOn{to{opacity:1}}
   /* Then the detached panel (same colour, same letter) comes up out of its cube and backs off. */
   .scene[data-step="3"] .panelOv{animation:panelOut 3.2s ease-in-out 1.8s both}
@@ -78,7 +78,7 @@
   /* Steps 4-5: the panel is back in the box and the opening stays open. */
   .scene:is([data-step="4"],[data-step="5"]) .inside{opacity:1}
   /* Steps 4-5: the face stays off, so the opening stays open (the dark hole) and does not close again. */
-  .scene:is([data-step="4"],[data-step="5"],[data-step="6"]) :is(.orange,.yellow) .body :is(.left,.right):not(.hole){visibility:hidden}
+  .scene:is([data-step="4"],[data-step="5"]) :is(.orange,.yellow) .body :is(.left,.right):not(.hole){visibility:hidden}
   /* Step 5 ("השלם את המילה"): the letters go back to their place, so the panels come up and slide back into the box. */
   .scene[data-step="5"] .panelOv{opacity:1;animation:panelBack 1.6s ease-in-out .2s both}
   /* On the way back the panel is see-through, so the opening stays visible behind it; it is solid again once it sits in the box. */
