@@ -60,7 +60,7 @@
   .cube{position:relative}
   .inside{position:absolute;z-index:4;inset:0;opacity:0;pointer-events:none;
     background:radial-gradient(ellipse at 50% 35%,#4a4a4a 0,#1d1d1d 55%,#090909 100%);box-shadow:inset 0 0 calc(var(--z) * .08) rgba(0,0,0,.8)}
-  .plate{z-index:5;background:var(--c);opacity:0;pointer-events:none;box-shadow:0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0,0,0,.4);transform:var(--ft)}
+  .plate{background:var(--c);opacity:0;pointer-events:none;box-shadow:0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0,0,0,.4);transform:var(--ft)}
   .plate.left{--ft:rotateY(-90deg) translateZ(calc(var(--z) / 2))}
   .plate.right{--ft:rotateY(90deg) translateZ(calc(var(--z) / 2))}
   .scene[data-step="3"] .inside{opacity:1;transition:opacity .3s 1s}
@@ -75,7 +75,7 @@
   @keyframes plateIn{0%{opacity:1;transform:var(--ft) translateY(-100%) translateZ(calc(var(--z) * -.3))}100%{opacity:0;transform:var(--ft)}}
   /* Packing: the openings stay open, the cube turns as one piece, then the panel comes out once and goes back down before the nesting starts. */
   .scene[data-step="6"] .inside{opacity:1;transition:opacity .3s}
-  .scene[data-step="6"] .plate{animation:plateCycle 2.4s ease-in-out 1.6s both}
+  .scene[data-step="6"] .plate{opacity:1;transform:var(--ft)}
   /* The panel ends back in its face, so the whole word is visible again. */
   @keyframes plateCycle{0%{opacity:0;transform:var(--ft)}15%{opacity:1;transform:var(--ft)}40%{opacity:1;transform:var(--ft) translateY(-100%)}70%{opacity:1;transform:var(--ft) translateY(-100%)}100%{opacity:1;transform:var(--ft)}}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
