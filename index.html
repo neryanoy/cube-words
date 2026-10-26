@@ -290,6 +290,8 @@
   // null = empty side, 'hole' = the open side the cubes nest through.
   // The pink cube is the innermost one, so it is closed all round.
   // Every letter is the same real size on every cube: the letter ד is LETTER_CM tall (NN), the rest use the same font size.
+  // Real ink height (cm) of every letter in the print files (David Bold, ד = 24 cm): the page uses the very same sizes, so stage, nets and print agree.
+  const LETTER_H = {'ד':24,'ה':24,'ח':24,'ת':24.2,'י':17.2,'ו':23.9,'ר':24.4,'ל':29,'ב':23,'ע':25.5,'ט':23.3,'ס':23.4};
   const LETTER_CM = 24; let LET_R = 0.62, LET_A = 0.45, LET_D = 0.17;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
     {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180, panel:'ת',
@@ -421,16 +423,20 @@
       if (!/^[א-ת]$/.test(ch)) return;
       const q = g.measureText(ch), fa = q.fontBoundingBoxAscent / 100, fd = q.fontBoundingBoxDescent / 100;
       const a = q.actualBoundingBoxAscent / 100, d = q.actualBoundingBoxDescent / 100;
-      f.style.setProperty('--fk', 1);   // one scale for every letter (ד = 24 cm), so a tall ל stays taller than ה
+      f.style.setProperty('--fk', (LETTER_H[ch] || LETTER_CM) / LETTER_CM * HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent));   // same cm height as the print file
       // Line every letter up with the pink cube's letter: lower it by half the difference between its cube and the pink one.
       const cube = CUBES.find(c => c.el === f.closest('.cube')), cs = cube.s, ps = CUBES.find(c => c.k === 'pink').s;
-      const fk = 1, em = (LETTER_CM / LET_R) * 130 / 50 * fk;
+      const fk = (LETTER_H[ch] || LETTER_CM) / LETTER_CM * HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent), em = (LETTER_CM / LET_R) * 130 / 50 * fk;
       // Measured residual (in cube units) left after centring, so every letter's base sits on the pink letter's base.
       const RESID = {yellow: 4, green: 3, purple: 1}, key = Object.keys(RESID).find(k => cube.k === k);
       t.style.setProperty('--dy', (1 - (fa + fd)) / 2 + fa - (a - d) / 2 - .5 - (cs - ps) / 2 / em + (key ? RESID[key] / em : 0));
       t.style.setProperty('--sx', (q.actualBoundingBoxLeft - q.actualBoundingBoxRight) / 200 + q.width / 200 - 0 );
     });
     document.documentElement.style.setProperty('--fsu', (LETTER_CM / LET_R) * 130 / 50);
+    document.querySelectorAll('.tile.letter').forEach(t => {   // the small net tiles show every letter at the same relative size as the print files
+      const ch = t.textContent.trim(); if (!/^[א-ת]$/.test(ch)) return;
+      const q = g.measureText(ch); t.style.fontSize = (21 * (LETTER_H[ch] || LETTER_CM) / LETTER_CM * HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent)) + 'px';
+    });
     const fs = 100 * LH / gh;                                   // font size (cm) so the glyph itself is exactly 24 cm tall
     const k = fs / 100, asc = m.actualBoundingBoxAscent * k, gw = (m.actualBoundingBoxLeft + m.actualBoundingBoxRight) * k;
     const el = (n, a, t) => { const e = document.createElementNS(NS, n); for (const q in a) e.setAttribute(q, a[q]); if (t) e.textContent = t; svg.appendChild(e); return e; };
@@ -667,7 +673,7 @@
         if (v.w) { g.fillStyle = '#fff'; WDOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 6, 0, 7); g.fill(); }); }
         g.fillStyle = '#1b2f86'; g.font = `900 ${Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT))}px "Frank Ruhl Libre", serif`;
         { const ch = v.w || v, q0 = g.measureText(ch), px0 = Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT));
-          g.font = `900 ${px0}px "Frank Ruhl Libre", serif`;   // one scale for every letter
+          g.font = `900 ${Math.round(px0 * (LETTER_H[ch] || LETTER_CM) / LETTER_CM * (LET_R * px0) / (q0.actualBoundingBoxAscent + q0.actualBoundingBoxDescent))}px "Frank Ruhl Libre", serif`;   // same cm height as the print file
           const q = g.measureText(ch); g.textAlign = 'left'; g.textBaseline = 'alphabetic';
           g.fillText(ch, 128 + (q.actualBoundingBoxLeft - q.actualBoundingBoxRight) / 2, 128 + (q.actualBoundingBoxAscent - q.actualBoundingBoxDescent) / 2); }
       }
