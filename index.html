@@ -454,7 +454,7 @@
       const top = BASE - c;
       el('rect', {x, y: top, width: c, height: c, fill: col, stroke: 'rgba(0,0,0,.25)', 'stroke-width': .3});
       const cx = x + c / 2, cy = top + c / 2;
-      el('text', {x: cx - gw / 2 + m.actualBoundingBoxLeft * k, y: cy - LH / 2 + asc, 'font-family': '"Frank Ruhl Libre",serif', 'font-weight': 900, 'font-size': fs, fill: '#1b2f86'}, LETTER);
+      el('text', {x: cx - gw / 2 + m.actualBoundingBoxLeft * k, y: (BASE - 15) - LH / 2 + asc,'font-family': '"Frank Ruhl Libre",serif', 'font-weight': 900, 'font-size': fs, fill: '#1b2f86'}, LETTER);
       el('text', {x: cx, y: BASE + 4.5, 'text-anchor': 'middle', 'font-size': 3.2, 'font-family': 'Assistant,sans-serif', fill: '#1c2733'}, `${c}×${c} ס״מ`);
       lastX = x; x += c + GAP;
     });
