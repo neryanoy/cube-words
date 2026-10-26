@@ -84,8 +84,16 @@
   .scene[data-step="2"] .orange .body{transform:rotateY(-180deg)}
   .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .body{transform:rotateY(-90deg)}
   .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .pink .body{transform:rotateY(-180deg)}
-  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .orange .body{transform:rotateX(90deg) rotateY(-270deg)}
-  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .yellow .body{transform:rotateX(90deg) rotateY(-90deg)}
+  /* Orange and yellow: same transform list (rotateX rotateY rotateZ) in every step, so they only tip back at 'חרב' and never spin extra. */
+  .yellow .body{transform:rotateX(0deg) rotateY(90deg) rotateZ(0deg)}
+  .orange .body{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg)}
+  .scene[data-step="1"] .orange .body{transform:rotateX(0deg) rotateY(-90deg) rotateZ(0deg)}
+  .scene[data-step="2"] .yellow .body{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg)}
+  .scene[data-step="2"] .orange .body{transform:rotateX(0deg) rotateY(-180deg) rotateZ(0deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .yellow .body{transform:rotateX(90deg) rotateY(0deg) rotateZ(0deg)}
+  .scene:is([data-step="3"],[data-step="4"],[data-step="5"]) .orange .body{transform:rotateX(90deg) rotateY(-180deg) rotateZ(0deg)}
+  .scene[data-step="6"] .yellow .body{transform:rotateX(0deg) rotateY(0deg) rotateZ(180deg)}
+  .scene[data-step="6"] .orange .body{transform:rotateX(0deg) rotateY(-360deg) rotateZ(180deg)}
   .scene[data-step="1"] .orange .body{transition-delay:.25s}
   .scene[data-step="2"] .purple .body,.scene[data-step="3"] .purple .body{transition-delay:.15s}
   .scene[data-step="2"] .green .body,.scene[data-step="3"] .green .body{transition-delay:.3s}
@@ -102,8 +110,6 @@
   /* Packing (last step): every cube turns its open side up and the camera looks down into them,
      then each one drops into the next bigger one, biggest first. */
   .scene[data-step="6"] .body{transform:rotateY(0deg);transition-delay:0s}
-  .scene[data-step="6"] .orange .body{transform:rotateZ(180deg) rotateY(-360deg)}
-  .scene[data-step="6"] .yellow .body{transform:rotateZ(180deg) rotateY(0deg)}
   .scene[data-step="6"] .cube{perspective-origin:50% -80%}
   .scene.xray .cube:not(.pink){opacity:.5}
   .scene.xray .cube{perspective-origin:50% 8%}
