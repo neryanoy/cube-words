@@ -64,22 +64,28 @@
   .panelOv{z-index:20;opacity:0;pointer-events:none;box-shadow:0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0,0,0,.4);transform-origin:50% 50%}
   .scene[data-step="3"] .inside{opacity:1;transition:opacity .3s 1s}
   /* Until the cubes have turned together (body transition ends by about 1.7 s) the panel is the cube's own face, so it turns with the cube. */
-  .scene[data-step="3"] .orange .body .left,.scene[data-step="3"] .yellow .body .right{animation:faceOff 0s linear 1.8s both}
+  .scene[data-step="3"] .orange .body .left:not(.hole),.scene[data-step="3"] .yellow .body .right:not(.hole){animation:faceOff 0s linear 1.8s both}
   @keyframes faceOff{to{visibility:hidden}}
+  .holeFace{opacity:0}
+  .holeFace.left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2 + 1px))}
+  .holeFace.right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2 + 1px))}
+  .scene[data-step="3"] .holeFace{animation:holeOn 0s linear 1.8s both}
+  .scene:is([data-step="4"],[data-step="5"],[data-step="6"]) .holeFace{opacity:1}
+  @keyframes holeOn{to{opacity:1}}
   /* Then the detached panel (same colour, same letter) comes up out of its cube and backs off. */
   .scene[data-step="3"] .panelOv{animation:panelOut 3.2s ease-in-out 1.8s both}
   @keyframes panelOut{0%{opacity:0;transform:translateY(0) scale(1)}1%{opacity:1}35%{opacity:1;transform:translateY(-110%) scale(1)}60%{opacity:1;transform:translateY(-110%) scale(.6)}100%{opacity:0;transform:translateY(0) scale(.6)}}
   /* Steps 4-5: the panel is back in the box and the opening stays open. */
   .scene:is([data-step="4"],[data-step="5"]) .inside{opacity:1}
   /* Steps 4-5: the face stays off, so the opening stays open (the dark hole) and does not close again. */
-  .scene:is([data-step="4"],[data-step="5"]) :is(.orange,.yellow) .body :is(.left,.right){visibility:hidden}
+  .scene:is([data-step="4"],[data-step="5"],[data-step="6"]) :is(.orange,.yellow) .body :is(.left,.right):not(.hole){visibility:hidden}
   /* Step 5 ("השלם את המילה"): the letters go back to their place, so the panels come up and slide back into the box. */
   .scene[data-step="5"] .panelOv{opacity:1;animation:panelBack 1.6s ease-in-out .2s both}
   /* On the way back the panel is see-through, so the opening stays visible behind it; it is solid again once it sits in the box. */
   @keyframes panelBack{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1;transform:translateY(0) scale(.6)}40%{opacity:1;transform:translateY(-110%) scale(.6)}85%{opacity:.35;transform:translateY(0) scale(.8)}100%{opacity:1;transform:translateY(0) scale(.8)}}
   .scene[data-step="4"] .panelOv{opacity:0}
   /* Packing: the openings stay open, then the panel is back in its face so the whole word is visible. */
-  .scene[data-step="6"] .inside{opacity:1;transition:opacity .3s}
+  .scene[data-step="6"] .inside{opacity:0;transition:opacity .3s}
   .scene[data-step="6"] .panelOv{opacity:0;animation:none}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
@@ -344,6 +350,8 @@
     el.appendChild(body);
     if (cube.k === 'orange' || cube.k === 'yellow') {
       const ins = document.createElement('div'); ins.className = 'inside'; el.appendChild(ins);
+      // The opening is also a face of the cube body, so it turns with the cube when packing (it shows once the panel has left its face).
+      const hf = document.createElement('div'); hf.className = 'f hole holeFace ' + (cube.k === 'orange' ? 'left' : 'right'); body.appendChild(hf);
       // The wooden panel is its own layer above the scene, placed over the cube's face, so it can be seen sliding out.
       const pl = document.createElement('div'); pl.className = 'f panelOv';
       pl.innerHTML = `<b>${cube.faces.left && cube.faces.left.w || cube.faces.right.w}</b>` + WDOTS.map(([x, y]) => `<span class="wdot" style="left:${i % 2 ? 100 - x : x}%;top:${y}%"></span>`).join('');
