@@ -62,12 +62,18 @@
     background:radial-gradient(ellipse at 50% 35%,#4a4a4a 0,#1d1d1d 55%,#090909 100%);box-shadow:inset 0 0 calc(var(--z) * .08) rgba(0,0,0,.8)}
   /* The wooden panel is its own layer over the scene (see placePanels). It slides up out of its cube, backs off, then slides back into the box. */
   .panelOv{z-index:20;background:#c99a5b;outline:calc(2 * var(--u)) solid #6b4a24;outline-offset:calc(-3 * var(--u));opacity:0;pointer-events:none;box-shadow:0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0,0,0,.4);transform-origin:50% 50%}
-  .scene[data-step="3"] .inside{opacity:1;transition:opacity .3s 1s}
-  .scene[data-step="3"] .panelOv{opacity:1;animation:panelOut 3.2s ease-in-out 1.2s both}
-  @keyframes panelOut{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-110%) scale(1)}60%{transform:translateY(-110%) scale(.6)}100%{opacity:0;transform:translateY(0) scale(.6)}}
+  .scene[data-step="3"] .inside{opacity:1;transition:opacity .3s 1s;background:none;box-shadow:none}  /* see steps 4-5 below */
+  /* The cubes turn together first (body transition ends by about 1.7 s); only then do the panels come out. */
+  .scene[data-step="3"] .panelOv{opacity:1;animation:panelOut 3.2s ease-in-out 1.8s both}
+  @keyframes panelOut{0%{opacity:1;transform:translateY(0) scale(1)}35%{opacity:1;transform:translateY(-110%) scale(1)}60%{opacity:1;transform:translateY(-110%) scale(.6)}100%{opacity:0;transform:translateY(0) scale(.6)}}
   /* Steps 4-5: the panel is back in the box and the opening stays open. */
   .scene:is([data-step="4"],[data-step="5"]) .inside{opacity:1}
-  .scene:is([data-step="4"],[data-step="5"]) .panelOv{opacity:0}
+  /* No black hole in steps 3-5: the opening shows the letter behind it, so the whole word can be read. */
+  .scene:is([data-step="4"],[data-step="5"]) .inside{background:none;box-shadow:none}
+  /* Step 4: the panels come up again and slide back into place on their faces. */
+  .scene[data-step="4"] .panelOv{opacity:1;animation:panelBack 1.6s ease-in-out .2s both}
+  @keyframes panelBack{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1;transform:translateY(0) scale(.6)}40%{opacity:1;transform:translateY(-110%) scale(.6)}100%{opacity:1;transform:translateY(0) scale(1)}}
+  .scene[data-step="5"] .panelOv{opacity:0}
   /* Packing: the openings stay open, then the panel is back in its face so the whole word is visible. */
   .scene[data-step="6"] .inside{opacity:1;transition:opacity .3s}
   .scene[data-step="6"] .panelOv{opacity:1;transform:none;animation:none}
