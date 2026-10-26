@@ -182,6 +182,26 @@
   .view{background:transparent;color:var(--ink)}
   .view[aria-pressed="true"]{background:var(--ink);color:#fff}
   @media (prefers-reduced-motion:reduce){.body,.ball{transition-duration:.01s!important;transition-delay:0s!important}}
+
+  /* Calm, airy look (NN): soft paper, pale sky, no metal frame, thin lines, pill buttons. Only styling, no behaviour. */
+  :root{--paper:#fbfaf7;--text:#26303b;--muted:#7a8591;--ink:#24378a;--line:#e7e9ec}
+  html,body{background:var(--paper)}
+  .wrap{max-width:760px;gap:26px}
+  h1{font:600 24px/1.2 "Assistant",sans-serif;letter-spacing:.01em}
+  h2{font:600 18px/1.2 "Assistant",sans-serif}
+  .scene{border-radius:22px;background:linear-gradient(#eef4f9 0 66%,#e6eaee 66% 100%);box-shadow:0 14px 40px -18px rgba(36,55,90,.28)}
+  .drop{border:0;border-image:none;background:linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),#dcebf7 url(sky-bg.jpg) 50% 0/cover no-repeat}
+  .word{font-weight:900;letter-spacing:.06em}
+  .steps{font-size:14px;color:var(--muted)}
+  button,.dl a.get,.dl select{border-radius:999px;border-width:1.5px}
+  button{font-weight:600;font-size:15px;padding:12px 22px}
+  #open3d,#drag3d{background:transparent;color:var(--ink);border-color:var(--line)}
+  .titlebar a{border-color:var(--line)!important;border-radius:999px!important;color:var(--muted)!important;padding:7px 14px!important}
+  .faces,.dl{border-top:1px solid var(--line)}
+  .pal div,.dl .pv{border-color:var(--line);border-radius:12px}
+  .tile{border-radius:6px}
+  .net h3{font-weight:600;color:var(--muted)}
+  .lead,.ideas{color:var(--muted)}
 </style>
 
 <div class="wrap" dir="rtl">
