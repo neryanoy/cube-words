@@ -425,7 +425,10 @@
       f.style.setProperty('--fk', HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent));   // every letter the same ink height
       // Line every letter up with the pink cube's letter: lower it by half the difference between its cube and the pink one.
       const cs = parseFloat(f.closest('.cube').style.getPropertyValue('--s')), ps = parseFloat(document.querySelector('.cube.pink').style.getPropertyValue('--s'));
-      t.style.setProperty('--dy', (1 - (fa + fd)) / 2 + fa - (a - d) / 2 - .5 - (cs - ps) / 2 / ((LETTER_CM / LET_R) * 130 / 50 * (HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent))));
+      const fk = HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent), em = (LETTER_CM / LET_R) * 130 / 50 * fk;
+      // Measured residual (in cube units) left after centring, so every letter's base sits on the pink letter's base.
+      const RESID = {yellow: 4, green: 3, purple: 1}, key = Object.keys(RESID).find(k => f.closest('.cube').classList.contains(k));
+      t.style.setProperty('--dy', (1 - (fa + fd)) / 2 + fa - (a - d) / 2 - .5 - (cs - ps) / 2 / em + (key ? RESID[key] / em : 0));
       t.style.setProperty('--sx', (q.actualBoundingBoxLeft - q.actualBoundingBoxRight) / 200 + q.width / 200 - 0 );
     });
     document.documentElement.style.setProperty('--fsu', (LETTER_CM / LET_R) * 130 / 50);
