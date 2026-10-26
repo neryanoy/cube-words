@@ -421,10 +421,10 @@
       if (!/^[א-ת]$/.test(ch)) return;
       const q = g.measureText(ch), fa = q.fontBoundingBoxAscent / 100, fd = q.fontBoundingBoxDescent / 100;
       const a = q.actualBoundingBoxAscent / 100, d = q.actualBoundingBoxDescent / 100;
-      f.style.setProperty('--fk', HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent));   // every letter the same ink height
+      f.style.setProperty('--fk', 1);   // one scale for every letter (ד = 24 cm), so a tall ל stays taller than ה
       // Line every letter up with the pink cube's letter: lower it by half the difference between its cube and the pink one.
       const cube = CUBES.find(c => c.el === f.closest('.cube')), cs = cube.s, ps = CUBES.find(c => c.k === 'pink').s;
-      const fk = HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent), em = (LETTER_CM / LET_R) * 130 / 50 * fk;
+      const fk = 1, em = (LETTER_CM / LET_R) * 130 / 50 * fk;
       // Measured residual (in cube units) left after centring, so every letter's base sits on the pink letter's base.
       const RESID = {yellow: 4, green: 3, purple: 1}, key = Object.keys(RESID).find(k => cube.k === k);
       t.style.setProperty('--dy', (1 - (fa + fd)) / 2 + fa - (a - d) / 2 - .5 - (cs - ps) / 2 / em + (key ? RESID[key] / em : 0));
@@ -667,7 +667,7 @@
         if (v.w) { g.fillStyle = '#fff'; WDOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 6, 0, 7); g.fill(); }); }
         g.fillStyle = '#1b2f86'; g.font = `900 ${Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT))}px "Frank Ruhl Libre", serif`;
         { const ch = v.w || v, q0 = g.measureText(ch), px0 = Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT));
-          g.font = `900 ${Math.round(px0 * (LET_R * px0) / (q0.actualBoundingBoxAscent + q0.actualBoundingBoxDescent))}px "Frank Ruhl Libre", serif`;   // every letter the same ink height
+          g.font = `900 ${px0}px "Frank Ruhl Libre", serif`;   // one scale for every letter
           const q = g.measureText(ch); g.textAlign = 'left'; g.textBaseline = 'alphabetic';
           g.fillText(ch, 128 + (q.actualBoundingBoxLeft - q.actualBoundingBoxRight) / 2, 128 + (q.actualBoundingBoxAscent - q.actualBoundingBoxDescent) / 2); }
       }
