@@ -76,7 +76,8 @@
   /* Packing: the openings stay open, the cube turns as one piece, then the panel comes out once and goes back down before the nesting starts. */
   .scene[data-step="6"] .inside{opacity:1;transition:opacity .3s}
   .scene[data-step="6"] .plate{animation:plateCycle 2.4s ease-in-out 1.6s both}
-  @keyframes plateCycle{0%{opacity:0;transform:var(--ft)}25%{opacity:1;transform:var(--ft) translateY(-100%)}70%{opacity:1;transform:var(--ft) translateY(-100%)}100%{opacity:0;transform:var(--ft)}}
+  /* The panel ends back in its face, so the whole word is visible again. */
+  @keyframes plateCycle{0%{opacity:0;transform:var(--ft)}15%{opacity:1;transform:var(--ft)}40%{opacity:1;transform:var(--ft) translateY(-100%)}70%{opacity:1;transform:var(--ft) translateY(-100%)}100%{opacity:1;transform:var(--ft)}}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
   .hole::after{content:"";position:absolute;inset:9%;border-radius:2px;
