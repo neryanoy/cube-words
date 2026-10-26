@@ -58,37 +58,6 @@
   .top{transform:rotateX(90deg) translateZ(calc(var(--z) / 2))}
   .bottom{transform:rotateX(-90deg) translateZ(calc(var(--z) / 2))}
   .cube{position:relative}
-  .inside{position:absolute;z-index:4;inset:0;opacity:0;pointer-events:none;
-    background:radial-gradient(ellipse at 50% 35%,#4a4a4a 0,#1d1d1d 55%,#090909 100%);box-shadow:inset 0 0 calc(var(--z) * .08) rgba(0,0,0,.8)}
-  /* The wooden panel is its own layer over the scene (see placePanels). It slides up out of its cube, backs off, then slides back into the box. */
-  .panelOv{z-index:20;opacity:0;pointer-events:none;box-shadow:0 calc(4 * var(--u)) calc(10 * var(--u)) rgba(0,0,0,.4);transform-origin:50% 50%}
-  /* The cubes turn as one closed piece; the opening appears only when the panel starts to leave (1.8 s). */
-  .scene[data-step="3"] .inside{animation:insideOn 0s linear 1.8s both}
-  @keyframes insideOn{to{opacity:1}}
-  /* Until the cubes have turned together (body transition ends by about 1.7 s) the panel is the cube's own face, so it turns with the cube. */
-  .scene[data-step="3"] .orange .body .left:not(.hole),.scene[data-step="3"] .yellow .body .right:not(.hole){animation:faceOff 0s linear 1.8s both}
-  @keyframes faceOff{to{visibility:hidden}}
-  .holeFace{opacity:0}
-  .holeFace.left{transform:rotateY(-90deg) translateZ(calc(var(--z) / 2 + 1px))}
-  .holeFace.right{transform:rotateY(90deg) translateZ(calc(var(--z) / 2 + 1px))}
-  .scene[data-step="3"] .holeFace{animation:holeOn 0s linear 1.8s both}
-  .scene:is([data-step="4"],[data-step="5"]) .holeFace{opacity:1}
-  @keyframes holeOn{to{opacity:1}}
-  /* Then the detached panel (same colour, same letter) comes up out of its cube and backs off. */
-  .scene[data-step="3"] .panelOv{animation:panelOut 3.2s ease-in-out 1.8s both}
-  @keyframes panelOut{0%{opacity:0;transform:translateY(0) scale(1)}1%{opacity:1}35%{opacity:1;transform:translateY(-110%) scale(1)}60%{opacity:1;transform:translateY(-110%) scale(.6)}100%{opacity:0;transform:translateY(0) scale(.6)}}
-  /* Steps 4-5: the panel is back in the box and the opening stays open. */
-  .scene:is([data-step="4"],[data-step="5"]) .inside{opacity:1}
-  /* Steps 4-5: the face stays off, so the opening stays open (the dark hole) and does not close again. */
-  .scene:is([data-step="4"],[data-step="5"]) :is(.orange,.yellow) .body :is(.left,.right):not(.hole){visibility:hidden}
-  /* Step 5 ("השלם את המילה"): the letters go back to their place, so the panels come up and slide back into the box. */
-  .scene[data-step="5"] .panelOv{opacity:1;animation:panelBack 1.6s ease-in-out .2s both}
-  /* On the way back the panel is see-through, so the opening stays visible behind it; it is solid again once it sits in the box. */
-  @keyframes panelBack{0%{opacity:0;transform:translateY(0) scale(.6)}15%{opacity:1;transform:translateY(0) scale(.6)}40%{opacity:1;transform:translateY(-110%) scale(.6)}85%{opacity:.35;transform:translateY(0) scale(.8)}100%{opacity:1;transform:translateY(0) scale(.8)}}
-  .scene[data-step="4"] .panelOv{opacity:0}
-  /* Packing: the openings stay open, then the panel is back in its face so the whole word is visible. */
-  .scene[data-step="6"] .inside{opacity:0;transition:opacity .3s}
-  .scene[data-step="6"] .panelOv{opacity:0;animation:none}
   .f b{display:block;transform:rotate(var(--r,0deg)) translate(calc(var(--sx,0) * 1em),calc(var(--dy,0) * -1em))}
   /* The open side: a rim of the cube colour around a dark hollow, so the cubes nest. */
   .hole::after{content:"";position:absolute;inset:9%;border-radius:2px;
@@ -350,32 +319,10 @@
       body.appendChild(f);
     });
     el.appendChild(body);
-    if (cube.k === 'orange' || cube.k === 'yellow') {
-      const ins = document.createElement('div'); ins.className = 'inside'; el.appendChild(ins);
-      // The opening is also a face of the cube body, so it turns with the cube when packing (it shows once the panel has left its face).
-      const hf = document.createElement('div'); hf.className = 'f hole holeFace ' + (cube.k === 'orange' ? 'left' : 'right'); body.appendChild(hf);
-      // The wooden panel is its own layer above the scene, placed over the cube's face, so it can be seen sliding out.
-      const pl = document.createElement('div'); pl.className = 'f panelOv';
-      pl.innerHTML = `<b>${cube.faces.left && cube.faces.left.w || cube.faces.right.w}</b>` + WDOTS.map(([x, y]) => `<span class="wdot" style="left:${i % 2 ? 100 - x : x}%;top:${y}%"></span>`).join('');
-      scene.appendChild(pl);
-      cube.ov = pl;
-    }
     scene.appendChild(el);
     cube.el = el;
     cube.body = body;
   });
-  // Keep each wooden panel exactly over its cube's box.
-  function placePanels(){
-    const s = scene.getBoundingClientRect();
-    CUBES.forEach(c => {
-      if (!c.ov) return;
-      const r = c.el.getBoundingClientRect();
-      Object.assign(c.ov.style, {background: c.c, left: (r.left - s.left) + 'px', top: (r.top - s.top) + 'px', width: r.width + 'px', height: r.height + 'px'});
-    });
-  }
-  placePanels();
-  addEventListener('resize', placePanels);
-
   // Turn one cube so the chosen side faces the audience.
   const facing = (cube, side) => ({
     front:'rotateX(0deg) rotateY(0deg)', right:'rotateX(0deg) rotateY(-90deg)',
@@ -449,7 +396,7 @@
       const a = q.actualBoundingBoxAscent / 100, d = q.actualBoundingBoxDescent / 100;
       f.style.setProperty('--fk', HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent));   // every letter the same ink height
       // Line every letter up with the pink cube's letter: lower it by half the difference between its cube and the pink one.
-      const cube = CUBES.find(c => c.ov === f) || CUBES.find(c => c.el === f.closest('.cube')), cs = cube.s, ps = CUBES.find(c => c.k === 'pink').s;
+      const cube = CUBES.find(c => c.el === f.closest('.cube')), cs = cube.s, ps = CUBES.find(c => c.k === 'pink').s;
       const fk = HD / (q.actualBoundingBoxAscent + q.actualBoundingBoxDescent), em = (LETTER_CM / LET_R) * 130 / 50 * fk;
       // Measured residual (in cube units) left after centring, so every letter's base sits on the pink letter's base.
       const RESID = {yellow: 4, green: 3, purple: 1}, key = Object.keys(RESID).find(k => cube.k === k);
@@ -481,7 +428,6 @@
   document.getElementById('ideas').innerHTML =
     `<li>צד שמאל ריק ב־${emptyLeft} הקוביות: סיבוב של כולן ימינה יכול לחשוף מילה נוספת של ${emptyLeft} אותיות.</li>` +
     `<li>הגב ריק ב${emptyBack.join(', ')}: מקום למילה של ${emptyBack.length} אותיות, או לנקודות כמו בכתומה.</li>` +
-    `<li>בכתומה ובצהובה, הפאה עם האות והנקודות (ת בכתומה, ו בצהובה) היא פאנל עץ נשלף שיוצא החוצה ומורכב בנפרד.</li>` +
     `<li>החור תמיד על הרצפה, חוץ מהרגע שבו ו ו־ת מתהפכות אליו, אז הוא חלק מההצגה.</li>`;
 
   // ---- Story steps ----
@@ -494,7 +440,7 @@
     {w:'דעות', t:'המצב ההתחלתי', b:'סובב'},
     {w:'טעות', t:'ה־ד והקוביה הכתומה הסתובבו שמאלה', b:'סובב את כל הקוביות'},
     {w:'סליחה', t:'כל הקוביות הסתובבו שמאלה', b:'הפוך'},
-    {w:'חרב', t:'ח־ר־ב הסתובבו לצד, הצהובה והכתומה נפתחות ופלטת העץ יוצאת החוצה, ב ו־ר החליפו מקום', b:'סדר את המילה'},
+    {w:'חרב', t:'ח־ר־ב הסתובבו לצד, הצהובה והכתומה נשארות סגורות וחלקות, ב ו־ר החליפו מקום', b:'סדר את המילה'},
     {w:'חבר', t:'ב ו־ר חזרו למקום, ו ו־ת עדיין על צד אחר', b:'השלם את המילה'},
     {w:'חברות', t:'ו ו־ת הסתובבו והראו את האותיות', b:'ארוז את הקוביות'},
     {w:'אריזה', t:'כמו בבושקה: הפתח למעלה, והקוביות נכנסות לפי הסדר מהגדולה לקטנה', b:'עוד פעם'}
