@@ -142,12 +142,12 @@
   .dl{display:grid;gap:12px}
   .dl .pv{position:relative;width:100%;max-width:560px;aspect-ratio:5/4;margin:0 auto;background:#fff;border:1px solid #d5dde5}
   .dl .pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
-  .dl .pv .trim{position:absolute;border:2px dashed #e8784a;pointer-events:none}
+  .dl .pv .trim{position:absolute;border:2px dashed #f58038;pointer-events:none}
   .dl .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
   .dl select,.dl a.get{font:600 15px/1 "Assistant",sans-serif;padding:10px 12px;border-radius:8px;border:1px solid var(--ink)}
   .dl a.get{background:var(--ink);color:#fff;text-decoration:none}
   .dl .info{font-size:14px;color:var(--muted);margin:0}
-  button:focus-visible{outline:3px solid #e8784a;outline-offset:2px}
+  button:focus-visible{outline:3px solid #f58038;outline-offset:2px}
   button:disabled{opacity:.45;cursor:default}
 
   /* Face map: every cube unfolded, so the free sides are easy to spot. */
@@ -170,7 +170,7 @@
   .ideas{margin:0;padding-inline-start:20px;line-height:1.6;font-size:15px}
   /* 3D stage: a button in the title row opens it in a full dialog. */
   .titlebar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
-  #open3d,#drag3d{background:#e8784a;border-color:#e8784a;color:#fff}
+  #open3d,#drag3d{background:#f58038;border-color:#f58038;color:#fff}
   .dlg3d{width:min(1100px,calc(100vw - 24px));max-width:none;max-height:calc(100vh - 24px);border:0;border-radius:12px;padding:16px;
     background:var(--paper);color:var(--text);direction:rtl;display:none;gap:12px}
   .dlg3d[open]{display:grid}
@@ -269,11 +269,11 @@
   <section class="faces" aria-labelledby="palTitle">
     <h2 id="palTitle">צבעים (מספר HEX)</h2>
     <div class="pal">
-      <div><i style="background:#e8784a"></i><span><b>כתומה 50×50 ס״מ</b><code>#E8784A</code></span></div>
-      <div><i style="background:#e8c957"></i><span><b>צהובה 45×45 ס״מ</b><code>#E8C957</code></span></div>
-      <div><i style="background:#9ccb82"></i><span><b>ירוקה 40×40 ס״מ</b><code>#9CCB82</code></span></div>
-      <div><i style="background:#bb8cd2"></i><span><b>סגולה 35×35 ס״מ</b><code>#BB8CD2</code></span></div>
-      <div><i style="background:#db8f98"></i><span><b>ורודה 30×30 ס״מ</b><code>#DB8F98</code></span></div>
+      <div><i style="background:#f58038"></i><span><b>כתומה 50×50 ס״מ</b><code>#f58038</code></span></div>
+      <div><i style="background:#ebb65b"></i><span><b>צהובה 45×45 ס״מ</b><code>#ebb65b</code></span></div>
+      <div><i style="background:#87b38f"></i><span><b>ירוקה 40×40 ס״מ</b><code>#87b38f</code></span></div>
+      <div><i style="background:#cf94b2"></i><span><b>סגולה 35×35 ס״מ</b><code>#cf94b2</code></span></div>
+      <div><i style="background:#e09ea4"></i><span><b>ורודה 30×30 ס״מ</b><code>#e09ea4</code></span></div>
       <div><i style="background:#63b3f0"></i><span><b>שמיים</b><code>#63B3F0</code></span></div>
     </div>
   </section>
@@ -314,15 +314,15 @@
   const LETTER_H = {'ד':24,'ה':24,'ח':24,'ת':24.2,'י':17.2,'ו':23.9,'ר':24.4,'ל':29,'ב':23,'ע':25.5,'ט':23.3,'ס':23.4};
   const LETTER_CM = 24; let LET_R = 0.62, LET_A = 0.45, LET_D = 0.17;   // LET_R = glyph height / font size, measured once the font has loaded
   const CUBES = [
-    {k:'orange', name:'הכתומה', s:130, c:'#e8784a', end:-180, panel:'ת',
+    {k:'orange', name:'הכתומה', s:130, c:'#f58038', end:-180, panel:'ת',
       faces:{front:{art:'ball'}, right:{art:'dots'}, back:'ה', left:null, top:null, bottom:'hole'}},
-    {k:'yellow', name:'הצהובה', s:117, c:'#e8c957', end:-90, panel:'ו',
+    {k:'yellow', name:'הצהובה', s:117, c:'#ebb65b', end:-90, panel:'ו',
       faces:{front:'ח', right:null, back:null, left:'ת', top:null, bottom:'hole'}},
-    {k:'green', name:'הירוקה', s:104, c:'#9ccb82', end:-90,
+    {k:'green', name:'הירוקה', s:104, c:'#87b38f', end:-90,
       faces:{front:'י', right:{w:'ר'}, back:null, left:'ו', top:'hole', bottom:null}},
-    {k:'purple', name:'הסגולה', s:91, c:'#bb8cd2', end:-90,
+    {k:'purple', name:'הסגולה', s:91, c:'#cf94b2', end:-90,
       faces:{front:'ל', right:{w:'ב'}, back:null, left:'ע', top:'hole', bottom:null}},
-    {k:'pink', name:'הוורודה', s:78, c:'#db8f98', end:-180,
+    {k:'pink', name:'הוורודה', s:78, c:'#e09ea4', end:-180,
       faces:{front:'ט', right:'ס', back:{w:'ח'}, left:'ד', top:null, bottom:null}}
   ];
   const SIDES = ['front','right','back','left','top','bottom'];
@@ -407,8 +407,8 @@
   });
   const sw = c => `<i class="sw" style="${c}"></i>`;
   document.getElementById('tally').innerHTML =
-    `<span>${sw('background:#e8c957')}${count.letter} עם אות</span>` +
-    `<span>${sw('background:#e8784a')}${count.art} עם ציור</span>` +
+    `<span>${sw('background:#ebb65b')}${count.letter} עם אות</span>` +
+    `<span>${sw('background:#f58038')}${count.art} עם ציור</span>` +
     `<span><b>${count.empty} פאות ריקות</b> (בצבע הקוביה, בלי אות)</span>` +
     `<span>${sw('background:#1d1d1d')}${count.hole} חורים (צד פתוח)</span>`;
   (() => {
@@ -432,7 +432,7 @@
 
   (async () => {
     const svg = document.getElementById('letSvg'), info = document.getElementById('letInfo'), NS = 'http://www.w3.org/2000/svg';
-    const SZ = [[50,'#e8784a','כתומה'],[45,'#e8c957','צהובה'],[40,'#9ccb82','ירוקה'],[35,'#bb8cd2','סגולה'],[30,'#db8f98','ורודה']];
+    const SZ = [[50,'#f58038','כתומה'],[45,'#ebb65b','צהובה'],[40,'#87b38f','ירוקה'],[35,'#cf94b2','סגולה'],[30,'#e09ea4','ורודה']];
     const LETTER = 'ד', LH = 24, GAP = 6, X0 = 8, BASE = 56;
     try { await document.fonts.load('900 100px "Frank Ruhl Libre"', LETTER); } catch (e) {}
     const g = document.createElement('canvas').getContext('2d'); g.font = '900 100px "Frank Ruhl Libre", serif';
@@ -471,8 +471,8 @@
     });
     // dimension line on the smallest cube
     const sx = lastX + 30 + 2.5, ty = BASE - 15 - LH / 2;
-    el('line', {x1: sx, y1: ty, x2: sx, y2: ty + LH, stroke: '#e8784a', 'stroke-width': .5});
-    el('text', {x: sx + 1.5, y: ty + LH / 2 + 1, 'text-anchor': 'start', 'font-size': 3.2, 'font-family': 'Assistant,sans-serif', fill: '#e8784a'}, '24 ס״מ');
+    el('line', {x1: sx, y1: ty, x2: sx, y2: ty + LH, stroke: '#f58038', 'stroke-width': .5});
+    el('text', {x: sx + 1.5, y: ty + LH / 2 + 1, 'text-anchor': 'start', 'font-size': 3.2, 'font-family': 'Assistant,sans-serif', fill: '#f58038'}, '24 ס״מ');
     info.textContent = `האות ${LETTER} בגובה ${LH} ס״מ (גובה האות עצמה, לא הגופן). בקוביה הקטנה (30×30) נשארים ${((30 - LH) / 2).toFixed(0)} ס״מ ריק מכל צד, ואילו בכתומה (50×50) ${((50 - LH) / 2).toFixed(0)} ס״מ.`;
   })();
 
