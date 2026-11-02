@@ -5,12 +5,12 @@
 <rect x="58" y="58" width="50" height="50" fill="#f58038" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="62.50" y="62.50" width="41.00" height="41.00" fill="#1d1d1d"/>
 <rect x="108" y="58" width="50" height="50" fill="#f58038" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
-<circle cx="118.50" cy="71.50" r="1.75" fill="#000"/>
-<circle cx="143.00" cy="69.00" r="1.75" fill="#000"/>
-<circle cx="129.00" cy="82.00" r="1.75" fill="#000"/>
-<circle cx="147.50" cy="90.00" r="1.75" fill="#000"/>
-<circle cx="121.00" cy="96.00" r="1.75" fill="#000"/>
-<circle cx="137.50" cy="99.50" r="1.75" fill="#000"/>
+
+
+
+
+
+
 <rect x="158" y="58" width="50" height="50" fill="#f58038" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <rect x="58" y="108" width="50" height="50" fill="#f58038" stroke="#000" stroke-width="0.08" stroke-dasharray="1 0.6"/>
 <path d="M1075 631 1073 145Q993 29 870 -59L850 535Q847 629 833 655Q810 696 729 696H55Q210 981 385 1139Q389 1056 399 991H829Q962 991 1030 887Q1076 816 1075 631ZM418 162Q327 38 205 -55V371Q301 500 418 610Z" fill="#1b2f86" transform="translate(83.000 133.000) rotate(180) scale(0.020033 -0.020033) translate(-565.01 -540.00)"/>
