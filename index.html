@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@900&family=Assistant:wght@500;700&display=swap">
 <style>
   :root{
-    --wall:#4a9fd6; --floor:#b9c6d2; --ink:#1b2f86; --paper:#f3f6f9; --text:#1c2733; --muted:#5b6b7a;
+    --wall:#4a9fd6; --floor:#b9c6d2; --ink:#000000; --paper:#f3f6f9; --text:#1c2733; --muted:#5b6b7a;
     --fsu:65;
     --u:min(1px, calc((100vw - 32px) / 640));
     color-scheme:light;
@@ -397,7 +397,7 @@
       t.setAttribute('aria-pressed', 'false');
       t.title = SIDE_NAME[side];
       t.innerHTML = k === 'empty' ? '' : k === 'hole' ? '<small>חור</small>'
-        : k === 'art' ? (v.art === 'ball' ? '⚫' : '⁘') : (v.w || v);
+        : k === 'art' ? (v.art === 'ball' ? '⚫' : '') : (v.w || v);
       t.addEventListener('click', () => peekOne(cube, side, t));
       grid.appendChild(t);
     });
@@ -470,7 +470,7 @@
       const top = BASE - c;
       el('rect', {x, y: top, width: c, height: c, fill: col, stroke: 'rgba(0,0,0,.25)', 'stroke-width': .3});
       const cx = x + c / 2, cy = top + c / 2;
-      el('text', {x: cx - gw / 2 + m.actualBoundingBoxLeft * k, y: (BASE - 15) - LH / 2 + asc,'font-family': '"Frank Ruhl Libre",serif', 'font-weight': 900, 'font-size': fs, fill: '#1b2f86'}, LETTER);
+      el('text', {x: cx - gw / 2 + m.actualBoundingBoxLeft * k, y: (BASE - 15) - LH / 2 + asc,'font-family': '"Frank Ruhl Libre",serif', 'font-weight': 900, 'font-size': fs, fill: '#000000'}, LETTER);
       el('text', {x: cx, y: BASE + 4.5, 'text-anchor': 'middle', 'font-size': 3.2, 'font-family': 'Assistant,sans-serif', fill: '#1c2733'}, `${c}×${c} ס״מ`);
       lastX = x; x += c + GAP;
     });
@@ -696,7 +696,7 @@
         SPOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 9, 0, 7); g.fill(); });
       } else if (v) {
         if (v.w) { g.fillStyle = '#fff'; WDOTS.forEach(([x, y]) => { g.beginPath(); g.arc(x * 2.56, y * 2.56, 6, 0, 7); g.fill(); }); }
-        g.fillStyle = '#1b2f86'; g.font = `900 ${Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT))}px "Frank Ruhl Libre", serif`;
+        g.fillStyle = '#000000'; g.font = `900 ${Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT))}px "Frank Ruhl Libre", serif`;
         { const ch = v.w || v, q0 = g.measureText(ch), px0 = Math.round(256 * LETTER_CM / LET_R / (cube.s * CM_PER_UNIT));
           g.font = `900 ${Math.round(px0 * (LETTER_H[ch] || LETTER_CM) / LETTER_CM * (LET_R * px0) / (q0.actualBoundingBoxAscent + q0.actualBoundingBoxDescent))}px "Frank Ruhl Libre", serif`;   // same cm height as the print file
           const q = g.measureText(ch); g.textAlign = 'left'; g.textBaseline = 'alphabetic';

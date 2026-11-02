@@ -3,7 +3,7 @@
 <g transform="translate(-159.50 -9.50)">
 <rect x="162.50" y="12.50" width="41.00" height="41.00" fill="#f58038" stroke="#000" stroke-width="0.35"/>
 <g transform="translate(183.00 33.00)"></g>
-<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#1b2f86" transform="translate(183.000 33.000) rotate(0) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
+<path d="M1145 238Q1081 62 942 -68L899 496Q891 605 876 641Q853 696 791 696H485Q548 489 565 283Q525 139 457 0H12L141 295H336Q308 487 227 696H53Q121 913 309 1139Q334 1065 371 991H922Q1038 991 1082 897Q1106 845 1114 721Z" fill="#000000" transform="translate(183.000 33.000) rotate(0) scale(0.020033 -0.020033) translate(-578.50 -535.50)"/>
 <text x="183.00" y="55.90" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555">PANEL (ORANGE) 41 x 41 cm - cut out, slides over the opening</text>
 </g>
 </svg>

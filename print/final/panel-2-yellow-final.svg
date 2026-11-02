@@ -3,7 +3,7 @@
 <g transform="translate(-144.05 -9.05)">
 <rect x="147.05" y="12.05" width="36.90" height="36.90" fill="#ebb65b" stroke="#000" stroke-width="0.35"/>
 <g transform="translate(165.50 30.50)"></g>
-<path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#1b2f86" transform="translate(165.500 30.500) rotate(0) scale(0.020033 -0.020033) translate(-248.03 -543.00)"/>
+<path d="M492 616 487 236Q413 77 276 -53L270 434Q269 511 265 543Q253 625 217 664Q130 755 4 844Q80 993 201 1139Q343 1029 436 897Q494 816 492 616Z" fill="#000000" transform="translate(165.500 30.500) rotate(0) scale(0.020033 -0.020033) translate(-248.03 -543.00)"/>
 <text x="165.50" y="51.35" font-size="1.6" text-anchor="middle" font-family="Helvetica" fill="#555">PANEL (YELLOW) 37 x 37 cm - cut out, slides over the opening</text>
 </g>
 </svg>
